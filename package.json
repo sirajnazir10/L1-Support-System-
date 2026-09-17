@@ -1,0 +1,16 @@
+{
+  "name": "l1-support-mr-cp",
+  "version": "1.0.0",
+  "description": "Document-grounded L1 support app for Modern Requirements & Copilot4DevOps — runs locally on Windows, Mac, or Linux.",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

@@ -1,0 +1,51 @@
+<!--
+  Example web.config for hosting this app directly under IIS using the
+  iisnode module (Option B in the IIS deployment guide in README.md).
+
+  To use it: rename this file to "web.config" and place it in the app's
+  root folder (next to server.js), then point an IIS website or
+  application at this folder. iisnode and the URL Rewrite module must
+  already be installed on the server.
+
+  If you're using the reverse-proxy approach instead (Option A, the
+  recommended one — Node running on its own via NSSM, IIS just forwards
+  traffic to it), you do NOT need this file at all.
+-->
+<configuration>
+  <system.webServer>
+
+    <!-- Let iisnode run server.js as the Node.js entry point -->
+    <handlers>
+      <add name="iisnode" path="server.js" verb="*" modules="iisnode" />
+    </handlers>
+
+    <rewrite>
+      <rules>
+        <!-- Don't rewrite requests for the iisnode debug UI -->
+        <rule name="iisnode-debug" patternSyntax="ECMAScript" stopProcessing="true">
+          <match url="^server.js\/debug[\/]?" />
+        </rule>
+
+        <!-- Serve static files directly if they exist on disk (public/…) -->
+        <rule name="StaticContent">
+          <action type="Rewrite" url="public{REQUEST_URI}" />
+        </rule>
+
+        <!-- Everything else goes through server.js (the API + the app shell) -->
+        <rule name="DynamicContent">
+          <conditions>
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+          </conditions>
+          <action type="Rewrite" url="server.js" />
+        </rule>
+      </rules>
+    </rewrite>
+
+    <!-- Keep the Node process warm and let iisnode manage restarts -->
+    <iisnode
+      nodeProcessCommandLine="&quot;C:\Program Files\nodejs\node.exe&quot;"
+      watchedFiles="*.js;web.config"
+      loggingEnabled="true" />
+
+  </system.webServer>
+</configuration>
