@@ -1,4 +1,4 @@
-// L1 Support for MR & CP — local server
+// MR Nexis — local server
 // Serves the web app and a small JSON API for the knowledge base, tickets,
 // and the continuous-learning log. Everything persists to /data so the app
 // keeps its state across restarts.
@@ -114,7 +114,7 @@ app.post('/api/log', (req, res) => {
 
 app.listen(PORT, () => {
   console.log('');
-  console.log('  L1 Support for MR & CP is running.');
+  console.log('  MR Nexis is running.');
   console.log('  Open http://localhost:' + PORT + ' in your browser.');
   console.log('  Knowledge base: ' + readJson(KB_FILE, []).length + ' entries loaded from data/kb.json');
   console.log('  Press Ctrl+C to stop.');

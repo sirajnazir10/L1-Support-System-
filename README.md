@@ -1,6 +1,6 @@
-# L1 Support Agent — V1
+# MR Nexis — V1
 
-**Version 1** of the document-grounded L1 support app for Modern
+**Version 1** of the document-grounded MR Nexis support app for Modern
 Requirements4DevOps and
 Copilot4DevOps. It runs entirely on your own machine — no cloud account,
 no Zendesk connection required — and serves a website at
@@ -89,7 +89,7 @@ any Node/Express/Next/etc. app behind IIS.
 - **Application Request Routing (ARR)** — https://www.iis.net/downloads/microsoft/application-request-routing
 - [NSSM](https://nssm.cc/download) (a tiny, well-known tool for running any .exe as a Windows Service) — unzip it somewhere like `C:\nssm`.
 
-**2. Copy the app to the server**, e.g. `C:\apps\L1-Support-MR-CP`
+**2. Copy the app to the server**, e.g. `C:\apps\MR-Nexis`
 (the same folder you already have — copy it there, or re-download the
 zip on the server), then from an elevated Command Prompt in that folder:
 ```
@@ -101,11 +101,11 @@ set PORT=3002
 **3. Register it as a Windows Service with NSSM** so it starts
 automatically and keeps running without a console window open:
 ```
-C:\nssm\nssm.exe install L1SupportMRCP "C:\Program Files\nodejs\node.exe" "C:\apps\L1-Support-MR-CP\server.js"
-C:\nssm\nssm.exe set L1SupportMRCP AppDirectory "C:\apps\L1-Support-MR-CP"
-C:\nssm\nssm.exe set L1SupportMRCP AppEnvironmentExtra "PORT=3002" "HOST=127.0.0.1"
-C:\nssm\nssm.exe set L1SupportMRCP Start SERVICE_AUTO_START
-C:\nssm\nssm.exe start L1SupportMRCP
+C:\nssm\nssm.exe install MRNexis "C:\Program Files\nodejs\node.exe" "C:\apps\MR-Nexis\server.js"
+C:\nssm\nssm.exe set MRNexis AppDirectory "C:\apps\MR-Nexis"
+C:\nssm\nssm.exe set MRNexis AppEnvironmentExtra "PORT=3002" "HOST=127.0.0.1"
+C:\nssm\nssm.exe set MRNexis Start SERVICE_AUTO_START
+C:\nssm\nssm.exe start MRNexis
 ```
 Confirm it's up by browsing to `http://localhost:3002` **on the server
 itself** — you should see the app.
@@ -128,9 +128,9 @@ other sites).
 **7. Test from another PC on the network:** `http://<server-name-or-IP>/`
 should now load the app, on plain HTTP, no port number needed.
 
-To update the app later: stop the service (`nssm stop L1SupportMRCP`),
+To update the app later: stop the service (`nssm stop MRNexis`),
 replace the files, run `npm install --production` again if
-`package.json` changed, then `nssm start L1SupportMRCP`.
+`package.json` changed, then `nssm start MRNexis`.
 
 ### Option B — iisnode (Node runs inside IIS itself)
 
@@ -139,7 +139,7 @@ manage the Node process directly:
 
 1. Install the **iisnode** module: https://github.com/Azure/iisnode/releases
    (also requires the URL Rewrite module from Option A, step 1).
-2. Copy the app to a folder IIS can serve, e.g. `C:\inetpub\wwwroot\L1-Support-MR-CP`.
+2. Copy the app to a folder IIS can serve, e.g. `C:\inetpub\wwwroot\MR-Nexis`.
 3. Rename the included `web.config.iisnode-example` file (in this
    folder) to `web.config` — it already contains the handler and
    rewrite rules iisnode needs, pointing at `server.js`.
@@ -168,7 +168,7 @@ lets you manage/restart the Node process independently of IIS.
 
 ## Growing the knowledge base
 
-Right now the app is grounded in 11 source documents (197 indexed
+Right now the app is grounded in 11 source documents (207 indexed
 sections): the Installation Guide, Admin Configuration Guide,
 Customization & Troubleshooting Guide, Word Import Configuration
 Technote, Cross-Reference Technote, MR4DevOps Services Technote,

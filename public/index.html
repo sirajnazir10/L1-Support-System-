@@ -1,0 +1,2351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MR Nexis</title>
+<style>
+  :root{
+    --bg:#FAF9F8; --surface:#FFFFFF; --surface-alt:#F3F2F1; --surface-hover:#F5F5F5;
+    --border:#E1DFDD; --border-strong:#C8C6C4;
+    --text:#201F1E; --text-2:#494847; --text-muted:#616161;
+    --primary:#0078D4; --primary-hover:#106EBE; --primary-active:#005A9E; --primary-soft:#EFF6FC; --on-primary:#FFFFFF;
+    --success:#107C10; --success-soft:#DFF6DD;
+    --warning:#8A5700; --warning-soft:#FFF4CE;
+    --danger:#A4262C; --danger-soft:#FDE7E9;
+    --info:#0078D4; --info-soft:#EFF6FC;
+    --shadow-xs:0 1px 2px rgba(0,0,0,.05);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.06), 0 1px 6px rgba(0,0,0,.05);
+    --shadow-md:0 3px 10px rgba(0,0,0,.09), 0 0 1px rgba(0,0,0,.1);
+    --shadow-lg:0 10px 28px rgba(0,0,0,.14), 0 2px 8px rgba(0,0,0,.08);
+    --radius-sm:4px; --radius-md:8px; --radius-lg:12px;
+    --sidebar-w:236px; --sidebar-w-collapsed:60px; --header-h:52px;
+    --ease:cubic-bezier(.2,.8,.2,1);
+  }
+  html[data-theme="dark"]{
+    --bg:#1B1A19; --surface:#252423; --surface-alt:#2D2C2B; --surface-hover:#333231;
+    --border:#3B3A39; --border-strong:#484644;
+    --text:#F3F2F1; --text-2:#D2D0CE; --text-muted:#A6A4A2;
+    --primary:#3AA0F3; --primary-hover:#5CB1F5; --primary-active:#1F8AE0; --primary-soft:#0D2A42; --on-primary:#062033;
+    --success:#6CCB5F; --success-soft:#0F2E12;
+    --warning:#FCE100; --warning-soft:#3B2F00;
+    --danger:#F1707B; --danger-soft:#3B1113;
+    --info:#3AA0F3; --info-soft:#0D2A42;
+    --shadow-xs:0 1px 2px rgba(0,0,0,.3);
+    --shadow-sm:0 1px 2px rgba(0,0,0,.4), 0 1px 6px rgba(0,0,0,.3);
+    --shadow-md:0 3px 10px rgba(0,0,0,.45), 0 0 1px rgba(0,0,0,.4);
+    --shadow-lg:0 10px 28px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  button, input, textarea, select{font:inherit; color:inherit;}
+  button{cursor:pointer;}
+  *:focus-visible{outline:2px solid var(--primary); outline-offset:1px; border-radius:4px;}
+  ::-webkit-scrollbar{width:10px; height:10px;}
+  ::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:99px; border:2px solid transparent; background-clip:padding-box;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  svg{display:block;}
+  .visually-hidden{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap;}
+
+  /* ---------------- boot / loading ---------------- */
+  .app-loading{position:fixed; inset:0; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; z-index:999;}
+  .spinner{width:34px; height:34px; border-radius:50%; border:3px solid var(--border); border-top-color:var(--primary); animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .app-loading p{color:var(--text-muted); font-size:13px; margin:0;}
+  .app-loading .err{display:none; flex-direction:column; align-items:center; gap:10px;}
+  .app-loading.err-state .spinner, .app-loading.err-state .loading-text{display:none;}
+  .app-loading.err-state .err{display:flex;}
+
+  /* ---------------- shell ---------------- */
+  .app-shell{display:none; height:100vh; flex-direction:column;}
+  .app-shell.ready{display:flex;}
+
+  .topbar{
+    height:var(--header-h); flex-shrink:0; display:flex; align-items:center; gap:10px; padding:0 12px;
+    background:linear-gradient(180deg,#ffffff,#fcfcfd); border-bottom:1px solid var(--border); box-shadow:var(--shadow-xs); position:relative; z-index:30;
+  }
+  html[data-theme="dark"] .topbar{background:linear-gradient(180deg,#252423,#221f1e);}
+  .icon-btn{
+    width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:var(--radius-sm);
+    border:1px solid transparent; background:transparent; color:var(--text-2); position:relative; transition:background .12s var(--ease), color .12s;
+  }
+  .icon-btn:hover{background:var(--surface-alt); color:var(--text);}
+  .icon-btn svg{width:17px; height:17px;}
+  .brand{display:flex; align-items:center; gap:9px; padding-right:6px; flex-shrink:0;}
+  .brand-mark{width:28px; height:28px; border-radius:7px; background:linear-gradient(155deg,var(--primary),var(--primary-active)); color:var(--on-primary); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; letter-spacing:-.02em; box-shadow:var(--shadow-xs);}
+  .brand-name{display:flex; flex-direction:column; line-height:1.15;}
+  .brand-name b{font-size:13.5px; font-weight:600;}
+  .brand-name span{font-size:10.5px; color:var(--text-muted); letter-spacing:.02em;}
+  .topbar-search{flex:1; max-width:420px; position:relative; display:flex; align-items:center;}
+  .topbar-search svg{position:absolute; left:10px; width:15px; height:15px; color:var(--text-muted); pointer-events:none;}
+  .topbar-search input{
+    width:100%; height:32px; border-radius:var(--radius-sm); border:1px solid var(--border); background:var(--surface-alt);
+    padding:0 10px 0 32px; font-size:13px; transition:border-color .12s, background .12s;
+  }
+  .topbar-search input:focus{background:var(--surface); border-color:var(--primary); outline:none;}
+  .topbar-actions{display:flex; align-items:center; gap:4px; margin-left:auto; flex-shrink:0; position:relative;}
+  .notif-dot{position:absolute; top:6px; right:6px; width:7px; height:7px; border-radius:50%; background:var(--danger); border:1.5px solid var(--surface);}
+  .avatar-chip{width:28px; height:28px; border-radius:50%; background:var(--surface-alt); border:1px solid var(--border); color:var(--text-2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; margin-left:4px;}
+
+  .notif-panel{
+    position:absolute; top:40px; right:0; width:340px; max-height:420px; overflow-y:auto; background:var(--surface);
+    border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-lg); padding:6px; z-index:40;
+    animation:pop .14s var(--ease);
+  }
+  @keyframes pop{from{opacity:0; transform:translateY(-4px) scale(.98);} to{opacity:1; transform:none;}}
+  .notif-panel h4{margin:6px 8px; font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-muted);}
+  .notif-item{padding:8px 9px; border-radius:var(--radius-sm); font-size:12.5px; line-height:1.5;}
+  .notif-item:hover{background:var(--surface-alt);}
+  .notif-item .ts{font-size:10.5px; color:var(--text-muted); display:block; margin-top:2px;}
+
+  .app-body{flex:1; display:flex; min-height:0;}
+  .sidebar{
+    width:var(--sidebar-w); flex-shrink:0; background:var(--surface); border-right:1px solid var(--border);
+    display:flex; flex-direction:column; padding:10px 8px; gap:2px; transition:width .16s var(--ease);
+    overflow-x:hidden;
+  }
+  .sidebar.collapsed{width:var(--sidebar-w-collapsed);}
+  .nav-item{
+    display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:var(--radius-sm); border:none;
+    background:none; color:var(--text-2); font-size:13px; font-weight:500; text-align:left; white-space:nowrap; width:100%;
+    transition:background .12s var(--ease), color .12s;
+  }
+  .nav-item svg{width:17px; height:17px; flex-shrink:0; color:var(--text-muted); transition:color .12s;}
+  .nav-item:hover{background:var(--surface-alt); color:var(--text);}
+  .nav-item.active{background:var(--primary-soft); color:var(--primary);}
+  .nav-item.active svg{color:var(--primary);}
+  .nav-item span.label{overflow:hidden; text-overflow:ellipsis; flex:1;}
+  .sidebar.collapsed .nav-item span.label, .sidebar.collapsed .nav-item .nav-badge, .sidebar.collapsed .sidebar-footer{display:none;}
+  .nav-badge{font-size:10.5px; font-weight:700; background:var(--danger); color:#fff; border-radius:99px; padding:1px 6px; min-width:16px; text-align:center;}
+  .nav-item.active .nav-badge{background:var(--primary);}
+  .sidebar-footer{margin-top:auto; padding:10px 8px 4px; font-size:11px; color:var(--text-muted); line-height:1.6; border-top:1px solid var(--border);}
+  .sidebar-footer b{color:var(--text-2);}
+
+  .main-content{flex:1; min-width:0; overflow-y:auto; background:var(--bg);}
+  .view-panel{display:none; padding:18px 22px 32px; max-width:1400px; margin:0 auto;}
+  .view-panel.active{display:block;}
+
+  /* ---------------- generic cards ---------------- */
+  .card{
+    background:linear-gradient(180deg,#ffffff,#fdfdfd); border:1px solid var(--border); border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm); transition:box-shadow .15s var(--ease);
+  }
+  html[data-theme="dark"] .card{background:linear-gradient(180deg,#262524,#242322);}
+  .page-title-row{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; flex-wrap:wrap;}
+  .page-title-row h1{font-size:19px; font-weight:600; margin:0;}
+  .page-title-row p{margin:2px 0 0; font-size:12.5px; color:var(--text-muted);}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:7px; border-radius:var(--radius-sm); padding:7px 14px; font-size:12.8px;
+    font-weight:600; border:1px solid var(--border); background:var(--surface); color:var(--text); transition:all .12s var(--ease);
+    white-space:nowrap;
+  }
+  .btn svg{width:14px; height:14px;}
+  .btn:hover{background:var(--surface-alt); border-color:var(--border-strong);}
+  .btn:active{transform:translateY(1px);}
+  .btn.primary{background:var(--primary); color:var(--on-primary); border-color:var(--primary);}
+  .btn.primary:hover{background:var(--primary-hover); border-color:var(--primary-hover);}
+  .btn.danger-ghost{color:var(--danger); border-color:var(--border);}
+  .btn.danger-ghost:hover{background:var(--danger-soft); border-color:var(--danger);}
+  .btn.ghost{border-color:transparent; background:transparent;}
+  .btn.ghost:hover{background:var(--surface-alt);}
+  .btn:disabled{opacity:.5; cursor:default; transform:none;}
+  .btn.sm{padding:5px 10px; font-size:12px;}
+
+  .badge{font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; border-radius:99px; padding:3px 9px; display:inline-flex; align-items:center; gap:5px;}
+  .badge::before{content:''; width:6px; height:6px; border-radius:50%; background:currentColor;}
+  .badge.new{background:var(--info-soft); color:var(--info);}
+  .badge.progress{background:var(--warning-soft); color:var(--warning);}
+  .badge.escalated{background:var(--danger-soft); color:var(--danger);}
+  .badge.resolved{background:var(--success-soft); color:var(--success);}
+  .pr-dot{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .pr-dot.high{background:var(--danger);} .pr-dot.medium{background:var(--warning);} .pr-dot.low{background:var(--success);}
+
+  .toast-root{position:fixed; top:64px; right:16px; display:flex; flex-direction:column; gap:8px; z-index:200; width:320px; max-width:calc(100vw - 32px);}
+  .toast{
+    background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--info); border-radius:var(--radius-md);
+    box-shadow:var(--shadow-lg); padding:10px 12px; display:flex; gap:9px; align-items:flex-start; font-size:12.8px;
+    animation:toastIn .18s var(--ease);
+  }
+  @keyframes toastIn{from{opacity:0; transform:translateX(12px);} to{opacity:1; transform:none;}}
+  .toast.leaving{animation:toastOut .15s var(--ease) forwards;}
+  @keyframes toastOut{to{opacity:0; transform:translateX(12px);}}
+  .toast.success{border-left-color:var(--success);}
+  .toast.warning{border-left-color:var(--warning);}
+  .toast.danger{border-left-color:var(--danger);}
+  .toast svg{width:16px; height:16px; flex-shrink:0; margin-top:1px;}
+  .toast.success svg{color:var(--success);} .toast.warning svg{color:var(--warning);} .toast.danger svg{color:var(--danger);} .toast.info svg{color:var(--info);}
+  .toast .msg{flex:1; line-height:1.45;}
+  .toast .close{flex-shrink:0; width:16px; height:16px; color:var(--text-muted); border-radius:3px;}
+  .toast .close:hover{color:var(--text);}
+
+  /* ---------------- customer portal ---------------- */
+  .customer-grid{display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,.75fr); gap:16px; align-items:start;}
+  .chat-panel{display:flex; flex-direction:column; min-height:0; position:relative; overflow:hidden;}
+  .chat-header{padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px;}
+  .chat-avatar{width:32px; height:32px; border-radius:9px; background:linear-gradient(155deg,var(--primary),var(--primary-active)); color:var(--on-primary); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;}
+  .chat-header-text strong{font-size:13.5px; font-weight:600; display:block;}
+  .chat-status{font-size:11.5px; color:var(--text-muted); display:flex; align-items:center; gap:5px;}
+  .chat-status .pip{width:6px; height:6px; border-radius:50%; background:var(--success);}
+  .chat-body{flex:1; min-height:380px; max-height:480px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px;}
+  .msg{max-width:88%; display:flex; flex-direction:column; gap:4px;}
+  .msg.user{align-self:flex-end; align-items:flex-end;}
+  .msg.bot{align-self:flex-start; align-items:flex-start;}
+  .msg-label{font-size:10.5px; color:var(--text-muted); padding:0 3px; font-weight:600; text-transform:uppercase; letter-spacing:.03em;}
+  .bubble{padding:9px 12px; border-radius:12px; font-size:13.5px; line-height:1.6; white-space:pre-wrap; word-break:break-word;}
+  .msg.user .bubble{background:var(--primary); color:var(--on-primary); border-bottom-right-radius:3px;}
+  .msg.bot .bubble{background:var(--surface-alt); color:var(--text); border-bottom-left-radius:3px;}
+  .cite{font-size:11px; color:var(--primary); background:var(--primary-soft); border-radius:6px; padding:4px 9px; width:fit-content;}
+  .investigate-note{font-size:11px; border-radius:6px; padding:4px 9px; width:fit-content; max-width:100%; display:flex; flex-direction:column; gap:2px;}
+  .investigate-note.needed{color:var(--warning); background:var(--warning-soft);}
+  .investigate-note.clear{color:var(--success); background:var(--success-soft);}
+  .investigate-note b{font-weight:700;}
+  .bubble .rsec{margin-bottom:9px;}
+  .bubble .rsec:last-child{margin-bottom:0;}
+  .bubble .rsec b{font-size:11px; text-transform:uppercase; letter-spacing:.04em; opacity:.72;}
+  .bubble img.inline-img{max-width:220px; border-radius:8px; display:block; margin:4px 0; border:1px solid rgba(0,0,0,.12);}
+  .file-chip{display:inline-flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:4px 9px 4px 6px; font-size:11.5px; margin:3px 4px 3px 0;}
+  .file-chip svg{width:12px; height:12px; flex-shrink:0;}
+  .msg.user .file-chip{background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.32); color:var(--on-primary);}
+  .typing{display:flex; gap:4px; padding:11px 13px; background:var(--surface-alt); border-radius:12px; border-bottom-left-radius:3px; align-self:flex-start; width:fit-content;}
+  .typing span{width:5px; height:5px; border-radius:50%; background:var(--text-muted); opacity:.5; animation:blink 1.1s infinite;}
+  .typing span:nth-child(2){animation-delay:.15s;} .typing span:nth-child(3){animation-delay:.3s;}
+  @keyframes blink{0%,80%,100%{opacity:.25; transform:translateY(0);} 40%{opacity:.9; transform:translateY(-2px);}}
+  .chip-row{display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 12px;}
+  .chip{font-size:12px; background:var(--surface-alt); color:var(--text-2); border:1px solid var(--border); border-radius:999px; padding:6px 12px; transition:border-color .12s, color .12s;}
+  .chip:hover{border-color:var(--primary); color:var(--primary);}
+
+  .dropzone{position:relative;}
+  .dropzone.dragover::after{content:'Drop screenshots, logs, or documents to attach'; position:absolute; inset:8px; border:2px dashed var(--primary); border-radius:var(--radius-md); background:var(--primary-soft); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:13px; color:var(--primary); pointer-events:none; z-index:5;}
+
+  .composer-wrap{border-top:1px solid var(--border);}
+  .composer-toolbar{display:flex; align-items:center; gap:6px; padding:7px 12px; border-bottom:1px solid var(--border);}
+  .tbtn{width:27px; height:27px; border-radius:6px; border:1px solid transparent; background:none; color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:700; flex-shrink:0; transition:background .12s, color .12s;}
+  .tbtn svg{width:14px; height:14px;}
+  .tbtn:hover{background:var(--surface-alt); color:var(--text);}
+  .tbtn.active{background:var(--primary-soft); color:var(--primary);}
+  .tb-sep{width:1px; height:16px; background:var(--border); margin:0 2px; flex-shrink:0;}
+  #composer{min-height:60px; max-height:140px; overflow-y:auto; padding:11px 14px; font-size:13.5px; line-height:1.6; outline:none;}
+  #composer:empty::before{content:attr(data-placeholder); color:var(--text-muted);}
+  .composer-actions{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 12px; border-top:1px solid var(--border);}
+  .composer-hint{font-size:11px; color:var(--text-muted);}
+
+  .side-rail{display:flex; flex-direction:column; gap:14px;}
+  .mini-card{padding:14px 16px; display:flex; flex-direction:column; gap:9px;}
+  .mini-card h3{font-size:12.5px; margin:0; font-weight:600;}
+  .status-row{display:flex; align-items:center; justify-content:space-between; font-size:12px; color:var(--text-muted);}
+  .status-row b{color:var(--text); font-weight:600;}
+  .kb-stat{font-size:12px; color:var(--text-muted); line-height:1.6; margin:0;}
+  .kb-stat b{color:var(--primary);}
+
+  @media (max-width:900px){ .customer-grid{grid-template-columns:1fr;} }
+
+  /* ---------------- agent console ---------------- */
+  .console-layout{display:grid; grid-template-columns:280px minmax(0,1fr); gap:16px; align-items:start;}
+  .queue-panel{display:flex; flex-direction:column; max-height:calc(100vh - var(--header-h) - 60px); position:sticky; top:0;}
+  .queue-toolbar{padding:12px 12px 10px; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:8px;}
+  .queue-search{position:relative; display:flex; align-items:center;}
+  .queue-search svg{position:absolute; left:8px; width:13px; height:13px; color:var(--text-muted); pointer-events:none;}
+  .queue-search input{width:100%; height:29px; border-radius:6px; border:1px solid var(--border); background:var(--surface-alt); padding:0 8px 0 27px; font-size:12.3px;}
+  .queue-search input:focus{background:var(--surface); border-color:var(--primary); outline:none;}
+  .filter-row{display:flex; gap:6px;}
+  .filter-row select{flex:1; min-width:0; height:28px; border-radius:6px; border:1px solid var(--border); background:var(--surface); font-size:11.8px; padding:0 6px;}
+  .queue-list{flex:1; overflow-y:auto; display:flex; flex-direction:column;}
+  .queue-item{display:flex; flex-direction:column; gap:5px; padding:11px 13px; border-bottom:1px solid var(--border); text-align:left; background:none; border-left:3px solid transparent; width:100%; transition:background .12s;}
+  .queue-item:hover{background:var(--surface-alt);}
+  .queue-item.active{background:var(--primary-soft); border-left-color:var(--primary);}
+  .queue-item .qtop{display:flex; align-items:center; justify-content:space-between; gap:6px;}
+  .queue-item .qsubj{font-size:12.3px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .queue-item .qmeta{font-size:10.8px; color:var(--text-muted); display:flex; align-items:center; gap:6px;}
+  .queue-empty{padding:28px 16px; text-align:center; color:var(--text-muted); font-size:12.5px;}
+
+  .ticket-detail{min-height:400px;}
+  .detail-empty{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:80px 20px; color:var(--text-muted); text-align:center;}
+  .detail-empty svg{width:38px; height:38px; opacity:.35;}
+
+  .detail-card{background:linear-gradient(180deg,#ffffff,#fdfdfd); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); margin-bottom:14px;}
+  html[data-theme="dark"] .detail-card{background:linear-gradient(180deg,#262524,#242322);}
+  .detail-header{padding:16px 18px; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+  .detail-header h2{font-size:16.5px; margin:0 0 3px; font-weight:600;}
+  .detail-header .meta{font-size:11.8px; color:var(--text-muted);}
+
+  .expand-card{margin-bottom:14px; overflow:hidden;}
+  .expand-header{display:flex; align-items:center; gap:9px; padding:13px 16px; width:100%; background:none; border:none; text-align:left;}
+  .expand-header:hover{background:var(--surface-alt);}
+  .expand-header svg.section-icon{width:16px; height:16px; color:var(--primary); flex-shrink:0;}
+  .expand-header .etitle{font-size:13.3px; font-weight:600; flex:1;}
+  .expand-header .ecount{font-size:11px; color:var(--text-muted); font-weight:500;}
+  .expand-header svg.chev{width:14px; height:14px; color:var(--text-muted); transition:transform .15s var(--ease); flex-shrink:0;}
+  .expand-card.collapsed .expand-header svg.chev{transform:rotate(-90deg);}
+  .expand-body{padding:2px 16px 16px;}
+  .expand-card.collapsed .expand-body{display:none;}
+
+  .analysis-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; margin-bottom:12px;}
+  .a-field{display:flex; flex-direction:column; gap:3px; background:var(--surface-alt); border-radius:8px; padding:9px 11px;}
+  .a-field .lbl{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted); font-weight:600;}
+  .a-field .val{font-size:13px; font-weight:600;}
+  .meter-row{display:flex; align-items:center; gap:10px;}
+  .meter{flex:1; height:6px; border-radius:99px; background:var(--border); overflow:hidden;}
+  .meter > i{display:block; height:100%; background:var(--primary); border-radius:99px; transition:width .5s var(--ease);}
+  .meter-num{font-size:11.5px; color:var(--text-muted); width:3.4em; text-align:right; font-variant-numeric:tabular-nums;}
+
+  .followup-card{border:1px solid color-mix(in srgb, var(--warning) 40%, var(--border)); background:var(--warning-soft); border-radius:10px; padding:11px 13px; display:flex; flex-direction:column; gap:5px; margin-top:12px;}
+  .followup-card .ttl{font-weight:600; font-size:12.3px; color:var(--warning); display:flex; align-items:center; gap:6px;}
+  .followup-card ul{margin:0; padding-left:18px; font-size:12.3px; line-height:1.6;}
+  .escalation-block{border:1px solid color-mix(in srgb, var(--danger) 40%, var(--border)); background:var(--danger-soft); border-radius:10px; padding:12px 14px; display:flex; flex-direction:column; gap:7px; margin-top:12px;}
+  .escalation-block .ttl{font-weight:700; font-size:12.6px; color:var(--danger); display:flex; align-items:center; gap:6px;}
+  .escalation-block pre{white-space:pre-wrap; font-family:ui-monospace,Consolas,monospace; font-size:11.2px; line-height:1.6; margin:0; color:var(--text-2);}
+
+  .transcript-list{display:flex; flex-direction:column; gap:10px; max-height:280px; overflow-y:auto; margin-bottom:10px;}
+  .attach-row{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
+
+  .match-card{border:1px solid var(--border); background:var(--surface-alt); border-radius:10px; padding:11px 12px; display:flex; flex-direction:column; gap:5px; margin-bottom:9px; cursor:pointer; transition:border-color .12s;}
+  .match-card:hover{border-color:var(--primary);}
+  .match-card:last-child{margin-bottom:0;}
+  .match-card .mtitle{font-weight:600; font-size:12.6px;}
+  .match-card .msrc{font-size:10.8px; color:var(--primary);}
+  .match-card .mexcerpt{font-size:11.8px; color:var(--text-muted); line-height:1.5; display:none;}
+  .match-card.open .mexcerpt{display:block;}
+  .empty-inline{text-align:center; color:var(--text-muted); font-size:12.3px; padding:14px 0;}
+
+  .editor-toolbar{display:flex; align-items:center; gap:3px; padding:7px 9px; background:var(--surface-alt); border:1px solid var(--border); border-bottom:none; border-radius:var(--radius-md) var(--radius-md) 0 0; flex-wrap:wrap;}
+  .editor-wrap{border:1px solid var(--border); border-radius:0 0 var(--radius-md) var(--radius-md); overflow:hidden;}
+  #responseEditor{min-height:150px; max-height:320px; overflow-y:auto; padding:13px 15px; font-size:13.3px; line-height:1.68; outline:none; background:var(--surface);}
+  #responseEditor ul, #responseEditor ol{margin:6px 0; padding-left:22px;}
+  #responseEditor a{color:var(--primary);}
+  .editor-footer{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:9px 12px; border:1px solid var(--border); border-top:none; border-radius:0 0 var(--radius-md) var(--radius-md); background:var(--surface-alt); margin-top:-1px;}
+  .ai-actions{display:flex; gap:6px; flex-wrap:wrap;}
+  .response-attach-row{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0;}
+  .action-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  .action-row .spacer{flex:1;}
+
+  /* ---------------- knowledge base view ---------------- */
+  .kb-stats-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-bottom:16px;}
+  .stat-card{padding:14px 16px; display:flex; flex-direction:column; gap:4px;}
+  .stat-card .num{font-size:22px; font-weight:700;}
+  .stat-card .lbl{font-size:11.5px; color:var(--text-muted);}
+  .kb-search-row{display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border);}
+  .kb-search-row .queue-search{flex:1;}
+  .kb-list{max-height:520px; overflow-y:auto;}
+  .kb-row{padding:12px 16px; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:3px; cursor:pointer;}
+  .kb-row:hover{background:var(--surface-alt);}
+  .kb-row .kt{font-size:13px; font-weight:600;}
+  .kb-row .ks{font-size:11.3px; color:var(--primary);}
+  .kb-row .ka{font-size:11.8px; color:var(--text-muted); line-height:1.5; display:none;}
+  .kb-row.open .ka{display:block; margin-top:2px;}
+
+  .form-grid{display:flex; flex-direction:column; gap:10px; padding:14px 16px;}
+  .form-grid label{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-muted); font-weight:600; margin-bottom:-4px;}
+  .form-grid input, .form-grid textarea{background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:8px 10px; font-size:12.8px; width:100%; resize:vertical;}
+  .form-grid input:focus, .form-grid textarea:focus{border-color:var(--primary); outline:none;}
+  .form-msg{font-size:12px; min-height:16px;}
+
+  .learn-list{padding:12px 16px; display:flex; flex-direction:column; gap:9px; max-height:260px; overflow-y:auto;}
+  .learn-item{font-size:12px; line-height:1.55; border-left:2px solid var(--primary); padding:3px 0 3px 10px; color:var(--text-muted);}
+  .learn-item b{color:var(--text);}
+  .learn-item .ts{font-size:10.3px; opacity:.75; display:block;}
+
+  .card-header-row{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border); width:100%; background:none; border-left:none; border-right:none; border-top:none; text-align:left;}
+  .card-header-row h3{font-size:13.3px; margin:0; font-weight:600;}
+  .card-header-row .chev{width:14px; height:14px; color:var(--text-muted); transition:transform .15s;}
+  .collapsible.collapsed .chev{transform:rotate(-90deg);}
+  .collapsible.collapsed .coll-body{display:none;}
+  .kb-mb{margin-bottom:14px;}
+
+  /* ---------------- responsive ---------------- */
+  @media (max-width:1180px){
+    .sidebar{position:fixed; top:var(--header-h); left:0; bottom:0; z-index:25; box-shadow:var(--shadow-lg); width:var(--sidebar-w); transform:translateX(-100%); transition:transform .18s var(--ease);}
+    .sidebar.mobile-open{transform:translateX(0);}
+    .sidebar.collapsed{width:var(--sidebar-w);}
+    .topbar-search{max-width:260px;}
+  }
+  @media (max-width:900px){
+    .console-layout{grid-template-columns:1fr;}
+    .queue-panel{position:static; max-height:340px;}
+  }
+  @media (max-width:640px){
+    .topbar-search{display:none;}
+    .view-panel{padding:14px 12px 26px;}
+    .brand-name span{display:none;}
+  }
+
+  .resp-dropzone{position:relative; border-radius:var(--radius-md); transition:outline-color .12s;}
+  .resp-dropzone.dragover{outline:2px dashed var(--primary); outline-offset:3px; background:var(--primary-soft);}
+  .confirm-inline{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--danger); font-weight:600;}
+
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important; transition-duration:.001ms !important;} }
+</style>
+</head>
+<body>
+
+<div class="app-loading" id="appLoading">
+  <div class="spinner"></div>
+  <p class="loading-text">Loading MR Nexis console…</p>
+  <div class="err">
+    <p style="color:var(--danger); font-weight:600;">Can't reach the local server</p>
+    <p style="max-width:34ch; text-align:center;">Make sure the server is running (<code>npm start</code>) and this page is loaded from that server, then retry.</p>
+    <button class="btn primary" id="retryBootBtn" type="button">Retry connection</button>
+  </div>
+</div>
+
+<div class="app-shell" id="appShell">
+  <header class="topbar">
+    <button class="icon-btn" id="sidebarToggle" aria-label="Toggle navigation" title="Toggle navigation"></button>
+    <div class="brand"><span class="brand-mark">NX</span><span class="brand-name"><b>MR Nexis</b></span></div>
+    <div class="topbar-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="globalSearch" placeholder="Search tickets…" autocomplete="off"/>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" id="notifBtn" aria-haspopup="true" aria-expanded="false" title="Activity"><span class="notif-dot" id="notifDot" hidden></span></button>
+      <div class="notif-panel" id="notifPanel" hidden></div>
+      <button class="icon-btn" id="themeToggle" title="Toggle dark mode"></button>
+      <div class="avatar-chip" title="Local agent session">NX</div>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <nav class="sidebar" id="sidebar">
+      <button class="nav-item active" data-view="customer" type="button"></button>
+      <button class="nav-item" data-view="console" type="button"></button>
+      <button class="nav-item" data-view="kb" type="button"></button>
+      <div class="sidebar-footer" id="sidebarFooter">Loading knowledge base…</div>
+    </nav>
+
+    <main class="main-content" id="mainContent">
+      <section class="view-panel active" id="viewCustomer"></section>
+      <section class="view-panel" id="viewConsole"></section>
+      <section class="view-panel" id="viewKb"></section>
+    </main>
+  </div>
+</div>
+
+<div class="toast-root" id="toastRoot" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ============================================================
+  //  ICONS (inline SVG, Feather-style, currentColor)
+  // ============================================================
+  var ICONS = {
+    menu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>',
+    search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+    sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/><line x1="4.5" y1="4.5" x2="6.2" y2="6.2"/><line x1="17.8" y1="17.8" x2="19.5" y2="19.5"/><line x1="4.5" y1="19.5" x2="6.2" y2="17.8"/><line x1="17.8" y1="6.2" x2="19.5" y2="4.5"/></svg>',
+    moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>',
+    bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+    chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    inbox:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+    book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    chevDown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+    link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.5-1.5"/></svg>',
+    eraser:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H8l-6-6a2 2 0 0 1 0-2.8L13.2 2a2 2 0 0 1 2.8 0l5.8 5.8a2 2 0 0 1 0 2.8L12 20"/></svg>',
+    undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h10a5 5 0 0 1 0 10H8"/><polyline points="7 5 3 10 7 15"/></svg>',
+    redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5"/><polyline points="17 5 21 10 17 15"/></svg>',
+    copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+    paperclip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.1 12.3 20a5 5 0 0 1-7-7L14.1 4.2a3.5 3.5 0 0 1 5 5L10.6 17.6a2 2 0 0 1-2.9-2.9l7.8-7.8"/></svg>',
+    image:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',
+    file:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+    x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+    check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="3"/></svg>',
+    refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.5 9a9 9 0 0 0-15-4.4L1 10m22 4-4.5 5.4A9 9 0 0 1 3.5 15"/></svg>',
+    sparkles:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>',
+    wand:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 1.5 1.5M4 20l9-9M12.5 6.5l5 5M18 3l1 1M21 6l1 1M3 18l1 1"/></svg>',
+    send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+    plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+    trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+    alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+    docCheck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 12.5"/></svg>'
+  };
+  function ic(name, cls){ return (ICONS[name]||'').replace('<svg ', '<svg class="'+(cls||'')+'" '); }
+
+  // ============================================================
+  //  TOASTS
+  // ============================================================
+  var toastRoot = document.getElementById('toastRoot');
+  function toast(message, type, timeout){
+    type = type || 'info';
+    var el = document.createElement('div');
+    el.className = 'toast ' + type;
+    var iconName = type === 'success' ? 'check' : (type === 'danger' ? 'alert' : (type === 'warning' ? 'alert' : 'info'));
+    el.innerHTML = ic(iconName) + '<span class="msg"></span><button class="icon-btn close" type="button" aria-label="Dismiss">' + ic('x') + '</button>';
+    el.querySelector('.msg').textContent = message;
+    toastRoot.appendChild(el);
+    function remove(){
+      if(!el.parentNode) return;
+      el.classList.add('leaving');
+      setTimeout(function(){ el.remove(); }, reduceMotion ? 0 : 160);
+    }
+    el.querySelector('.close').addEventListener('click', remove);
+    setTimeout(remove, timeout || 4200);
+    return el;
+  }
+
+  // ============================================================
+  //  THEME + SIDEBAR TOGGLES
+  // ============================================================
+  var themeToggle = document.getElementById('themeToggle');
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    themeToggle.innerHTML = ic(t === 'dark' ? 'sun' : 'moon');
+    themeToggle.title = t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+    try{ localStorage.setItem('mr-nexis-theme', t); }catch(e){}
+  }
+  (function initTheme(){
+    var saved = null;
+    try{ saved = localStorage.getItem('mr-nexis-theme'); }catch(e){}
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+  })();
+  themeToggle.addEventListener('click', function(){
+    var cur = document.documentElement.getAttribute('data-theme');
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  });
+
+  var sidebar = document.getElementById('sidebar');
+  var sidebarToggle = document.getElementById('sidebarToggle');
+  sidebarToggle.innerHTML = ic('menu');
+  function isMobile(){ return window.innerWidth <= 1180; }
+  sidebarToggle.addEventListener('click', function(){
+    if(isMobile()){ sidebar.classList.toggle('mobile-open'); }
+    else { sidebar.classList.toggle('collapsed'); }
+  });
+  document.addEventListener('click', function(e){
+    if(isMobile() && sidebar.classList.contains('mobile-open') && !sidebar.contains(e.target) && e.target !== sidebarToggle && !sidebarToggle.contains(e.target)){
+      sidebar.classList.remove('mobile-open');
+    }
+  });
+
+  // ============================================================
+  //  TINY FETCH HELPERS TO THE LOCAL API
+  // ============================================================
+  function apiGet(url){ return fetch(url).then(function(r){ return r.json(); }); }
+  function apiPost(url, body){
+    return fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(function(r){ return r.json(); });
+  }
+  function apiPatch(url, body){
+    return fetch(url, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(function(r){ return r.json(); });
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; });
+  }
+  function excerpt(text, len){
+    var t = String(text).replace(/\n+/g, ' ');
+    return t.length > len ? t.slice(0, len).trim() + '…' : t;
+  }
+  function fmtBytes(n){
+    if(n < 1024) return n + ' B';
+    if(n < 1024*1024) return (n/1024).toFixed(1) + ' KB';
+    return (n/(1024*1024)).toFixed(1) + ' MB';
+  }
+
+  // ============================================================
+  //  VIEW SWITCHING (sidebar nav)
+  // ============================================================
+  var VIEWS = ['customer','console','kb'];
+  var currentView = 'customer';
+  var navItems = Array.prototype.slice.call(document.querySelectorAll('.nav-item'));
+  var viewPanels = { customer: document.getElementById('viewCustomer'), console: document.getElementById('viewConsole'), kb: document.getElementById('viewKb') };
+  var globalSearch = document.getElementById('globalSearch');
+
+  function setView(name){
+    currentView = name;
+    VIEWS.forEach(function(v){ viewPanels[v].classList.toggle('active', v === name); });
+    navItems.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-view') === name); });
+    document.getElementById('mainContent').scrollTop = 0; // bug fix: switching views used to keep the previous view's scroll offset
+    if(name === 'console'){ globalSearch.placeholder = 'Search tickets by subject, customer, or ID…'; renderQueue(); }
+    else if(name === 'kb'){ globalSearch.placeholder = 'Search the knowledge base…'; renderKbList(); }
+    else { globalSearch.placeholder = 'Search tickets…'; }
+    if(isMobile()) sidebar.classList.remove('mobile-open');
+  }
+  navItems.forEach(function(b){ b.addEventListener('click', function(){ setView(b.getAttribute('data-view')); }); });
+
+  globalSearch.addEventListener('input', function(){
+    if(currentView === 'console'){ queueFilter.query = globalSearch.value; renderQueue(); }
+    else if(currentView === 'kb'){ kbFilter.query = globalSearch.value; renderKbList(); }
+  });
+
+  navItems[0].innerHTML = ic('chat') + '<span class="label">Customer Portal</span>';
+  navItems[1].innerHTML = ic('inbox') + '<span class="label">Agent Console</span><span class="nav-badge" id="navQueueBadge">0</span>';
+  navItems[2].innerHTML = ic('book') + '<span class="label">Knowledge Base</span>';
+  var navQueueBadge = document.getElementById('navQueueBadge');
+
+  // ============================================================
+  //  NOTIFICATIONS BELL (backed by the activity/learning log)
+  // ============================================================
+  var notifBtn = document.getElementById('notifBtn');
+  var notifPanel = document.getElementById('notifPanel');
+  var notifDot = document.getElementById('notifDot');
+  notifBtn.innerHTML = ic('bell') + '<span class="notif-dot" id="notifDot" hidden></span>';
+  notifDot = document.getElementById('notifDot');
+  var notifSeen = 0;
+  function renderNotifPanel(){
+    if(!learningLog.length){
+      notifPanel.innerHTML = '<h4>Activity</h4><div class="empty-inline">No activity yet.</div>';
+      return;
+    }
+    notifPanel.innerHTML = '<h4>Recent activity</h4>' + learningLog.slice(0, 20).map(function(e){
+      return '<div class="notif-item">' + e.text + '<span class="ts">' + e.ts + '</span></div>';
+    }).join('');
+  }
+  notifBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var open = notifPanel.hasAttribute('hidden');
+    if(open){ renderNotifPanel(); notifPanel.removeAttribute('hidden'); notifBtn.setAttribute('aria-expanded','true'); notifSeen = learningLog.length; notifDot.hidden = true; }
+    else { notifPanel.setAttribute('hidden',''); notifBtn.setAttribute('aria-expanded','false'); }
+  });
+  document.addEventListener('click', function(e){
+    if(!notifPanel.hasAttribute('hidden') && !notifPanel.contains(e.target) && e.target !== notifBtn && !notifBtn.contains(e.target)){
+      notifPanel.setAttribute('hidden',''); notifBtn.setAttribute('aria-expanded','false');
+    }
+  });
+
+  // ============================================================
+  //  RETRIEVAL — token + curated-keyword matching with synonym
+  //  expansion. See scoreEntry() for the full rationale: curated
+  //  keyword substrings are the strongest signal, token overlap
+  //  (IDF-weighted, capped) catches rephrasing, and word/phrase
+  //  synonyms bridge everyday client language to doc vocabulary.
+  // ============================================================
+  var KB = [];
+  var STOPWORDS = ["this","that","from","with","have","what","when","where","does","doesn","cannot","about","there","which","would","could","should","your","their","been","were","will","into","then","than","also","just","only","like","need","want","tell","show","give","please","thanks","hello","help",
+    "member","members","team","every","separate","whole","really","actually","feel","feels","feeling","thing","things","share","sharing","some","much","many","most","more","less","still","even","back","again","other","another","anyone","someone","something","everything"];
+  function stem(w){ return w.length > 6 ? w.slice(0, 6) : w; }
+  function rawWords(text){
+    return text.toLowerCase().split(/\W+/).filter(function(w){ return w.length > 3 && STOPWORDS.indexOf(w) === -1; });
+  }
+  function tokenize(text){ return rawWords(text).map(stem); }
+  var SYNONYMS = {
+    "login": ["authenticate","signin"], "signin": ["authenticate"], "logon": ["authenticate"],
+    "crash": ["error","fail"], "crashing": ["error","fail"], "freeze": ["error"], "freezing": ["error"],
+    "hang": ["error"], "hanging": ["error"], "stuck": ["error"], "broken": ["error"], "glitch": ["error"],
+    "slow": ["performance"], "sluggish": ["performance"], "lag": ["performance"], "laggy": ["performance"],
+    "picture": ["image"], "screenshot": ["image"], "photo": ["image"], "pictures": ["image"],
+    "doc": ["document"], "docs": ["document"],
+    "sso": ["authenticate","single"],
+    "permission": ["rights","access"], "permissions": ["rights","access"],
+    "setup": ["configuration","install"], "config": ["configuration"], "configure": ["configuration"],
+    "licence": ["license"], "subscription": ["license"], "seat": ["license"], "seats": ["license"],
+    "upgrade": ["patch","version","update"], "update": ["patch","version"], "updating": ["patch","version"],
+    "download": ["export"], "downloading": ["export"],
+    "upload": ["import"], "uploading": ["import"],
+    "popup": ["notification"], "alert": ["notification"],
+    "snapshot": ["baseline"], "history": ["baseline"],
+    "database": ["mongodb","sql"], "db": ["mongodb","sql"],
+    "chrome": ["browser"], "firefox": ["browser"], "edge": ["browser"],
+    "grid": ["table"], "matrix": ["table"],
+    "label": ["caption"], "heading": ["caption"],
+    "remove": ["delete"], "erase": ["delete"],
+    "deploy": ["install"], "deployment": ["install"],
+    "ticket": ["item"], "story": ["item"], "task": ["item"],
+    "cert": ["https"], "certificate": ["https"], "ssl": ["https"],
+    "extension": ["vsix"], "addon": ["vsix"], "plugin": ["vsix"],
+    "linking": ["trace"], "traceability": ["trace"], "linkage": ["trace"]
+  };
+  var PHRASE_SYNONYMS = {
+    "log in": ["authenticate"], "log into": ["authenticate"], "logged in": ["authenticate"],
+    "logging in": ["authenticate"], "sign in": ["authenticate"], "signed in": ["authenticate"],
+    "single sign on": ["authenticate"], "cant access": ["authenticate","rights"],
+    "roll back": ["baseline","version"], "rolled back": ["baseline","version"], "undo": ["baseline"],
+    "spinning": ["error"], "not responding": ["error"], "freezes": ["error"], "keeps loading": ["error"]
+  };
+
+  // ============================================================
+  //  SECTION 2 — INPUT NORMALIZATION
+  //  Case, spacing and punctuation are never meaningful. Glued words, camelCase and
+  //  product abbreviations are resolved to canonical entity names BEFORE any matching,
+  //  so "SMART DOCS", "SmartDocs" and "smartdocs" all reach retrieval as "smart docs".
+  // ============================================================
+  // Abbreviations are expanded on word boundaries only, so "cp" in "cp not working"
+  // expands but the "cp" inside another word never does.
+  var ABBREVIATIONS = {
+    "cp": "copilot4devops", "c4do": "copilot4devops", "copilot": "copilot4devops",
+    "ado": "azure devops", "vsts": "azure devops", "tfs": "azure devops server",
+    "mr4do": "modern requirements4devops", "mr4devops": "modern requirements4devops",
+    "tcm": "test case management", "wi": "work item", "wits": "work items",
+    "sd": "smart docs", "va": "trace analysis", "pat": "personal access token",
+    "sso": "single sign on", "kb": "knowledge base", "repro": "reproduce"
+  };
+  // Glued forms that word-splitting alone cannot separate.
+  var GLUED_TERMS = {
+    "smartdocs": "smart docs", "smartdoc": "smart docs", "smartreport": "smart report",
+    "smartreports": "smart report", "smartedit": "smart edit", "smartview": "smart view",
+    "smartimport": "smart import", "workitem": "work item", "workitems": "work items",
+    "testcase": "test case", "testcases": "test cases", "testplan": "test plan",
+    "testsuite": "test suite", "testrun": "test run", "traceanalysis": "trace analysis",
+    "crossreference": "cross reference", "versionpackage": "version package",
+    "versionpackages": "version packages", "documentmanagement": "document management",
+    "adminpanel": "admin panel", "emailmonitor": "email monitor", "customid": "custom id",
+    "suspectlinks": "suspect links", "wordimport": "word import", "linkedartifacts": "linked artifacts",
+    "copilot4devops": "copilot4devops"
+  };
+  function normalizeQuery(text){
+    var s = String(text || '');
+    // split camelCase / PascalCase boundaries ("SmartDocs" -> "Smart Docs") before lowercasing
+    s = s.replace(/([a-z])([A-Z])/g, '$1 $2');
+    s = s.toLowerCase();
+    // punctuation to spaces, except the digits/letters inside product names like copilot4devops
+    s = s.replace(/[^\w\s@.&/-]/g, ' ');
+    // expand glued product terms
+    Object.keys(GLUED_TERMS).forEach(function(g){
+      s = s.replace(new RegExp('\\b' + g + '\\b', 'g'), GLUED_TERMS[g]);
+    });
+    // expand abbreviations on word boundaries
+    Object.keys(ABBREVIATIONS).forEach(function(a){
+      s = s.replace(new RegExp('\\b' + a + '\\b', 'g'), ABBREVIATIONS[a]);
+    });
+    return s.replace(/\s+/g, ' ').trim();
+  }
+
+  function expandQueryStems(text){
+    var lower = text.toLowerCase();
+    var words = rawWords(text);
+    var stems = words.map(stem);
+    var extra = [];
+    words.forEach(function(w){
+      if(SYNONYMS[w]) SYNONYMS[w].forEach(function(t){ extra.push(stem(t)); });
+    });
+    Object.keys(PHRASE_SYNONYMS).forEach(function(p){
+      if(lower.indexOf(p) !== -1) PHRASE_SYNONYMS[p].forEach(function(t){ extra.push(stem(t)); });
+    });
+    return stems.concat(extra);
+  }
+  // Deliberately indexes only the title + keywords, NOT the full answer body — indexing the whole
+  // prose paragraph let incidental words inside an unrelated answer (e.g. "achieve") spuriously
+  // match a query, causing the bot to jump to a different topic than the one actually asked about.
+  function searchTokens(entry){
+    if(!entry._tokens){
+      var haystack = entry.title + ' ' + entry.keywords.join(' ');
+      entry._tokens = {};
+      tokenize(haystack).forEach(function(t){ entry._tokens[t] = true; });
+    }
+    return entry._tokens;
+  }
+  var docFreqCache = null, docFreqN = -1;
+  function docFreq(){
+    if(docFreqCache === null || docFreqN !== KB.length){
+      docFreqCache = {};
+      KB.forEach(function(e){
+        Object.keys(searchTokens(e)).forEach(function(t){ docFreqCache[t] = (docFreqCache[t] || 0) + 1; });
+      });
+      docFreqN = KB.length;
+    }
+    return docFreqCache;
+  }
+  function tokenWeight(t){
+    var df = docFreq()[t] || 0;
+    if(!df) return 0;
+    return Math.min(1.3, 2.5 / (1 + df / 8));
+  }
+  // Returns a breakdown, not just a total — keywordScore (explicit keyword/phrase hit, strong signal)
+  // is kept separate from tokenScore (weak stemmed overlap) so callers can require real topical
+  // overlap instead of accepting any match that merely clears a numeric threshold.
+  function scoreEntry(entry, lowerText, queryStems){
+    var keywordScore = 0;
+    entry.keywords.forEach(function(k){
+      // Compare lowercased — many KB entries use natural Title Case keywords ("Email Monitor",
+      // "Custom ID"), and comparing them as-is against the already-lowercased query text meant
+      // they could never match, silently breaking the strongest relevance signal for those entries.
+      var kLower = k.toLowerCase();
+      if(lowerText.indexOf(kLower) !== -1){
+        var base = kLower.length >= 10 ? 3 : (kLower.length >= 6 ? 2 : 1);
+        keywordScore += kLower.indexOf(' ') !== -1 ? base : base * 0.4;
+      }
+    });
+    var tokens = searchTokens(entry);
+    var tokenScore = 0;
+    queryStems.forEach(function(t){ if(tokens[t]) tokenScore += tokenWeight(t); });
+    return { keywordScore: keywordScore, tokenScore: tokenScore, total: keywordScore + tokenScore };
+  }
+  var MIN_MATCH_SCORE = 1.1;
+
+  // SECTION 5 — SOURCE HIERARCHY.
+  // current official documentation > release notes/changelogs > older-version KB > unverified.
+  // Applied as a tie-break so that when two sources say comparable things, the more current one
+  // wins; it never overrides a clearly stronger textual match.
+  var SOURCE_TIERS = [
+    { tier: 1, label: 'Current official documentation', test: function(d){ return /NextGen Online Help/i.test(d); } },
+    { tier: 2, label: 'Official release notes', test: function(d){ return /Release Notes/i.test(d); } },
+    { tier: 3, label: 'Version-specific KB / technote', test: function(d){ return /Technote|Guide/i.test(d); } }
+  ];
+  function sourceTier(sourceDoc){
+    for(var i = 0; i < SOURCE_TIERS.length; i++){ if(SOURCE_TIERS[i].test(sourceDoc || '')) return SOURCE_TIERS[i].tier; }
+    return 4;
+  }
+  function sourceTierLabel(sourceDoc){
+    for(var i = 0; i < SOURCE_TIERS.length; i++){ if(SOURCE_TIERS[i].test(sourceDoc || '')) return SOURCE_TIERS[i].label; }
+    return 'Unverified / uncategorised source';
+  }
+  var TIER_TIEBREAK_MARGIN = 0.6; // scores this close are treated as "comparable"
+  function rankMatches(a, b){
+    if(Math.abs(a.score - b.score) <= TIER_TIEBREAK_MARGIN){
+      var ta = sourceTier(a.entry.sourceDoc), tb = sourceTier(b.entry.sourceDoc);
+      if(ta !== tb) return ta - tb;
+    }
+    return b.score - a.score;
+  }
+
+  // A candidate only counts as a real match if it has an explicit keyword/phrase hit, or a strong
+  // enough title/keyword token overlap on its own — this is the "extract the key topic, only use
+  // directly relevant information" gate that stops a weak, coincidental score from one document
+  // out-competing on an unrelated topic.
+  function findMatches(text){
+    var lower = normalizeQuery(text);
+    var queryStems = expandQueryStems(lower);
+    return KB.map(function(e){
+        var s = scoreEntry(e, lower, queryStems);
+        return { entry:e, score: s.total, keywordScore: s.keywordScore, tokenScore: s.tokenScore };
+      })
+      .filter(function(s){ return s.score >= MIN_MATCH_SCORE && (s.keywordScore > 0 || s.tokenScore >= MIN_MATCH_SCORE); })
+      .sort(rankMatches);
+  }
+  // Same scoring, but scoped to one source document — used to keep a vague follow-up ("how do we
+  // achieve it") anchored to the topic already under discussion instead of letting it match
+  // whatever unrelated document happens to score highest across the whole knowledge base.
+  function findMatchesWithinDoc(text, sourceDoc){
+    if(!sourceDoc) return [];
+    var lower = normalizeQuery(text);
+    var queryStems = expandQueryStems(lower);
+    return KB.filter(function(e){ return e.sourceDoc === sourceDoc; })
+      .map(function(e){ var s = scoreEntry(e, lower, queryStems); return { entry:e, score: s.total, keywordScore: s.keywordScore, tokenScore: s.tokenScore }; })
+      .filter(function(s){ return s.score > 0; })
+      .sort(rankMatches);
+  }
+  // A query has no identifiable topic of its own when it doesn't hit any real keyword/phrase in
+  // the knowledge base — short pronoun-heavy follow-ups like "how do we achieve it" look like this.
+  function hasOwnTopicSignal(matches){
+    return matches.length > 0 && matches[0].keywordScore > 0;
+  }
+
+  // ---------------- classification heuristics ----------------
+  var HIGH_PRIORITY_WORDS = ["production","down","cannot access","can't access","data loss","lost data","all users","urgent","asap","critical","security","blocked completely","not working at all","outage"];
+  var MED_PRIORITY_WORDS = ["error","fail","not working","issue","broken","stuck","cannot","can't","problem","wrong"];
+  var ESCALATION_WORDS = ["data loss","lost data","security","breach","corrupt","production down","all users","outage","cannot access anything"];
+
+  function priorityOf(text, confidence){
+    var lower = text.toLowerCase();
+    if(HIGH_PRIORITY_WORDS.some(function(w){ return lower.indexOf(w) !== -1; })) return "High";
+    if(confidence < 0.4) return "High";
+    if(MED_PRIORITY_WORDS.some(function(w){ return lower.indexOf(w) !== -1; })) return "Medium";
+    return "Low";
+  }
+  function shouldEscalate(text, confidence, matches){
+    var lower = text.toLowerCase();
+    if(ESCALATION_WORDS.some(function(w){ return lower.indexOf(w) !== -1; })) return { escalate:true, reason:"Contains language indicating a critical/data-integrity issue that requires specialist review." };
+    if(!matches.length || confidence < 0.32) return { escalate:true, reason:"No documentation section matches this query with sufficient confidence — needs product-team input." };
+    return { escalate:false, reason:null };
+  }
+  function moduleOf(matches){
+    if(!matches.length) return "Unclassified";
+    return matches[0].entry.sourceDoc;
+  }
+  function missingInfoQuestions(text, matches){
+    var lower = text.toLowerCase();
+    var qs = [];
+    if(lower.indexOf("error") !== -1 && lower.indexOf("screenshot") === -1 && lower.indexOf("log") === -1){
+      qs.push("Could you share a screenshot or the exact error text/log so we can confirm the exact failure point?");
+    }
+    if(!/embedded|standalone/.test(lower) && /activat|install|licens/.test(lower)){
+      qs.push("Are you running the Embedded (Azure DevOps) build or the Standalone build?");
+    }
+    if(!matches.length){
+      qs.push("Which product are you using — Modern Requirements4DevOps or Copilot4DevOps — and which feature/module is involved?");
+    }
+    return qs;
+  }
+  var NOT_COVERED = "I couldn't find a section that closely matches that in the documentation currently loaded. I've logged this question so it can be reviewed and added to the knowledge base — an agent will follow up shortly with a checked answer. In the meantime, try rephrasing, or ask about installation, admin configuration, Word import, cross-references, services, document properties, test case management, or recent release/patch notes.";
+
+  // ============================================================
+  //  SECTION 3 — INTERNAL REASONING PASS
+  //  Everything in this section is scratch reasoning for the agent console only.
+  //  None of these field names or values are ever rendered into a customer reply.
+  // ============================================================
+
+  // Distinct product entities. Deliberately kept separate — Smart Docs is not Baseline,
+  // Document Management is not Smart Docs, Copilot4DevOps is not MR4DevOps. Retrieval may
+  // never silently substitute one for another.
+  var ENTITIES = [
+    { name: 'Smart Docs', product: 'MR4DevOps', match: ['smart docs', 'smart doc'] },
+    { name: 'Document Management', product: 'MR4DevOps', match: ['document management'] },
+    { name: 'Baseline', product: 'MR4DevOps', match: ['baseline'] },
+    { name: 'Review', product: 'MR4DevOps', match: ['review request', 'review module', 'reviewer', 'approver'] },
+    { name: 'Trace Analysis', product: 'MR4DevOps', match: ['trace analysis', 'traceability', 'traceability matrix'] },
+    { name: 'Version Packages', product: 'MR4DevOps', match: ['version package'] },
+    { name: 'Smart Import', product: 'MR4DevOps', match: ['smart import'] },
+    { name: 'Word Import', product: 'MR4DevOps', match: ['word import', 'ruleset'] },
+    { name: 'Smart Report', product: 'MR4DevOps', match: ['smart report'] },
+    { name: 'Reporting', product: 'MR4DevOps', match: ['advanced report'] },
+    { name: 'Smart Edit', product: 'MR4DevOps', match: ['smart edit', 'smart view'] },
+    { name: 'Diagrams', product: 'MR4DevOps', match: ['diagram', 'mockup', 'mock-up'] },
+    { name: 'Linked Artifacts', product: 'MR4DevOps', match: ['linked artifact'] },
+    { name: 'Test Case Management', product: 'MR4DevOps', match: ['test case', 'test plan', 'test suite', 'test run', 'test point', 'test step run'] },
+    { name: 'Cross Reference', product: 'MR4DevOps', match: ['cross reference'] },
+    { name: 'Document Properties', product: 'MR4DevOps', match: ['document propert', 'quick part'] },
+    { name: 'MR Services', product: 'MR4DevOps', match: ['mr services', 'mr agent', 'email monitor', 'custom id', 'suspect links', 'matcal'] },
+    { name: 'Admin Panel', product: 'MR4DevOps', match: ['admin panel', 'admin configuration'] },
+    { name: 'Licensing', product: 'MR4DevOps', match: ['licen', 'activation', 'seat'] },
+    { name: 'Copilot4DevOps', product: 'Copilot4DevOps', match: ['copilot4devops'] }
+  ];
+  function detectEntities(normalized){
+    var found = [];
+    ENTITIES.forEach(function(ent){
+      for(var i = 0; i < ent.match.length; i++){
+        if(normalized.indexOf(ent.match[i]) !== -1){
+          found.push({ name: ent.name, product: ent.product, match: ent.match[i] });
+          return;
+        }
+      }
+    });
+    return found;
+  }
+
+  function classifyIntent(normalized){
+    if(/licen|activation|seat|subscription/.test(normalized)) return 'licensing';
+    if(/slow|performance|lag|timeout|hang|takes too long/.test(normalized)) return 'performance';
+    if(/error|fail|exception|crash|broken|not working|doesn t work|does not work|unable to/.test(normalized)) return 'error';
+    if(/difference between|compare|versus| vs /.test(normalized)) return 'comparison';
+    if(/limit|maximum|max |restrict|not supported|can t we|cannot/.test(normalized)) return 'limitation';
+    if(/compatib|supported version|works with|browser|operating system/.test(normalized)) return 'compatibility';
+    if(/known issue|bug|defect/.test(normalized)) return 'known-issue';
+    if(/integrat|connect|sync|api/.test(normalized)) return 'integration';
+    if(/upgrade|update to|migrat|version|patch|release/.test(normalized)) return 'version-diff';
+    if(/config|setting|set up|setup|enable|disable|install/.test(normalized)) return 'config';
+    if(/should it|supposed to|expected|is it normal/.test(normalized)) return 'expected-vs-unexpected';
+    if(/what is|what does|how does|how do|how can|explain|where is/.test(normalized)) return 'how-it-works';
+    return 'general-info';
+  }
+
+  function detectVersion(normalized){
+    var m = normalized.match(/\b(20\d\d)\b/) || normalized.match(/\bpatch\s*(\d+)\b/) || normalized.match(/\bv(\d+(?:\.\d+)?)\b/);
+    return m ? m[0] : 'unconfirmed';
+  }
+  function detectEnvironment(normalized){
+    if(/embedded/.test(normalized)) return 'Embedded (Azure DevOps)';
+    if(/standalone/.test(normalized)) return 'Standalone';
+    if(/on.?prem|server|tfs/.test(normalized)) return 'On-premises Azure DevOps Server';
+    if(/cloud|dev\.azure\.com|azure devops services/.test(normalized)) return 'Cloud Azure DevOps';
+    return 'unconfirmed';
+  }
+  function detectProduct(entities, matches){
+    var products = {};
+    entities.forEach(function(e){ products[e.product] = true; });
+    if(!entities.length && matches.length){
+      products[/Copilot/i.test(matches[0].entry.sourceDoc + matches[0].entry.title) ? 'Copilot4DevOps' : 'MR4DevOps'] = true;
+    }
+    var keys = Object.keys(products);
+    if(!keys.length) return 'unconfirmed';
+    return keys.join(' + ');
+  }
+  function confidenceBand(conf){
+    if(conf >= DIRECT_ANSWER_THRESHOLD) return 'high';
+    if(conf >= 0.32) return 'medium';
+    return 'low';
+  }
+
+  // SECTION 8 — attachments are evidence, weighted like retrieved documentation.
+  // Honest limitation: this build has no OCR/vision, so image contents cannot be read
+  // automatically. Attachments are recorded and flagged for human review rather than
+  // having their contents invented.
+  function describeAttachments(parts){
+    var atts = (parts || []).filter(function(p){ return p.type === 'image' || p.type === 'file'; });
+    if(!atts.length) return { count: 0, names: [], note: 'None provided.' };
+    var names = atts.map(function(a){ return a.name || (a.type === 'image' ? 'screenshot' : 'file'); });
+    return {
+      count: atts.length,
+      names: names,
+      note: atts.length + ' attachment(s) provided (' + names.join(', ') + '). Contents are not machine-readable in this build — an agent must open them to read error text, version strings and visible configuration.'
+    };
+  }
+
+  // SECTION 4 — ambiguity detection. Two distinct named entities, or two near-tied matches
+  // from different areas with nothing named, means we must ask rather than pick.
+  function detectAmbiguity(entities, matches){
+    if(entities.length >= 2){
+      return { ambiguous: true, what: 'the message names more than one distinct feature', options: entities.slice(0, 3).map(function(e){ return e.name; }) };
+    }
+    if(!entities.length && matches.length >= 2){
+      var a = matches[0], b = matches[1];
+      if(a.entry.sourceDoc !== b.entry.sourceDoc && Math.abs(a.score - b.score) < 0.4){
+        return { ambiguous: true, what: 'the wording fits two different areas equally well', options: [friendlyTopicName(a.entry.sourceDoc), friendlyTopicName(b.entry.sourceDoc)] };
+      }
+    }
+    return { ambiguous: false, what: null, options: [] };
+  }
+
+  // ---------------- structured response pipeline ----------------
+  // Question -> Understand -> Check latest knowledge -> Analyze -> Verify -> Answer -> Suggest further investigation
+  var DIRECT_ANSWER_THRESHOLD = 0.55;
+
+  // Verify: does the top match actually look like a direct answer, or just a topically-related section?
+  function needsFurtherInvestigation(text, matches, confidence){
+    if(!matches.length) return true;
+    var lower = text.toLowerCase();
+    if(ESCALATION_WORDS.some(function(w){ return lower.indexOf(w) !== -1; })) return true;
+    if(confidence < DIRECT_ANSWER_THRESHOLD) return true;
+    return false;
+  }
+
+  // Suggest a concrete next action: review logs, check configuration, reproduce, request info, or escalate.
+  function suggestNextAction(text, matches, confidence){
+    var lower = text.toLowerCase();
+    if(ESCALATION_WORDS.some(function(w){ return lower.indexOf(w) !== -1; })){
+      return "This mentions a possible data-integrity or production-impact issue — escalate to L2/L3 · R&D rather than answering from documentation alone.";
+    }
+    if(!matches.length){
+      return "Nothing in the current documentation matches this closely enough to trust. Ask the customer for more detail (exact product/module, error text, and a screenshot or log if available), then check with the team whether this is a known issue before replying.";
+    }
+    if(confidence < 0.32){
+      return "The best match found is only loosely related — confirm the customer's exact scenario (version, Embedded vs Standalone, steps to reproduce) and verify against the cited source page before sending a reply.";
+    }
+    if(/error|fail|exception|crash|freeze|hang/.test(lower) && lower.indexOf('log') === -1 && lower.indexOf('screenshot') === -1){
+      return "Request the exact error text or a log file/screenshot, then compare it against the cited documentation to confirm this is the same issue before sending a fix.";
+    }
+    if(/config|setting|permission|admin panel|install/.test(lower)){
+      return "Ask the customer to confirm their current configuration/settings against the steps in the cited source — a mismatch there is the most common cause — and reproduce the scenario if possible.";
+    }
+    return "The closest documentation only partially covers this question — verify the specific detail the customer asked about against the cited source page, and reproduce the scenario if possible, before sending a final answer.";
+  }
+
+  // Compose the final structured reply. This is the "extract the topic -> only use directly
+  // relevant information -> verify -> answer" pipeline the customer actually asked for:
+  //  1. A candidate only counts if it has its own real keyword/topic signal (hasOwnTopicSignal) —
+  //     this is the "extract the key product/feature/topic" + "do not combine unrelated docs
+  //     because of similar keywords" step.
+  //  2. A topic-less follow-up ("how do we achieve it") is answered by staying anchored to the
+  //     topic already under discussion (lastSourceDoc), never by letting some other, unrelated
+  //     document win on a coincidental score.
+  //  3. If nothing genuinely relevant is found — even within the current topic — the reply says so
+  //     plainly instead of guessing, which is the final Question vs. Answer validation.
+  function friendlyTopicName(sourceDoc){
+    return String(sourceDoc || '').replace(/\s+(Technote|Guide)$/i, '');
+  }
+  // "About" = the document's own title or source names the feature, as opposed to merely
+  // listing it among its keywords.
+  function isAboutEntity(entry, matchPhrase){
+    return (entry.sourceDoc + ' ' + entry.title).toLowerCase().indexOf(matchPhrase) !== -1;
+  }
+  // Customers think in features ("Smart Docs"), not in source documents ("NextGen Online Help").
+  // Anything shown to a customer must be named as a feature wherever one can be identified.
+  function entityNameForEntry(entry){
+    if(!entry) return null;
+    var hay = (entry.sourceDoc + ' ' + entry.title + ' ' + entry.keywords.join(' ')).toLowerCase();
+    for(var i = 0; i < ENTITIES.length; i++){
+      for(var j = 0; j < ENTITIES[i].match.length; j++){
+        if(hay.indexOf(ENTITIES[i].match[j]) !== -1) return ENTITIES[i].name;
+      }
+    }
+    var friendly = friendlyTopicName(entry.sourceDoc);
+    return /online help|release notes/i.test(friendly) ? null : friendly;
+  }
+  // SECTION 7 — response validation. Run against every draft before it is allowed out.
+  // A failing draft is discarded and regenerated as an honest "not enough verified
+  // information" reply — never patched into something that merely looks right.
+  function validateDraft(draft, reasoning){
+    var problems = [];
+    if(!draft.usedMatches.length){
+      problems.push('No retrieved source supports an answer.');
+      return { pass: false, problems: problems };
+    }
+    var top = draft.usedMatches[0];
+    if(top.keywordScore === 0 && !draft.anchoredToContext){
+      problems.push('Top source has no direct topical overlap with the question wording.');
+    }
+    // The answer must be about the feature the customer actually named (Section 7: never
+    // answer an adjacent topic that happened to surface in retrieval). When several features
+    // were named, the one committed to after clarification is the one that must match.
+    var committed = reasoning.committedEntity || (reasoning.entities.length === 1 ? reasoning.entities[0] : null);
+    if(committed){
+      var haystack = (top.entry.sourceDoc + ' ' + top.entry.title + ' ' + top.entry.keywords.join(' ')).toLowerCase();
+      if(haystack.indexOf(committed.match) === -1){
+        problems.push('Customer named "' + committed.name + '" but the best source is about "' + friendlyTopicName(top.entry.sourceDoc) + '".');
+      }
+    }
+    if(reasoning.confidenceBand === 'low'){
+      problems.push('Confidence is low — not presentable as settled.');
+    }
+    return { pass: problems.length === 0, problems: problems };
+  }
+
+  // Customer-facing "what to do right now", tuned to intent. Plain English, no internal terms.
+  function nextStepFor(intent, entityName, settled){
+    var what = entityName ? entityName : 'this feature';
+    if(!settled) return null; // unsettled replies build their own ask
+    switch(intent){
+      case 'config':
+        return 'Try the steps above in your own project. If a setting on your screen does not match what is described, tell me what you see and I will take it from there.';
+      case 'error':
+        return 'Work through the steps above. If the same error comes back, send me the exact error text or a screenshot and I will check it against the known issues.';
+      case 'licensing':
+        return 'Check this against your current licence details. If what you see does not line up, tell me and I will pick it up with the licensing team.';
+      case 'limitation':
+      case 'compatibility':
+        return 'Plan around this limit for now. If you need it raised or changed, say so and I will raise it as a product request.';
+      case 'version-diff':
+        return 'Confirm which version you are on so I can tell you whether this applies to your environment.';
+      case 'comparison':
+        return 'Let me know which of the two you want to go with and I can walk you through it.';
+      default:
+        return 'Nothing further is needed from you. If you want, I can go deeper into any part of ' + what + '.';
+    }
+  }
+
+  // SECTION 6 — customer-facing response generation.
+  // Returns Understanding / Answer / Next Step / Further Investigation Required, plus the
+  // Section 3 reasoning block, which stays internal (agent console only).
+  function composeNexisReply(text, rawMatches, ctx){
+    ctx = ctx || {};
+    var normalized = normalizeQuery(text);
+    var entities = detectEntities(normalized);
+    var intent = classifyIntent(normalized);
+    var attachments = ctx.attachments || { count: 0, names: [], note: 'None provided.' };
+    var rounds = ctx.clarificationRounds || 0;
+
+    var usedMatches = rawMatches;
+    var anchoredToContext = false;
+    var assumption = null;
+    var validatedTopic = hasOwnTopicSignal(rawMatches);
+
+    // Topic-less follow-up ("how do we achieve it") continues the investigation already in
+    // progress rather than restarting from zero (Section 4).
+    if(!validatedTopic && ctx.lastSourceDoc){
+      var contextMatches = findMatchesWithinDoc(text, ctx.lastSourceDoc);
+      if(contextMatches.length){
+        usedMatches = contextMatches;
+        validatedTopic = true;
+        anchoredToContext = true;
+        assumption = 'still about ' + (ctx.lastTopicLabel || friendlyTopicName(ctx.lastSourceDoc));
+      } else {
+        usedMatches = [];
+      }
+    }
+
+    var ambiguity = detectAmbiguity(entities, rawMatches);
+
+    // Section 4: once two clarification rounds are spent, stop asking and commit to the
+    // best-supported reading. Committing means retrieval is restricted to that one feature —
+    // leaving it free to return whatever scored highest across all the named features is how a
+    // reply ends up claiming to be about Smart Docs while quoting something else entirely.
+    var committedEntity = null;
+    if(ambiguity.ambiguous && rounds >= 2 && entities.length){
+      committedEntity = entities[0];
+      usedMatches = usedMatches
+        .filter(function(m){
+          var hay = (m.entry.sourceDoc + ' ' + m.entry.title + ' ' + m.entry.keywords.join(' ')).toLowerCase();
+          return hay.indexOf(committedEntity.match) !== -1;
+        })
+        // A document that is *about* the feature (its title/source says so) beats one that merely
+        // mentions it in passing among its keywords — otherwise a release-note bug list wins over
+        // the actual feature documentation just by listing more matching keywords.
+        .sort(function(a, b){
+          var aAbout = isAboutEntity(a.entry, committedEntity.match) ? 0 : 1;
+          var bAbout = isAboutEntity(b.entry, committedEntity.match) ? 0 : 1;
+          if(aAbout !== bAbout) return aAbout - bAbout;
+          return rankMatches(a, b);
+        });
+      assumption = 'a question about ' + committedEntity.name;
+      if(!usedMatches.length) validatedTopic = false;
+    }
+
+    var topEntry = usedMatches.length ? usedMatches[0].entry : null;
+    var confidence = usedMatches.length ? Math.min(0.97, 0.42 + usedMatches[0].score * 0.07) : 0;
+
+    var reasoning = {
+      committedEntity: committedEntity,
+      product: detectProduct(entities, usedMatches),
+      module: topEntry ? (entityNameForEntry(topEntry) || friendlyTopicName(topEntry.sourceDoc)) : 'unconfirmed',
+      sourceDocName: topEntry ? topEntry.sourceDoc : 'unconfirmed',
+      feature: topEntry ? topEntry.title : 'unconfirmed',
+      version: detectVersion(normalized),
+      environment: detectEnvironment(normalized),
+      intent: intent,
+      restated: excerpt(normalized, 160),
+      entities: entities,
+      entityNames: entities.map(function(e){ return e.name; }),
+      conversationContext: ctx.lastSourceDoc ? ('prior turns about ' + friendlyTopicName(ctx.lastSourceDoc)) : 'first turn on this ticket',
+      ambiguous: ambiguity.ambiguous,
+      ambiguityWhat: ambiguity.what,
+      clarificationRounds: rounds,
+      sourceIds: usedMatches.slice(0, 5).map(function(m){ return m.entry.id; }),
+      sourceTier: topEntry ? sourceTierLabel(topEntry.sourceDoc) : 'n/a',
+      confidence: confidence,
+      confidenceBand: confidenceBand(confidence),
+      attachments: attachments,
+      anchoredToContext: anchoredToContext,
+      assumption: assumption,
+      possibleCause: null,
+      requiredInvestigation: null,
+      validationProblems: []
+    };
+
+    var named = committedEntity ? committedEntity.name
+      : (entities.length === 1 ? entities[0].name : (topEntry ? entityNameForEntry(topEntry) : null));
+
+    function unsettled(understanding, answer, nextStep, missingWhat, cause){
+      reasoning.possibleCause = cause || null;
+      reasoning.requiredInvestigation = missingWhat;
+      return {
+        understanding: understanding, answer: answer, nextStep: nextStep,
+        investigate: true, missingWhat: missingWhat, citation: null,
+        resolvedSourceDoc: ctx.lastSourceDoc || null, usedMatches: [], reasoning: reasoning,
+        anchoredToContext: anchoredToContext
+      };
+    }
+
+    // --- Ambiguity: ask one short, easy question, at most twice (Section 4) -------------
+    if(ambiguity.ambiguous && rounds < 2){
+      var opts = ambiguity.options.map(function(o, i){ return '(' + String.fromCharCode(97 + i) + ') ' + o; }).join(', ');
+      return {
+        understanding: 'You have asked about something that could apply to more than one part of the product.',
+        answer: 'I can answer this properly, I just want to be sure I answer for the right one rather than guess.',
+        nextStep: 'Which one do you mean: ' + opts + ', or something else?',
+        investigate: true,
+        missingWhat: 'which feature the question is about',
+        citation: null,
+        resolvedSourceDoc: ctx.lastSourceDoc || null,
+        usedMatches: [],
+        reasoning: reasoning,
+        askedClarification: true,
+        anchoredToContext: anchoredToContext
+      };
+    }
+
+    // --- Nothing usable retrieved (Section 10 failure behaviour) ------------------------
+    if(!validatedTopic || !usedMatches.length){
+      if(ctx.lastSourceDoc){
+        return unsettled(
+          'You are asking a follow-up about ' + (ctx.lastTopicLabel || 'what we were just discussing') + ', but I cannot tell yet exactly which part.',
+          'I do not have documentation that covers "' + excerpt(text, 70) + '" specifically, so I would rather not guess at an answer.',
+          'Could you tell me in one line what you are trying to do with ' + (ctx.lastTopicLabel || 'it') + '?',
+          'a clearer description of what you are trying to do',
+          'POSSIBLE: the question may relate to a part of this feature that is not documented in the loaded material.'
+        );
+      }
+      return unsettled(
+        attachments.count && !text ? 'You have sent an attachment without a description of the problem.' : 'I am not yet sure which product area your question is about.',
+        'I do not have enough verified information to answer this confidently, and I do not want to guess.',
+        'Which product and feature is this about — for example Modern Requirements4DevOps (Smart Docs, Baseline, Review, Trace Analysis) or Copilot4DevOps?',
+        'the product and feature involved',
+        null
+      );
+    }
+
+    // --- Draft the answer, then validate it before it is allowed out (Section 7) --------
+    var draft = { usedMatches: usedMatches, anchoredToContext: anchoredToContext };
+    var verdict = validateDraft(draft, reasoning);
+    reasoning.validationProblems = verdict.problems;
+
+    if(!verdict.pass){
+      reasoning.possibleCause = 'POSSIBLE: closest material found was "' + topEntry.title + '" (' + topEntry.sourceDoc + '), which did not survive validation.';
+      return unsettled(
+        named ? ('You are asking about ' + named + '.') : ('You are asking about "' + excerpt(text, 70) + '".'),
+        'I could not confirm an answer to this from the current documentation. The closest material I found does not actually answer what you asked, so I am not going to present it as if it did.',
+        intent === 'error'
+          ? 'Could you send the exact error message or a screenshot, and confirm whether you are on Azure DevOps cloud or an on-premises server?'
+          : 'Could you confirm the exact feature and what you are trying to do, and I will check it properly?',
+        'verified documentation covering this exact question',
+        reasoning.possibleCause
+      );
+    }
+
+    // --- Settled answer ----------------------------------------------------------------
+    var understanding = named
+      ? ('You are asking about ' + named + (intent === 'how-it-works' ? ' and how it works.' : '.'))
+      : ('You are asking about "' + excerpt(text, 70) + '".');
+    if(assumption) understanding += ' I am assuming this is ' + assumption + ' — tell me if you meant something else.';
+    if(attachments.count) understanding += ' I can see you attached ' + attachments.names.join(', ') + '; an agent will need to open it, as I cannot read image contents directly.';
+
+    reasoning.requiredInvestigation = null;
+    return {
+      understanding: understanding,
+      answer: topEntry.answer,
+      nextStep: nextStepFor(intent, named, true),
+      investigate: false,
+      missingWhat: null,
+      citation: 'Source: ' + topEntry.sourceDoc + ', "' + topEntry.title + '" — page ' + topEntry.page,
+      resolvedSourceDoc: topEntry.sourceDoc,
+      resolvedTopicLabel: entityNameForEntry(topEntry) || friendlyTopicName(topEntry.sourceDoc),
+      usedMatches: usedMatches,
+      reasoning: reasoning,
+      anchoredToContext: anchoredToContext
+    };
+  }
+
+  // ============================================================
+  //  TICKET STORE (persisted via the local API)
+  // ============================================================
+  var tickets = [];
+  var activeTicketId = null;
+  var learningLog = [];
+  var queueFilter = { query:'', status:'all', priority:'all' };
+  var kbFilter = { query:'' };
+
+  function nowLabel(){
+    var d = new Date();
+    return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  }
+
+  function makeTicket(opts){
+    var t = {
+      subject: opts.subject, customer: opts.customer || "You", status: opts.status || "New",
+      priority: opts.priority || "Medium", messages: opts.messages || [], matches: opts.matches || [],
+      matchIds: (opts.matches||[]).map(function(m){ return m.entry.id; }),
+      confidence: opts.confidence || 0, module: opts.module || "Unclassified",
+      escalate: !!opts.escalate, escalateReason: opts.escalateReason || null,
+      investigate: opts.investigate !== undefined ? !!opts.investigate : true, nextAction: opts.nextAction || null,
+      reasoning: opts.reasoning || null, clarificationRounds: 0, lastSourceDoc: null,
+      draft: opts.draft || "", draftIsHtml:false, followups: opts.followups || [],
+      responseAttachments: [], createdAt: opts.createdAt || nowLabel(), isLive: !!opts.isLive,
+      id: 'local-' + Date.now() + '-' + Math.random().toString(36).slice(2,7)
+    };
+    tickets.push(t);
+    apiPost('/api/tickets', {
+      subject:t.subject, customer:t.customer, status:t.status, priority:t.priority,
+      module:t.module, confidence:t.confidence, escalate:t.escalate, escalateReason:t.escalateReason,
+      draft:t.draft, followups:t.followups, createdAt:t.createdAt, matchIds:t.matchIds
+    }).then(function(saved){
+      t.id = saved.id; // bug fix: keep the customer-facing ticket-id label in sync once the real server id arrives
+      renderQueue();
+      if(t.id === activeTicketId || t.isLive) syncLiveTicketIdLabel(t);
+    }).catch(function(){ toast('Could not save the new ticket to the server — it will only exist for this session.', 'warning'); });
+    return t;
+  }
+
+  // The recommended next diagnostic step is either a full sentence already (from the
+  // investigation advisor) or a noun phrase describing what is still missing.
+  function nextDiagnosticStep(t){
+    var a = t.nextAction;
+    if(!a) return 'Reproduce in a controlled environment and confirm against current official documentation.';
+    if(/[.!?]\s*$/.test(a) || a.length > 90) return a;
+    return 'Obtain ' + a + ', then reproduce against the cited source.';
+  }
+
+  // SECTION 9 — structured escalation handoff. This is the deliverable of a failed
+  // resolution, so it must be complete enough that L2/L3 never has to re-ask the customer.
+  function buildEscalationTicket(t){
+    var r = t.reasoning || {};
+    var firstUser = null;
+    for(var i = 0; i < t.messages.length; i++){
+      if(t.messages[i].role === 'user'){ firstUser = t.messages[i]; break; }
+    }
+    var verbatim = firstUser ? firstUser.parts.map(function(p){ return p.type === 'text' ? p.value : ''; }).join('').trim() : t.subject;
+    var atts = r.attachments && r.attachments.count
+      ? r.attachments.note
+      : 'None provided.';
+    var docsChecked = (t.matches || []).slice(0, 5).map(function(m){
+      return '    - ' + m.entry.id + ' (' + m.entry.sourceDoc + ', p.' + m.entry.page + '): ' + m.entry.title;
+    }).join('\n') || '    - None matched closely enough to cite.';
+    var whyNotResolved;
+    if(r.validationProblems && r.validationProblems.length){
+      whyNotResolved = r.validationProblems.join(' ');
+    } else if(!(t.matches && t.matches.length)){
+      whyNotResolved = 'No documentation covers this question.';
+    } else if(/data loss|corrupt|security|breach|outage|production down/i.test(verbatim)){
+      whyNotResolved = 'Documentation describes the feature, but the reported symptom indicates possible data/production impact that documentation cannot confirm or rule out — needs specialist verification.';
+    } else {
+      whyNotResolved = 'Closest sources were topically related but did not answer the exact question asked.';
+    }
+    var urgency = /urgent|asap|critical|production|down|blocker/i.test(verbatim) ? 'Customer signalled urgency in their own words.' : 'None signalled by the customer.';
+    var suspected = r.possibleCause || (t.escalateReason ? ('POSSIBLE: ' + t.escalateReason) : 'POSSIBLE: not determined from available documentation.');
+
+    return [
+      'ESCALATION TICKET',
+      'Customer-reported issue (verbatim, normalized):',
+      '    "' + excerpt(verbatim, 400) + '"',
+      'Product / Module / Feature:',
+      '    ' + (r.product || 'unconfirmed') + ' / ' + (r.module || t.module || 'unconfirmed') + ' / ' + (r.feature || 'unconfirmed'),
+      'Version / Environment:',
+      '    ' + (r.version && r.version !== 'unconfirmed' ? r.version : 'unconfirmed — ask customer') +
+        ' / ' + (r.environment && r.environment !== 'unconfirmed' ? r.environment : 'unconfirmed — ask customer'),
+      'Symptom vs. suspected cause (explicitly separated):',
+      '    SYMPTOM (customer-observed): ' + excerpt(verbatim, 200),
+      '    ' + suspected,
+      'Steps already tried / ruled out:',
+      '    ' + (t.clarificationRounds ? (t.clarificationRounds + ' clarification round(s) with the customer.') : 'None recorded in this channel.'),
+      'Relevant documentation checked (with source IDs) and why it did not resolve this:',
+      docsChecked,
+      '    Why unresolved: ' + whyNotResolved,
+      'Attachments/logs provided:',
+      '    ' + atts,
+      'Recommended next diagnostic step:',
+      '    ' + nextDiagnosticStep(t),
+      'Urgency signal (if customer indicated one):',
+      '    ' + urgency
+    ].join('\n');
+  }
+
+  // SECTION 3 rendering — agent console only. Never shown to the customer.
+  function renderReasoningPanel(t){
+    var r = t.reasoning;
+    if(!r) return '<div class="empty-inline">No reasoning recorded for this ticket.</div>';
+    var rows = [
+      ['Product', r.product],
+      ['Module', r.module],
+      ['Source document', r.sourceDocName || '—'],
+      ['Feature', r.feature],
+      ['Version', r.version],
+      ['Environment', r.environment],
+      ['Customer intent', r.intent],
+      ['Question (restated)', r.restated],
+      ['Distinct entities named', r.entityNames && r.entityNames.length ? r.entityNames.join(', ') : 'none identified'],
+      ['Conversation context', r.conversationContext],
+      ['Ambiguity', r.ambiguous ? ('YES — ' + r.ambiguityWhat) : 'NO'],
+      ['Clarification rounds used', String(t.clarificationRounds || 0) + ' of 2'],
+      ['Knowledge retrieved', r.sourceIds && r.sourceIds.length ? r.sourceIds.join(', ') : 'none'],
+      ['Source hierarchy applied', r.sourceTier],
+      ['Confidence', r.confidenceBand + ' (' + Math.round((r.confidence || 0) * 100) + '%)'],
+      ['Potential cause', r.possibleCause || '—'],
+      ['Required investigation', r.requiredInvestigation || 'none'],
+      ['Attachments', r.attachments ? r.attachments.note : 'None provided.']
+    ];
+    if(r.validationProblems && r.validationProblems.length){
+      rows.push(['Validation blocked answer', r.validationProblems.join(' | ')]);
+    }
+    if(r.assumption) rows.push(['Assumption stated to customer', r.assumption]);
+    return '<div class="analysis-grid">' + rows.map(function(row){
+      return '<div class="a-field" style="grid-column:1/-1;"><span class="lbl">' + escapeHtml(row[0]) + '</span><span class="val">' + escapeHtml(String(row[1] == null ? '—' : row[1])) + '</span></div>';
+    }).join('') + '</div>';
+  }
+
+  function persistTicketUpdate(t, extra){
+    if(!t.id) return;
+    var body = Object.assign({ status:t.status, priority:t.priority, escalate:t.escalate, escalateReason:t.escalateReason }, extra || {});
+    apiPatch('/api/tickets/' + encodeURIComponent(t.id), body).catch(function(){
+      toast('Could not save this change to the server.', 'warning');
+    });
+  }
+
+  function log(entryHtml){
+    learningLog.unshift({ text: entryHtml, ts: nowLabel() });
+    if(notifPanel.hasAttribute('hidden')) notifDot.hidden = false;
+    renderNotifPanel();
+    if(currentView === 'kb') renderLearningLog();
+    apiPost('/api/log', { text: entryHtml });
+  }
+
+  // ---- seed example tickets so the console isn't empty on first run ----
+  function seedExamples(){
+    var q1 = findMatches("Redis installation port and password configuration");
+    var q1text = "Hi, during install I set a custom Redis port but the service still tries to connect on 6379. Is that expected?";
+    var q1conf = Math.min(0.95, 0.42+ (q1[0]?q1[0].score:0)*0.07);
+    makeTicket({
+      subject:"Redis port keeps defaulting to 6379 even after I change it",
+      customer:"J. Alvarez — Contoso Ltd.", status:"In Progress", priority:"Medium",
+      module: moduleOf(q1), matches:q1, confidence: q1conf,
+      investigate: needsFurtherInvestigation(q1text, q1, q1conf), nextAction: suggestNextAction(q1text, q1, q1conf),
+      reasoning: composeNexisReply(q1text, q1, {}).reasoning,
+      messages:[{role:'user', parts:[{type:'text', value:"Hi, during install I set a custom Redis port but the service still tries to connect on 6379. Is that expected?"}]}],
+      draft:"Hi Jordan,\n\nThanks for flagging this. The default Redis port used by Modern Requirements4DevOps is 6379 — if a different port was used during your own Redis installation, that same port needs to be entered again in the Redis Installation Options screen during MR setup (it isn't picked up automatically).\n\nCould you confirm which port your Redis instance is actually listening on? Once we have that we can walk through re-pointing the configuration.\n\nBest,\nMR Nexis",
+      followups:["Which port is your Redis instance actually listening on?", "Was this a fresh install or a re-run of the installer?"],
+      createdAt:"09:14"
+    });
+
+    var q2text = "data loss after migrating version packages, work items missing";
+    var q2 = findMatches(q2text);
+    var esc2 = shouldEscalate(q2text, 0.3, q2);
+    makeTicket({
+      subject:"Work items missing after Version Package migration — possible data loss",
+      customer:"R. Chen — Meridian Systems", status:"Escalated", priority:"High",
+      module: moduleOf(q2), matches:q2, confidence:0.31, escalate:true, escalateReason: esc2.reason,
+      investigate: true, nextAction: suggestNextAction(q2text, q2, 0.31),
+      reasoning: composeNexisReply(q2text, q2, {}).reasoning,
+      messages:[{role:'user', parts:[{type:'text', value:"After migrating a Version Package, about 40 work items seem to have disappeared from the target project. This looks like data loss."}]}],
+      draft:"Hi Rae,\n\nThis has been escalated to our R&D/Version Package specialists given the possible data impact — flagging as high priority. Please avoid running further migrations on this project until we confirm root cause, and if possible let us know your last known-good backup/snapshot time.\n\nWe'll follow up as soon as we hear back from the specialist team.\n\nBest,\nMR Nexis",
+      followups:["What is the exact build/patch version in use?", "Do you have a backup or snapshot from before the migration?"],
+      createdAt:"08:52"
+    });
+
+    var q3text = "how do I configure MatCal expressions config.xml";
+    var q3 = findMatches(q3text);
+    var q3conf = Math.min(0.95, 0.42+ (q3[0]?q3[0].score:0)*0.07);
+    makeTicket({
+      subject:"Need help writing a MatCal expression for a calculated field",
+      customer:"S. Whitfield — Northgate Health", status:"Resolved", priority:"Low",
+      module: moduleOf(q3), matches:q3, confidence: q3conf,
+      investigate: needsFurtherInvestigation(q3text, q3, q3conf), nextAction: suggestNextAction(q3text, q3, q3conf),
+      reasoning: composeNexisReply(q3text, q3, {}).reasoning,
+      messages:[{role:'user', parts:[{type:'text', value:"Can you point me to an example of a MatCal expression in config.xml? I want to calculate a field from two others."}]}],
+      draft:"Hi Sam,\n\nGlad to help — MatCal expressions are defined in config.xml under the MR Agent installation folder. I've included one of the documented examples that matches what you're after; let me know if you'd like it adapted to your exact field names.\n\nBest,\nMR Nexis",
+      followups:[], createdAt:"Yesterday"
+    });
+
+    var q4text = "Copilot4DevOps multi-select feature how does it work";
+    var q4 = findMatches(q4text);
+    var q4conf = Math.min(0.95, 0.42+ (q4[0]?q4[0].score:0)*0.07);
+    makeTicket({
+      subject:"Question about the new Copilot4DevOps multi-select feature",
+      customer:"T. Okafor — Bluepeak Retail", status:"New", priority:"Low",
+      module: moduleOf(q4), matches:q4, confidence: q4conf,
+      investigate: needsFurtherInvestigation(q4text, q4, q4conf), nextAction: suggestNextAction(q4text, q4, q4conf),
+      reasoning: composeNexisReply(q4text, q4, {}).reasoning,
+      messages:[{role:'user', parts:[{type:'text', value:"I saw multi-select was added to Copilot4DevOps in the 2025 release notes — how do I turn it on?"}]}],
+      draft:"Hi Tunde,\n\nThanks for reaching out — I've pulled up the relevant note from our 2025 Release Notes on the Copilot4DevOps multi-select capability below. Let me know if you'd like a walkthrough of enabling it in your environment.\n\nBest,\nMR Nexis",
+      followups:[], createdAt:"Yesterday"
+    });
+
+    var docSet = {}; KB.forEach(function(e){ docSet[e.sourceDoc] = true; });
+    log('<b>Knowledge base loaded</b> — ' + Object.keys(docSet).length + ' source documents (' + KB.length + ' entries) indexed for retrieval.');
+    log('<b>Escalation policy applied</b> to ticket <b>' + tickets[1].id + '</b> — data-integrity language auto-routes to R&amp;D regardless of match confidence.');
+  }
+
+  // ============================================================
+  //  QUEUE RENDERING (with search + status/priority filtering)
+  // ============================================================
+  var queueList, ticketDetailEl;
+
+  function statusClass(status){
+    return { "New":"new", "In Progress":"progress", "Escalated":"escalated", "Resolved":"resolved" }[status] || "new";
+  }
+  function priorityClass(p){ return p === "High" ? "high" : (p === "Medium" ? "medium" : "low"); }
+
+  function filteredTickets(){
+    var q = queueFilter.query.trim().toLowerCase();
+    return tickets.filter(function(t){
+      if(queueFilter.status !== 'all' && t.status !== queueFilter.status) return false;
+      if(queueFilter.priority !== 'all' && t.priority !== queueFilter.priority) return false;
+      if(q && (t.subject.toLowerCase().indexOf(q) === -1 && t.customer.toLowerCase().indexOf(q) === -1 && String(t.id).toLowerCase().indexOf(q) === -1)) return false;
+      return true;
+    });
+  }
+
+  function renderQueue(){
+    if(!queueList) return;
+    var openCount = tickets.filter(function(t){ return t.status !== 'Resolved'; }).length;
+    navQueueBadge.textContent = String(openCount);
+    var list = filteredTickets().slice().reverse();
+    if(!list.length){
+      queueList.innerHTML = '<div class="queue-empty">No tickets match your search/filters.</div>';
+    } else {
+      queueList.innerHTML = list.map(function(t){
+        return '<button type="button" class="queue-item' + (t.id === activeTicketId ? ' active' : '') + '" data-id="' + escapeHtml(t.id) + '">' +
+          '<div class="qtop"><span class="qsubj">' + escapeHtml(t.subject) + '</span></div>' +
+          '<div class="qmeta"><span class="pr-dot ' + priorityClass(t.priority) + '"></span>' + escapeHtml(t.id) + ' · ' + escapeHtml(t.customer) + '</div>' +
+          '<div class="qmeta"><span class="badge ' + statusClass(t.status) + '">' + t.status + '</span><span>' + t.createdAt + '</span></div>' +
+        '</button>';
+      }).join('');
+      Array.prototype.forEach.call(queueList.querySelectorAll('.queue-item'), function(btn){
+        btn.addEventListener('click', function(){
+          activeTicketId = btn.getAttribute('data-id');
+          renderQueue();
+          renderTicketDetail();
+          document.getElementById('mainContent').scrollTop = 0;
+        });
+      });
+    }
+    if(!activeTicketId && tickets.length){ activeTicketId = tickets[tickets.length-1].id; }
+    renderTicketDetail();
+  }
+
+  function syncLiveTicketIdLabel(t){
+    var el = document.getElementById('custTicketId');
+    if(el && liveTicket && t.id !== undefined && liveTicket === t) el.textContent = t.id;
+  }
+
+  // ============================================================
+  //  TICKET DETAIL — Customer Query / AI Analysis / Knowledge
+  //  Sources / Suggested Response, each an expandable section.
+  // ============================================================
+  var sectionCollapsed = { query:false, analysis:false, reasoning:true, sources:false, response:false };
+
+  function textToHtml(t){ return escapeHtml(t).replace(/\n/g, '<br/>'); }
+  function polishText(text){
+    var t = text.replace(/\r\n/g, '\n').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+    t = t.replace(/(^|[.!?]\s+)([a-z])/g, function(m,p1,p2){ return p1 + p2.toUpperCase(); });
+    if(!/^(hi|hello|dear|hey)\b/i.test(t)) t = "Hi,\n\n" + t;
+    if(!/(best regards|best,|regards,|thank you,|thanks,|mr nexis)\s*$/i.test(t)) t = t + "\n\nBest regards,\nMR Nexis";
+    return t;
+  }
+  function simplifyToHtml(text){
+    var lines = text.replace(/\r\n/g,'\n').split(/\n+/).map(function(s){ return s.trim(); }).filter(Boolean);
+    var sentences = [];
+    lines.forEach(function(line){
+      if(/^(hi|hello|dear|hey|best|regards|thanks|thank you)\b/i.test(line) || /mr nexis/i.test(line)) return;
+      line.split(/(?<=[.!?])\s+/).forEach(function(s){ s = s.trim(); if(s.length > 3) sentences.push(s); });
+    });
+    if(!sentences.length) return textToHtml(polishText(text));
+    var html = '<p>' + escapeHtml(sentences[0]) + '</p>';
+    if(sentences.length > 1) html += '<ul>' + sentences.slice(1).map(function(s){ return '<li>' + escapeHtml(s) + '</li>'; }).join('') + '</ul>';
+    html += '<p>Best regards,<br/>MR Nexis</p>';
+    return html;
+  }
+
+  function getActiveTicket(){ return tickets.filter(function(t){ return t.id === activeTicketId; })[0]; }
+
+  function renderTicketDetail(){
+    if(!ticketDetailEl) return;
+    var t = getActiveTicket();
+    if(!t){
+      ticketDetailEl.innerHTML = '<div class="detail-card"><div class="detail-empty">' + ic('inbox') +
+        '<div>Select a ticket from the queue to see the Customer Query, AI Analysis, Knowledge Sources, and Suggested Response.</div></div></div>';
+      return;
+    }
+    var confidencePct = Math.round((t.confidence||0)*100);
+
+    var attachmentsHtml = '';
+    var allAttachments = [];
+    t.messages.forEach(function(m){ m.parts.forEach(function(p){ if(p.type==='image'||p.type==='file') allAttachments.push(p); }); });
+    if(allAttachments.length){
+      attachmentsHtml = '<div class="attach-row">' + allAttachments.map(function(p){
+        return '<span class="file-chip">' + ic(p.type==='image'?'image':'file') + escapeHtml(p.name) + '</span>';
+      }).join('') + '</div>';
+    }
+
+    var transcriptHtml = t.messages.map(function(m){
+      var body = m.parts.map(function(p){
+        if(p.type === 'text') return escapeHtml(p.value);
+        if(p.type === 'break') return '<br/>';
+        return '';
+      }).join('');
+      return '<div class="msg ' + (m.role==='user'?'user':'bot') + '"><div class="msg-label">' + (m.role==='user'?escapeHtml(t.customer):'MR Nexis Assistant') + '</div><div class="bubble">' + body + '</div></div>';
+    }).join('') || '<div class="empty-inline">No messages yet on this ticket.</div>';
+
+    var followupHtml = t.followups.length ? (
+      '<div class="followup-card"><div class="ttl">' + ic('alert') + 'Missing information detected</div><ul>' +
+      t.followups.map(function(q){ return '<li>' + escapeHtml(q) + '</li>'; }).join('') + '</ul></div>'
+    ) : '';
+
+    var escalationHtml = t.escalate
+      ? ('<div class="escalation-block"><div class="ttl">' + ic('flag') + 'Recommended: Escalate to L2/L3 · R&amp;D</div>' +
+         '<div style="font-size:12.3px;">' + escapeHtml(t.escalateReason || '') + '</div>' +
+         '<pre>' + escapeHtml(buildEscalationTicket(t)) + '</pre></div>')
+      : '';
+
+    var sourcesHtml = !t.matches.length
+      ? '<div class="empty-inline">No documentation section matched closely enough to cite.</div>'
+      : t.matches.slice(0,6).map(function(m,i){
+          return '<div class="match-card" data-idx="' + i + '"><div class="mtitle">' + escapeHtml(m.entry.title) + '</div>' +
+            '<div class="msrc">' + escapeHtml(m.entry.sourceDoc) + ' · p.' + m.entry.page + '</div>' +
+            '<div class="mexcerpt">' + escapeHtml(excerpt(m.entry.answer, 240)) + '</div></div>';
+        }).join('');
+
+    var respAttachHtml = t.responseAttachments.length ? ('<div class="response-attach-row">' + t.responseAttachments.map(function(a,i){
+      return '<span class="file-chip">' + ic(a.isImage?'image':'file') + escapeHtml(a.name) + ' <button type="button" class="icon-btn" style="width:16px;height:16px;" data-remove-attach="' + i + '">' + ic('x') + '</button></span>';
+    }).join('') + '</div>') : '';
+
+    function sec(key, iconName, title, countLabel, bodyHtml){
+      var collapsed = sectionCollapsed[key];
+      return '<div class="detail-card expand-card' + (collapsed?' collapsed':'') + '" data-section="' + key + '">' +
+        '<button type="button" class="expand-header">' + ic(iconName,'section-icon') +
+          '<span class="etitle">' + title + '</span>' + (countLabel ? '<span class="ecount">' + countLabel + '</span>' : '') +
+          ic('chevDown','chev') +
+        '</button>' +
+        '<div class="expand-body">' + bodyHtml + '</div>' +
+      '</div>';
+    }
+
+    ticketDetailEl.innerHTML =
+      '<div class="detail-card"><div class="detail-header">' +
+        '<div><h2>' + escapeHtml(t.subject) + '</h2><div class="meta">' + escapeHtml(t.id) + ' · ' + escapeHtml(t.customer) + ' · opened ' + t.createdAt + '</div></div>' +
+        '<span class="badge ' + statusClass(t.status) + '">' + t.status + '</span>' +
+      '</div></div>' +
+
+      sec('query','chat','Customer Query', t.messages.length + ' message' + (t.messages.length===1?'':'s'),
+        '<div class="transcript-list">' + transcriptHtml + '</div>' + attachmentsHtml) +
+
+      sec('analysis','sparkles','AI Analysis', confidencePct + '% confidence',
+        '<div class="analysis-grid">' +
+          '<div class="a-field"><span class="lbl">Category / Module</span><span class="val">' + escapeHtml(t.module) + '</span></div>' +
+          '<div class="a-field"><span class="lbl">Priority</span><span class="val">' + t.priority + '</span></div>' +
+          '<div class="a-field"><span class="lbl">Known issue?</span><span class="val">' + (t.matches.length ? 'Documented' : 'Not documented') + '</span></div>' +
+          '<div class="a-field"><span class="lbl">Route</span><span class="val">' + (t.escalate ? 'Escalate' : 'MR Nexis resolvable') + '</span></div>' +
+        '</div>' +
+        '<div class="a-field" style="background:none;padding:0;"><span class="lbl">Match confidence</span></div>' +
+        '<div class="meter-row"><div class="meter"><i style="width:' + confidencePct + '%"></i></div><span class="meter-num">' + confidencePct + '%</span></div>' +
+        '<div class="investigate-note ' + (t.investigate ? 'needed' : 'clear') + '" style="margin-top:10px;">' +
+          '<div><b>Further investigation required:</b> ' + (t.investigate ? 'YES' : 'NO') + '</div>' +
+          (t.investigate && t.nextAction ? '<div>Still needed: ' + escapeHtml(t.nextAction) + '</div>' : '') +
+        '</div>' +
+        followupHtml + escalationHtml) +
+
+      sec('reasoning','sparkles','Internal Reasoning (not shown to customer)',
+        t.reasoning ? (t.reasoning.confidenceBand + ' confidence') : '',
+        renderReasoningPanel(t)) +
+
+      sec('sources','book','Knowledge Sources', t.matches.length ? (t.matches.length + ' match' + (t.matches.length===1?'':'es')) : '', sourcesHtml) +
+
+      sec('response','docCheck','Suggested Response', '',
+        '<div class="editor-toolbar">' +
+          '<button class="tbtn" data-cmd="undo" title="Undo">' + ic('undo') + '</button>' +
+          '<button class="tbtn" data-cmd="redo" title="Redo">' + ic('redo') + '</button>' +
+          '<span class="tb-sep"></span>' +
+          '<button class="tbtn" data-cmd="bold" title="Bold"><b>B</b></button>' +
+          '<button class="tbtn" data-cmd="italic" title="Italic"><i>I</i></button>' +
+          '<button class="tbtn" data-cmd="underline" title="Underline"><u>U</u></button>' +
+          '<button class="tbtn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>' +
+          '<span class="tb-sep"></span>' +
+          '<button class="tbtn" data-cmd="insertUnorderedList" title="Bulleted list">•≡</button>' +
+          '<button class="tbtn" data-cmd="insertOrderedList" title="Numbered list">1≡</button>' +
+          '<span class="tb-sep"></span>' +
+          '<button class="tbtn" data-cmd="createLink" title="Insert link">' + ic('link') + '</button>' +
+          '<button class="tbtn" data-cmd="removeFormat" title="Clear formatting">' + ic('eraser') + '</button>' +
+          '<span class="tb-sep"></span>' +
+          '<button class="tbtn" id="attachRespBtn" title="Attach a file to this response">' + ic('paperclip') + '</button>' +
+          '<input type="file" id="respFileInput" hidden multiple/>' +
+          '<button class="tbtn" id="copyDraftBtn" title="Copy to clipboard">' + ic('copy') + '</button>' +
+        '</div>' +
+        '<div class="editor-wrap resp-dropzone" id="respDropzone"><div id="responseEditor" contenteditable="true"></div></div>' +
+        '<div class="editor-footer"><span class="composer-hint">Word/Outlook-style — edit freely, or use an AI action below</span>' +
+          '<div class="ai-actions">' +
+            '<button class="btn sm" id="improveBtn" type="button">' + ic('sparkles') + 'Improve</button>' +
+            '<button class="btn sm" id="simplifyBtn" type="button">' + ic('wand') + 'Simplify</button>' +
+            '<button class="btn sm" id="regenBtn" type="button">' + ic('refresh') + 'Regenerate</button>' +
+          '</div>' +
+        '</div>' +
+        respAttachHtml +
+        '<div class="action-row">' +
+          '<button class="btn danger-ghost" id="escalateBtn" type="button">' + ic('flag') + 'Escalate to L2/L3 · R&amp;D</button>' +
+          '<span class="spacer"></span>' +
+          '<button class="btn primary" id="approveBtn" type="button">' + ic('send') + 'Approve &amp; Send</button>' +
+        '</div>');
+
+    // ---- section expand/collapse ----
+    Array.prototype.forEach.call(ticketDetailEl.querySelectorAll('.expand-header'), function(btn){
+      btn.addEventListener('click', function(){
+        var card = btn.closest('.expand-card');
+        var key = card.getAttribute('data-section');
+        sectionCollapsed[key] = !sectionCollapsed[key];
+        card.classList.toggle('collapsed', sectionCollapsed[key]);
+      });
+    });
+
+    // ---- source match-card expand ----
+    Array.prototype.forEach.call(ticketDetailEl.querySelectorAll('.match-card'), function(card){
+      card.addEventListener('click', function(){ card.classList.toggle('open'); });
+    });
+
+    wireResponseEditor(t);
+  }
+
+  function wireResponseEditor(t){
+    var editor = document.getElementById('responseEditor');
+    if(!t.originalDraft) t.originalDraft = t.draft;
+    editor.innerHTML = t.draftIsHtml ? t.draft : textToHtml(t.draft);
+
+    editor.addEventListener('input', function(){
+      t.draft = editor.innerHTML;
+      t.draftIsHtml = true;
+    });
+    editor.addEventListener('blur', function(){ persistTicketUpdate(t, { draft: t.draft }); });
+
+    Array.prototype.forEach.call(ticketDetailEl.querySelectorAll('.editor-toolbar .tbtn[data-cmd]'), function(btn){
+      btn.addEventListener('click', function(){
+        editor.focus();
+        var cmd = btn.getAttribute('data-cmd');
+        if(cmd === 'createLink'){
+          var url = window.prompt('Link URL:', 'https://');
+          if(url) document.execCommand(cmd, false, url);
+        } else {
+          document.execCommand(cmd, false, null);
+        }
+      });
+    });
+
+    document.getElementById('copyDraftBtn').addEventListener('click', function(){
+      var text = editor.innerText;
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text); }
+      toast('Draft copied to clipboard.', 'success', 2200);
+    });
+
+    document.getElementById('improveBtn').addEventListener('click', function(){
+      var html = textToHtml(polishText(editor.innerText));
+      editor.innerHTML = html; t.draft = html; t.draftIsHtml = true;
+      persistTicketUpdate(t, { draft:t.draft });
+      log('Agent used <b>Improve</b> on the draft for <b>' + t.id + '</b> — greeting/sign-off and formatting normalized.');
+      toast('Draft improved: greeting, sign-off, and formatting cleaned up.', 'success');
+    });
+
+    document.getElementById('simplifyBtn').addEventListener('click', function(){
+      var html = simplifyToHtml(editor.innerText);
+      editor.innerHTML = html; t.draft = html; t.draftIsHtml = true;
+      persistTicketUpdate(t, { draft:t.draft });
+      log('Agent used <b>Simplify</b> on the draft for <b>' + t.id + '</b> — reformatted as a short scannable list.');
+      toast('Draft simplified into a scannable list.', 'success');
+    });
+
+    document.getElementById('regenBtn').addEventListener('click', function(){
+      var btn = document.getElementById('regenBtn');
+      btn.disabled = true;
+      setTimeout(function(){
+        t.draft = t.originalDraft; t.draftIsHtml = false;
+        editor.innerHTML = textToHtml(t.draft);
+        persistTicketUpdate(t, { draft:t.draft });
+        btn.disabled = false;
+        log('Agent regenerated the draft for <b>' + t.id + '</b> — original AI draft restored.');
+        toast('Draft regenerated from the original AI answer.', 'info');
+      }, reduceMotion ? 60 : 450);
+    });
+
+    // ---- response attachments: click-to-browse + drag & drop ----
+    var attachBtn = document.getElementById('attachRespBtn');
+    var fileInput = document.getElementById('respFileInput');
+    var dz = document.getElementById('respDropzone');
+    attachBtn.addEventListener('click', function(){ fileInput.click(); });
+    fileInput.addEventListener('change', function(){
+      Array.prototype.forEach.call(fileInput.files || [], function(f){ addResponseAttachment(t, f); });
+      fileInput.value = '';
+    });
+    ['dragenter','dragover'].forEach(function(evt){ dz.addEventListener(evt, function(e){ e.preventDefault(); dz.classList.add('dragover'); }); });
+    ['dragleave','drop'].forEach(function(evt){ dz.addEventListener(evt, function(e){ if(evt==='drop') e.preventDefault(); dz.classList.remove('dragover'); }); });
+    dz.addEventListener('drop', function(e){
+      var files = e.dataTransfer && e.dataTransfer.files;
+      if(files && files.length) Array.prototype.forEach.call(files, function(f){ addResponseAttachment(t, f); });
+    });
+    Array.prototype.forEach.call(ticketDetailEl.querySelectorAll('[data-remove-attach]'), function(btn){
+      btn.addEventListener('click', function(){
+        t.responseAttachments.splice(parseInt(btn.getAttribute('data-remove-attach'),10), 1);
+        renderTicketDetail();
+      });
+    });
+
+    // ---- approve & send (bug fix: the agent's actual edited text is now
+    // persisted as the ticket's draft/response instead of being discarded) ----
+    var approveBtn = document.getElementById('approveBtn');
+    approveBtn.addEventListener('click', function(){
+      approveBtn.disabled = true;
+      var edited = t.draftIsHtml && editor.innerHTML !== textToHtml(t.originalDraft);
+      t.draft = editor.innerHTML; t.draftIsHtml = true;
+      t.status = 'Resolved';
+      persistTicketUpdate(t, { draft:t.draft, status:t.status });
+      renderQueue();
+      log('<b>' + t.id + '</b> approved &amp; sent by agent' + (edited ? ' — <b>edited before sending</b>, correction logged for retraining.' : ' — sent as drafted.'));
+      toast('Response sent to ' + t.customer + '.', 'success');
+    });
+
+    // ---- escalate, with a lightweight inline confirm to avoid mis-clicks ----
+    var escalateBtn = document.getElementById('escalateBtn');
+    var escalateArmed = false;
+    escalateBtn.addEventListener('click', function(){
+      if(!escalateArmed){
+        escalateArmed = true;
+        escalateBtn.innerHTML = ic('flag') + 'Click again to confirm escalation';
+        setTimeout(function(){
+          if(escalateArmed){ escalateArmed = false; if(document.body.contains(escalateBtn)) escalateBtn.innerHTML = ic('flag') + 'Escalate to L2/L3 · R&amp;D'; }
+        }, 3000);
+        return;
+      }
+      t.status = 'Escalated';
+      t.escalate = true;
+      t.escalateReason = t.escalateReason || 'Manually escalated by agent for specialist review.';
+      t.draft = editor.innerHTML; t.draftIsHtml = true;
+      persistTicketUpdate(t, { draft:t.draft, status:t.status, escalate:t.escalate, escalateReason:t.escalateReason });
+      renderQueue();
+      log('<b>' + t.id + '</b> manually escalated to L2/L3 · R&amp;D by agent.');
+      toast('Ticket escalated to L2/L3 · R&D.', 'warning');
+    });
+  }
+
+  function addResponseAttachment(t, file){
+    var MAX = 6 * 1024 * 1024;
+    if(file.size > MAX){ toast('"' + file.name + '" is over the 6 MB attachment limit and was not added.', 'danger'); return; }
+    var isImage = file.type.indexOf('image/') === 0;
+    t.responseAttachments.push({ name:file.name, size:file.size, isImage:isImage });
+    log('Agent attached <b>' + escapeHtml(file.name) + '</b> (' + fmtBytes(file.size) + ') to the response on <b>' + t.id + '</b>.');
+    renderTicketDetail();
+  }
+
+  // ============================================================
+  //  VIEW SKELETONS (built once, then rendered into by JS)
+  // ============================================================
+  document.getElementById('viewConsole').innerHTML =
+    '<div class="page-title-row"><div><h1>Agent Console</h1><p>Review AI-drafted responses, check citations, and approve or escalate.</p></div></div>' +
+    '<div class="console-layout">' +
+      '<aside class="card queue-panel">' +
+        '<div class="queue-toolbar">' +
+          '<div class="queue-search">' + ic('search') + '<input type="text" id="queueSearchInput" placeholder="Filter this list…"/></div>' +
+          '<div class="filter-row">' +
+            '<select id="filterStatus"><option value="all">All statuses</option><option>New</option><option>In Progress</option><option>Escalated</option><option>Resolved</option></select>' +
+            '<select id="filterPriority"><option value="all">All priorities</option><option>High</option><option>Medium</option><option>Low</option></select>' +
+          '</div>' +
+        '</div>' +
+        '<div class="queue-list" id="queueList"></div>' +
+      '</aside>' +
+      '<section class="ticket-detail" id="ticketDetail"></section>' +
+    '</div>';
+  queueList = document.getElementById('queueList');
+  ticketDetailEl = document.getElementById('ticketDetail');
+  var qSearchInput = document.getElementById('queueSearchInput');
+  var fStatus = document.getElementById('filterStatus');
+  var fPriority = document.getElementById('filterPriority');
+  qSearchInput.addEventListener('input', function(){ queueFilter.query = qSearchInput.value; renderQueue(); });
+  fStatus.addEventListener('change', function(){ queueFilter.status = fStatus.value; renderQueue(); });
+  fPriority.addEventListener('change', function(){ queueFilter.priority = fPriority.value; renderQueue(); });
+
+  document.getElementById('viewCustomer').innerHTML =
+    '<div class="page-title-row"><div><h1>Customer Portal</h1><p>Every answer is retrieved and cited from official documentation loaded on this server. Nothing reaches a customer without an agent approving it.</p></div>' +
+      '<span class="badge new" id="kbBadge" style="text-transform:none; font-weight:600;">Loading knowledge base…</span></div>' +
+    '<div class="customer-grid">' +
+      '<section class="card chat-panel dropzone" id="dropzone">' +
+        '<div class="chat-header"><div class="chat-avatar">NX</div><div class="chat-header-text">' +
+          '<strong>MR Nexis</strong>' +
+          '<span class="chat-status"><span class="pip"></span>Online · answers grounded in loaded documentation</span>' +
+        '</div></div>' +
+        '<div class="chat-body" id="chatBody"></div>' +
+        '<div class="chip-row" id="starterChips">' +
+          '<button class="chip" type="button" data-q="What are the general software requirements before installing?">Software requirements</button>' +
+          '<button class="chip" type="button" data-q="How do I configure the Email Monitor?">Configure Email Monitor</button>' +
+          '<button class="chip" type="button" data-q="How does heading to work item type mapping work in Word Import?">Word heading mapping</button>' +
+          '<button class="chip" type="button" data-q="What are Virtual Work Items in Test Case Management?">Virtual Work Items</button>' +
+          '<button class="chip" type="button" data-q="I\'m getting a 400 Bad Request error in the embedded version">400 Bad Request error</button>' +
+          '<button class="chip" type="button" data-q="Activation says it cannot connect to server, what do I do?">Activation fails</button>' +
+        '</div>' +
+        '<div class="composer-wrap">' +
+          '<div class="composer-toolbar">' +
+            '<button type="button" class="tbtn" id="attachBtn" title="Attach screenshot, log, or document">' + ic('paperclip') + '</button>' +
+            '<input type="file" id="fileInput" hidden accept="image/*,.txt,.log,.csv,.json,.xml,.config,.pdf,.docx,.zip"/>' +
+            '<span class="tb-sep"></span>' +
+            '<span class="composer-hint">Type your message — drag &amp; drop files anywhere in this panel, or paste a screenshot directly.</span>' +
+          '</div>' +
+          '<div id="composer" contenteditable="true" data-placeholder="Describe the issue you\'re running into…"></div>' +
+          '<div class="composer-actions"><span class="composer-hint">Enter to send · Shift+Enter for a new line</span>' +
+            '<button class="btn primary" type="button" id="sendBtn">' + ic('send') + 'Send</button></div>' +
+        '</div>' +
+      '</section>' +
+      '<div class="side-rail">' +
+        '<div class="card mini-card"><h3>This conversation</h3>' +
+          '<div class="status-row">Status <b id="custStatusBadgeWrap"><span class="badge new" id="custStatusBadge">New</span></b></div>' +
+          '<div class="status-row">Ticket ID <b id="custTicketId">—</b></div>' +
+          '<div class="status-row">Assigned queue <b>MR Nexis</b></div>' +
+        '</div>' +
+        '<div class="card mini-card"><h3>Knowledge base coverage</h3><p class="kb-stat" id="kbCoverageText">Loading…</p>' +
+          '<p class="kb-stat">The system keeps growing: every resolved ticket, agent correction, and newly added document expands what it can answer next — see the Knowledge Base tab.</p></div>' +
+        '<div class="card mini-card"><h3>Attachments help</h3><p class="kb-stat">Drop in a screenshot, a log file, a config export, or a document and the assistant will note it for the reviewing agent, alongside your message.</p></div>' +
+      '</div>' +
+    '</div>';
+
+  document.getElementById('viewKb').innerHTML =
+    '<div class="page-title-row"><div><h1>Knowledge Base</h1><p>Browse indexed documentation, add newly verified answers, and review recent activity.</p></div></div>' +
+    '<div class="kb-stats-row">' +
+      '<div class="card stat-card"><span class="num" id="statEntries">—</span><span class="lbl">Indexed sections</span></div>' +
+      '<div class="card stat-card"><span class="num" id="statDocs">—</span><span class="lbl">Source documents</span></div>' +
+      '<div class="card stat-card"><span class="num" id="statOpen">—</span><span class="lbl">Open tickets</span></div>' +
+      '<div class="card stat-card"><span class="num" id="statResolved">—</span><span class="lbl">Resolved tickets</span></div>' +
+    '</div>' +
+    '<div class="card kb-mb collapsible" id="kbAddCard">' +
+      '<button type="button" class="card-header-row"><h3>Add documentation</h3>' + ic('chevDown','chev') + '</button>' +
+      '<div class="coll-body"><div class="form-grid">' +
+        '<label for="kbTitle">Title</label><input id="kbTitle" type="text" placeholder="e.g. Fix for licensing timeout on VM restart"/>' +
+        '<label for="kbSource">Source (ticket / manual / website)</label><input id="kbSource" type="text" placeholder="e.g. Support ticket #MR-2291"/>' +
+        '<label for="kbAnswer">Answer</label><textarea id="kbAnswer" rows="3" placeholder="The verified answer to store, in plain language…"></textarea>' +
+        '<button class="btn primary" id="kbAddBtn" type="button" style="align-self:flex-start;">' + ic('plus') + 'Add to knowledge base</button>' +
+        '<div class="form-msg" id="kbAddMsg"></div>' +
+      '</div></div>' +
+    '</div>' +
+    '<div class="card kb-mb">' +
+      '<div class="kb-search-row"><div class="queue-search">' + ic('search') + '<input type="text" id="kbSearchInput" placeholder="Search titles, sources, and answers…"/></div><span class="composer-hint" id="kbListCount"></span></div>' +
+      '<div class="kb-list" id="kbList"></div>' +
+    '</div>' +
+    '<div class="card collapsible" id="activityCard">' +
+      '<button type="button" class="card-header-row"><h3>Activity log</h3>' + ic('chevDown','chev') + '</button>' +
+      '<div class="coll-body"><div class="learn-list" id="learnBody"></div></div>' +
+    '</div>';
+
+  // ---- collapsible card headers (KB Add / Activity log) ----
+  Array.prototype.forEach.call(document.querySelectorAll('.card-header-row'), function(btn){
+    btn.addEventListener('click', function(){ btn.closest('.collapsible').classList.toggle('collapsed'); });
+  });
+
+  // ============================================================
+  //  CUSTOMER CHAT + COMPOSER (Outlook/Word-style inline composing)
+  // ============================================================
+  var chatBody = document.getElementById('chatBody');
+  var composer = document.getElementById('composer');
+  var sendBtn = document.getElementById('sendBtn');
+  var chips = document.getElementById('starterChips');
+  var attachBtn = document.getElementById('attachBtn');
+  var fileInput = document.getElementById('fileInput');
+  var dropzone = document.getElementById('dropzone');
+  var custStatusBadge = document.getElementById('custStatusBadge');
+  var custTicketId = document.getElementById('custTicketId');
+
+  var MAX_FILE_BYTES = 6 * 1024 * 1024;
+  var liveTicket = null;
+
+  function getCaretRange(){
+    var sel = window.getSelection();
+    if(sel && sel.rangeCount && composer.contains(sel.anchorNode)) return sel.getRangeAt(0);
+    var range = document.createRange();
+    range.selectNodeContents(composer);
+    range.collapse(false);
+    return range;
+  }
+  function insertNodeAtCaret(node){
+    composer.focus();
+    var range = getCaretRange();
+    range.deleteContents();
+    range.insertNode(node);
+    range.setStartAfter(node);
+    range.collapse(true);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+  function insertImageAtCaret(dataUrl, name, size){
+    var img = document.createElement('img');
+    img.src = dataUrl; img.className = 'inline-img'; img.contentEditable = 'false';
+    img.alt = 'Inserted screenshot: ' + name; img.dataset.name = name; img.dataset.size = String(size);
+    insertNodeAtCaret(img);
+    insertNodeAtCaret(document.createTextNode(' '));
+  }
+  function insertFileChipAtCaret(name, size){
+    var chip = document.createElement('span');
+    chip.className = 'file-chip'; chip.contentEditable = 'false';
+    chip.innerHTML = ic('file') + escapeHtml(name);
+    chip.dataset.name = name; chip.dataset.size = String(size); chip.dataset.file = '1';
+    insertNodeAtCaret(chip);
+    insertNodeAtCaret(document.createTextNode(' '));
+  }
+  function insertLineBreakAtCaret(){ insertNodeAtCaret(document.createElement('br')); }
+  function insertTextAtCaret(text){ insertNodeAtCaret(document.createTextNode(text)); }
+
+  function handleFile(file){
+    if(!file) return;
+    // bug fix: oversized attachments used to fail with zero feedback — now surfaced as a toast
+    if(file.size > MAX_FILE_BYTES){ toast('"' + file.name + '" is over the 6 MB attachment limit and was not attached.', 'danger'); return; }
+    if(file.type.indexOf('image/') === 0){
+      var reader = new FileReader();
+      reader.onload = function(e){ insertImageAtCaret(e.target.result, file.name, file.size); };
+      reader.readAsDataURL(file);
+    } else {
+      insertFileChipAtCaret(file.name, file.size);
+    }
+  }
+
+  attachBtn.addEventListener('click', function(){ fileInput.click(); });
+  fileInput.addEventListener('change', function(){ handleFile(fileInput.files && fileInput.files[0]); fileInput.value = ''; });
+
+  ['dragenter','dragover'].forEach(function(evt){
+    dropzone.addEventListener(evt, function(e){ e.preventDefault(); dropzone.classList.add('dragover'); });
+  });
+  ['dragleave','drop'].forEach(function(evt){
+    dropzone.addEventListener(evt, function(e){ if(evt==='drop') e.preventDefault(); dropzone.classList.remove('dragover'); });
+  });
+  dropzone.addEventListener('drop', function(e){
+    var files = e.dataTransfer && e.dataTransfer.files;
+    if(files && files.length){ Array.prototype.forEach.call(files, handleFile); }
+  });
+
+  composer.addEventListener('paste', function(e){
+    var cd = e.clipboardData || window.clipboardData;
+    if(!cd) return;
+    var items = cd.items;
+    if(items){
+      for(var i=0;i<items.length;i++){
+        if(items[i].type.indexOf('image/') === 0){ e.preventDefault(); handleFile(items[i].getAsFile()); return; }
+      }
+    }
+    e.preventDefault();
+    var text = cd.getData('text/plain');
+    if(text) insertTextAtCaret(text);
+  });
+
+  composer.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      if(e.shiftKey){ insertLineBreakAtCaret(); } else { trySend(); }
+    }
+  });
+
+  function walkComposerNode(node, parts){
+    if(node.nodeType === Node.TEXT_NODE){
+      var t = node.textContent;
+      if(t) parts.push({ type:'text', value:t });
+    } else if(node.nodeType === Node.ELEMENT_NODE){
+      if(node.tagName === 'IMG'){
+        parts.push({ type:'image', src:node.src, name:node.dataset.name || 'screenshot.png', size:parseInt(node.dataset.size||'0',10) });
+      } else if(node.tagName === 'BR'){
+        parts.push({ type:'break' });
+      } else if(node.dataset && node.dataset.file){
+        parts.push({ type:'file', name:node.dataset.name || 'file', size:parseInt(node.dataset.size||'0',10) });
+      } else {
+        Array.prototype.forEach.call(node.childNodes, function(child){ walkComposerNode(child, parts); });
+        if(node.tagName === 'DIV') parts.push({ type:'break' });
+      }
+    }
+  }
+  function extractComposerParts(){
+    var parts = [];
+    Array.prototype.forEach.call(composer.childNodes, function(n){ walkComposerNode(n, parts); });
+    while(parts.length && parts[0].type === 'break') parts.shift();
+    while(parts.length && parts[parts.length-1].type === 'break') parts.pop();
+    return parts;
+  }
+  function partsToText(parts){
+    return parts.map(function(p){ return p.type==='text' ? p.value : (p.type==='break' ? '\n' : ''); }).join('');
+  }
+
+  function addUserMessage(parts){
+    var wrap = document.createElement('div');
+    wrap.className = 'msg user';
+    var label = document.createElement('div'); label.className='msg-label'; label.textContent='You';
+    var bubble = document.createElement('div'); bubble.className='bubble';
+    parts.forEach(function(p){
+      if(p.type === 'text') bubble.appendChild(document.createTextNode(p.value));
+      else if(p.type === 'break') bubble.appendChild(document.createElement('br'));
+      else if(p.type === 'image'){ var img=document.createElement('img'); img.src=p.src; img.className='inline-img'; bubble.appendChild(img); }
+      else if(p.type === 'file'){ var chip=document.createElement('span'); chip.className='file-chip'; chip.innerHTML=ic('file')+escapeHtml(p.name); bubble.appendChild(chip); }
+    });
+    wrap.appendChild(label); wrap.appendChild(bubble);
+    chatBody.appendChild(wrap); chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  // Renders either a plain string (greetings) or a Section 6 structured reply:
+  // Understanding / Answer / Next Step / Further Investigation Required.
+  // Internal reasoning field names never appear here — those live in the agent console only.
+  function addBotMessage(payload){
+    var wrap = document.createElement('div');
+    wrap.className = 'msg bot';
+    var label = document.createElement('div'); label.className='msg-label'; label.textContent='Nexis';
+    var bubble = document.createElement('div'); bubble.className='bubble';
+
+    if(typeof payload === 'string'){
+      bubble.textContent = payload;
+      wrap.appendChild(label); wrap.appendChild(bubble);
+      chatBody.appendChild(wrap); chatBody.scrollTop = chatBody.scrollHeight;
+      return;
+    }
+
+    var html = '';
+    if(payload.understanding) html += '<div class="rsec"><b>Understanding</b><br/>' + escapeHtml(payload.understanding) + '</div>';
+    if(payload.answer) html += '<div class="rsec"><b>Answer</b><br/>' + escapeHtml(payload.answer).replace(/\n/g, '<br/>') + '</div>';
+    if(payload.nextStep) html += '<div class="rsec"><b>Next step</b><br/>' + escapeHtml(payload.nextStep) + '</div>';
+    bubble.innerHTML = html;
+    wrap.appendChild(label); wrap.appendChild(bubble);
+
+    if(payload.citation){
+      var cite = document.createElement('div'); cite.className = 'cite'; cite.textContent = payload.citation;
+      wrap.appendChild(cite);
+    }
+    var note = document.createElement('div');
+    note.className = 'investigate-note ' + (payload.investigate ? 'needed' : 'clear');
+    var line1 = document.createElement('div');
+    line1.innerHTML = '<b>Further investigation required:</b> ' + (payload.investigate ? 'YES' : 'NO');
+    note.appendChild(line1);
+    if(payload.investigate && payload.missingWhat){
+      var line2 = document.createElement('div');
+      line2.textContent = 'Still needed: ' + payload.missingWhat;
+      note.appendChild(line2);
+    }
+    wrap.appendChild(note);
+    chatBody.appendChild(wrap); chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  function showTyping(){
+    var t = document.createElement('div'); t.className='typing'; t.id='typingIndicator';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    chatBody.appendChild(t); chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  function hideTyping(){ var t=document.getElementById('typingIndicator'); if(t) t.remove(); }
+
+  function trySend(){
+    var parts = extractComposerParts();
+    if(!parts.length) return;
+    var text = partsToText(parts).trim();
+    if(!text && !parts.some(function(p){return p.type==='image'||p.type==='file';})) return;
+
+    addUserMessage(parts);
+    composer.innerHTML = '';
+    sendBtn.disabled = true;
+    showTyping();
+
+    // Understand -> check latest knowledge -> analyze -> verify -> answer -> suggest further investigation.
+    var minDelay = new Promise(function(resolve){ setTimeout(resolve, reduceMotion ? 150 : 900); });
+    var refreshKb = apiGet('/api/kb').then(function(kb){ if(kb && kb.length) KB = kb; }).catch(function(){ /* keep last-known KB if refresh fails */ });
+
+    Promise.all([minDelay, refreshKb]).then(function(){
+      hideTyping();
+      // Normalize -> retrieve -> reason -> validate -> answer. The reply is only allowed out
+      // after Section 7 validation; an unvalidated draft becomes an honest "not enough
+      // verified information" reply rather than a confident guess.
+      var rawMatches = findMatches(text || 'attachment');
+      var reply = composeNexisReply(text, rawMatches, {
+        lastSourceDoc: liveTicket ? liveTicket.lastSourceDoc : null,
+        lastTopicLabel: liveTicket ? liveTicket.lastTopicLabel : null,
+        clarificationRounds: liveTicket ? (liveTicket.clarificationRounds || 0) : 0,
+        attachments: describeAttachments(parts)
+      });
+      var matches = reply.usedMatches || [];
+      var confidence = reply.reasoning.confidence;
+      var esc = shouldEscalate(text, confidence, matches);
+      var priority = priorityOf(text, confidence);
+      var followups = missingInfoQuestions(text, matches);
+
+      if(!liveTicket){
+        liveTicket = makeTicket({
+          subject: text ? excerpt(text, 60) : 'Attachment received',
+          customer: 'You (live chat)', status: 'New', priority: priority,
+          module: moduleOf(matches), matches: matches, confidence: confidence,
+          escalate: esc.escalate, escalateReason: esc.reason,
+          investigate: reply.investigate, nextAction: reply.missingWhat,
+          reasoning: reply.reasoning,
+          draft: matches.length ? matches[0].entry.answer : "Thanks for the details — I don't have a confident match in the documentation yet, so I've flagged this for an agent to review personally.",
+          followups: followups, messages: [], isLive: true
+        });
+        custTicketId.textContent = liveTicket.id;
+        log('New live ticket <b>' + liveTicket.id + '</b> opened from Customer Portal.');
+      } else {
+        liveTicket.matches = matches; liveTicket.confidence = confidence;
+        liveTicket.escalate = esc.escalate; liveTicket.escalateReason = esc.reason;
+        liveTicket.investigate = reply.investigate; liveTicket.nextAction = reply.missingWhat;
+        liveTicket.priority = priority; liveTicket.followups = followups;
+        liveTicket.module = moduleOf(matches);
+        liveTicket.reasoning = reply.reasoning;
+        persistTicketUpdate(liveTicket);
+      }
+      // Section 4: at most one clarifying question per turn, and at most two rounds per ticket.
+      if(reply.askedClarification) liveTicket.clarificationRounds = (liveTicket.clarificationRounds || 0) + 1;
+      liveTicket.lastSourceDoc = reply.resolvedSourceDoc || liveTicket.lastSourceDoc || null;
+      liveTicket.lastTopicLabel = reply.resolvedTopicLabel || liveTicket.lastTopicLabel || null;
+      liveTicket.messages.push({ role:'user', parts: parts });
+      custStatusBadge.className = 'badge ' + statusClass(liveTicket.status);
+      custStatusBadge.textContent = liveTicket.status;
+
+      addBotMessage(reply);
+      var transcript = 'Understanding: ' + reply.understanding + '\n\nAnswer: ' + reply.answer +
+        (reply.nextStep ? ('\n\nNext step: ' + reply.nextStep) : '') +
+        '\n\nFurther investigation required: ' + (reply.investigate ? 'YES' : 'NO');
+      liveTicket.messages.push({ role:'bot', parts:[{type:'text', value: transcript}] });
+
+      if(matches.length){ liveTicket.draft = matches[0].entry.answer; liveTicket.originalDraft = matches[0].entry.answer; liveTicket.draftIsHtml = false; }
+      renderQueue();
+
+      sendBtn.disabled = false;
+      composer.focus();
+    });
+  }
+
+  sendBtn.addEventListener('click', trySend);
+  chips.addEventListener('click', function(e){
+    var btn = e.target.closest('.chip');
+    if(!btn || sendBtn.disabled) return;
+    composer.textContent = btn.getAttribute('data-q');
+    trySend();
+  });
+
+  // ============================================================
+  //  KNOWLEDGE BASE VIEW — stats, browse/search, add form, activity
+  // ============================================================
+  function updateKbStats(){
+    var docs = {};
+    KB.forEach(function(e){ docs[e.sourceDoc] = true; });
+    var docCount = Object.keys(docs).length;
+    document.getElementById('kbBadge').textContent = docCount + ' documents · ' + KB.length + ' entries loaded';
+    document.getElementById('kbCoverageText').innerHTML = 'Currently grounded in <b>' + docCount + '</b> source documents and <b>' + KB.length + '</b> indexed sections.';
+    document.getElementById('statEntries').textContent = KB.length;
+    document.getElementById('statDocs').textContent = docCount;
+    document.getElementById('statOpen').textContent = tickets.filter(function(t){ return t.status !== 'Resolved'; }).length;
+    document.getElementById('statResolved').textContent = tickets.filter(function(t){ return t.status === 'Resolved'; }).length;
+    document.getElementById('sidebarFooter').innerHTML = '<b>' + KB.length + '</b> KB entries<br/>Running at <b>' + window.location.host + '</b>';
+  }
+
+  function renderKbList(){
+    var list = document.getElementById('kbList');
+    if(!list) return;
+    var q = kbFilter.query.trim().toLowerCase();
+    var filtered = !q ? KB : KB.filter(function(e){
+      return e.title.toLowerCase().indexOf(q) !== -1 || e.sourceDoc.toLowerCase().indexOf(q) !== -1 || e.answer.toLowerCase().indexOf(q) !== -1;
+    });
+    document.getElementById('kbListCount').textContent = filtered.length + ' of ' + KB.length + ' entries';
+    var shown = filtered.slice(0, 60);
+    list.innerHTML = shown.length ? shown.map(function(e){
+      return '<div class="kb-row" data-id="' + escapeHtml(e.id) + '"><div class="kt">' + escapeHtml(e.title) + '</div>' +
+        '<div class="ks">' + escapeHtml(e.sourceDoc) + ' · p.' + e.page + '</div>' +
+        '<div class="ka">' + escapeHtml(excerpt(e.answer, 320)) + '</div></div>';
+    }).join('') : '<div class="empty-inline" style="padding:22px;">No entries match your search.</div>';
+    if(filtered.length > shown.length){
+      list.innerHTML += '<div class="empty-inline">Showing first ' + shown.length + ' results — refine your search to narrow further.</div>';
+    }
+    Array.prototype.forEach.call(list.querySelectorAll('.kb-row'), function(row){
+      row.addEventListener('click', function(){ row.classList.toggle('open'); });
+    });
+  }
+  var kbSearchInput = document.getElementById('kbSearchInput');
+  kbSearchInput.addEventListener('input', function(){ kbFilter.query = kbSearchInput.value; globalSearch.value = kbSearchInput.value; renderKbList(); });
+
+  function renderLearningLog(){
+    var el = document.getElementById('learnBody');
+    if(!el) return;
+    el.innerHTML = learningLog.map(function(e){
+      return '<div class="learn-item"><span class="ts">' + e.ts + '</span>' + e.text + '</div>';
+    }).join('') || '<div class="empty-inline">No activity yet.</div>';
+  }
+
+  document.getElementById('kbAddBtn').addEventListener('click', function(){
+    var title = document.getElementById('kbTitle').value.trim();
+    var source = document.getElementById('kbSource').value.trim() || 'Agent-added';
+    var answer = document.getElementById('kbAnswer').value.trim();
+    var msg = document.getElementById('kbAddMsg');
+    if(!title || !answer){ msg.textContent = 'Title and answer are required.'; msg.style.color = 'var(--danger)'; return; }
+    // bug fix: keywords used to be derived from the title only, making new
+    // entries hard to retrieve later — now the answer contributes too.
+    var titleWords = title.toLowerCase().split(/\W+/).filter(function(w){ return w.length > 3; });
+    var answerWords = answer.toLowerCase().split(/\W+/).filter(function(w){ return w.length > 4; }).slice(0, 12);
+    var keywords = Array.from(new Set(titleWords.concat(answerWords)));
+    var btn = document.getElementById('kbAddBtn');
+    btn.disabled = true;
+    apiPost('/api/kb', { title:title, sourceDoc:source, page:0, keywords:keywords, answer:answer }).then(function(entry){
+      KB.push(entry);
+      docFreqCache = null;
+      document.getElementById('kbTitle').value = '';
+      document.getElementById('kbSource').value = '';
+      document.getElementById('kbAnswer').value = '';
+      msg.style.color = 'var(--success)';
+      msg.textContent = 'Added — the knowledge base now has ' + KB.length + ' entries.';
+      btn.disabled = false;
+      updateKbStats();
+      renderKbList();
+      toast('Added to the knowledge base.', 'success');
+      loadLog();
+    }).catch(function(){
+      msg.style.color = 'var(--danger)'; msg.textContent = 'Could not reach the server.'; btn.disabled = false;
+      toast('Could not save this entry — check the server is running.', 'danger');
+    });
+  });
+
+  function loadLog(){
+    apiGet('/api/log').then(function(entries){
+      learningLog = (entries || []).map(function(e){
+        var d = new Date(e.ts);
+        return { text: e.text, ts: isNaN(d) ? '' : d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) };
+      });
+      renderLearningLog();
+      renderNotifPanel();
+    });
+  }
+
+  // ============================================================
+  //  BOOT — load KB from the local API, then render everything
+  // ============================================================
+  var appLoading = document.getElementById('appLoading');
+  var appShell = document.getElementById('appShell');
+  var retryBootBtn = document.getElementById('retryBootBtn');
+
+  function boot(){
+    appLoading.classList.remove('err-state');
+    apiGet('/api/kb').then(function(kb){
+      KB = kb || [];
+      appLoading.style.display = 'none';
+      appShell.classList.add('ready');
+      updateKbStats();
+      addBotMessage("Hi, I'm Nexis — the product assistant for Modern Requirements4DevOps and Copilot4DevOps. Every answer I give is grounded in the " + KB.length + " indexed sections of product documentation loaded here, and if something isn't covered I'll tell you that rather than guess. Ask me anything, or attach a screenshot, log or document.");
+      seedExamples();
+      updateKbStats();
+      renderKbList();
+      loadLog();
+      renderQueue();
+    }).catch(function(){
+      appLoading.classList.add('err-state');
+    });
+  }
+  retryBootBtn.addEventListener('click', boot);
+  boot();
+
+})();
+</script>
+</body>
+</html>

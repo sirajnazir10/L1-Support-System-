@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# L1 Support for MR & CP — launcher for macOS / Linux
+# MR Nexis — launcher for macOS / Linux
 set -e
 cd "$(dirname "$0")"
 
@@ -19,7 +19,7 @@ fi
 export PORT=3002
 
 echo ""
-echo "Starting L1 Support for MR & CP ..."
+echo "Starting MR Nexis ..."
 echo "Once you see \"is running\" below, open http://localhost:3002 in your browser."
 echo "Press Ctrl+C to stop the server."
 echo ""
