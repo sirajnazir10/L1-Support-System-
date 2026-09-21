@@ -1,7 +1,7 @@
 {
-  "name": "l1-support-mr-cp",
+  "name": "mr-nexis",
   "version": "1.0.0",
-  "description": "Document-grounded L1 support app for Modern Requirements & Copilot4DevOps — runs locally on Windows, Mac, or Linux.",
+  "description": "Document-grounded MR Nexis support app for Modern Requirements & Copilot4DevOps — runs locally on Windows, Mac, or Linux.",
   "private": true,
   "main": "server.js",
   "scripts": {

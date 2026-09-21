@@ -1,5 +1,5 @@
 @echo off
-title L1 Support for MR ^& CP
+title MR Nexis
 cd /d "%~dp0"
 
 where node >nul 2>nul
@@ -20,7 +20,7 @@ if not exist "node_modules" (
 set PORT=3002
 
 echo.
-echo Starting L1 Support for MR ^& CP ...
+echo Starting MR Nexis ...
 echo Once you see "is running" below, open http://localhost:3002 in your browser.
 echo Leave this window open while you use the app. Close it to stop the server.
 echo.
