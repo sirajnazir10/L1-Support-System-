@@ -1,6 +1,6 @@
 {
   "name": "mr-nexis",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Document-grounded MR Nexis support app for Modern Requirements & Copilot4DevOps — runs locally on Windows, Mac, or Linux.",
   "private": true,
   "main": "server.js",
@@ -8,7 +8,11 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "@anthropic-ai/sdk": "^0.32.1",
+    "multer": "^2.0.0",
+    "pdf-parse": "^1.1.1",
+    "mammoth": "^1.8.0"
   },
   "engines": {
     "node": ">=16"

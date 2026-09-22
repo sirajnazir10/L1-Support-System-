@@ -2107,6 +2107,18 @@
         '<div class="form-msg" id="kbAddMsg"></div>' +
       '</div></div>' +
     '</div>' +
+    '<div class="card kb-mb collapsible" id="kbUploadCard">' +
+      '<button type="button" class="card-header-row"><h3>Upload a document</h3>' + ic('chevDown','chev') + '</button>' +
+      '<div class="coll-body">' +
+        '<p class="kb-stat">Upload a PDF, Word (.docx), .txt, or .md file — an AI pass proposes distinct knowledge-base entries from it for you to review, edit, and approve before anything is saved. Requires the server\'s LLM to be configured (ANTHROPIC_API_KEY).</p>' +
+        '<div class="form-grid">' +
+          '<label for="kbUploadFile">File</label><input id="kbUploadFile" type="file" accept=".pdf,.docx,.doc,.txt,.md"/>' +
+          '<button class="btn primary" id="kbUploadBtn" type="button" style="align-self:flex-start;">' + ic('plus') + 'Extract entries</button>' +
+          '<div class="form-msg" id="kbUploadMsg"></div>' +
+        '</div>' +
+        '<div id="kbUploadReview"></div>' +
+      '</div>' +
+    '</div>' +
     '<div class="card kb-mb">' +
       '<div class="kb-search-row"><div class="queue-search">' + ic('search') + '<input type="text" id="kbSearchInput" placeholder="Search titles, sources, and answers…"/></div><span class="composer-hint" id="kbListCount"></span></div>' +
       '<div class="kb-list" id="kbList"></div>' +
@@ -2371,47 +2383,81 @@
       var priority = priorityOf(text, confidence);
       var followups = missingInfoQuestions(text, matches);
 
-      if(!liveTicket){
-        liveTicket = makeTicket({
-          subject: text ? excerpt(text, 60) : 'Attachment received',
-          customer: 'You (live chat)', status: 'New', priority: priority,
-          module: moduleOf(matches), matches: matches, confidence: confidence,
-          escalate: esc.escalate, escalateReason: esc.reason,
-          investigate: reply.investigate, nextAction: reply.missingWhat,
-          reasoning: reply.reasoning,
-          draft: matches.length ? matches[0].entry.answer : "Thanks for the details — I don't have a confident match in the documentation yet, so I've flagged this for an agent to review personally.",
-          followups: followups, messages: [], isLive: true
-        });
-        custTicketId.textContent = liveTicket.id;
-        log('New live ticket <b>' + liveTicket.id + '</b> opened from Customer Portal.');
-      } else {
-        liveTicket.matches = matches; liveTicket.confidence = confidence;
-        liveTicket.escalate = esc.escalate; liveTicket.escalateReason = esc.reason;
-        liveTicket.investigate = reply.investigate; liveTicket.nextAction = reply.missingWhat;
-        liveTicket.priority = priority; liveTicket.followups = followups;
-        liveTicket.module = moduleOf(matches);
-        liveTicket.reasoning = reply.reasoning;
-        persistTicketUpdate(liveTicket);
+      // Ticket fields (escalation, priority, confidence, investigate flag) always come from the
+      // local deterministic engine above — never from the LLM draft — so escalation/routing
+      // behavior can't vary based on phrasing. `displayReply` is the only thing that changes:
+      // what's actually shown in the chat bubble and saved into the transcript.
+      function finish(displayReply){
+        if(!liveTicket){
+          liveTicket = makeTicket({
+            subject: text ? excerpt(text, 60) : 'Attachment received',
+            customer: 'You (live chat)', status: 'New', priority: priority,
+            module: moduleOf(matches), matches: matches, confidence: confidence,
+            escalate: esc.escalate, escalateReason: esc.reason,
+            investigate: reply.investigate, nextAction: reply.missingWhat,
+            reasoning: reply.reasoning,
+            draft: matches.length ? matches[0].entry.answer : "Thanks for the details — I don't have a confident match in the documentation yet, so I've flagged this for an agent to review personally.",
+            followups: followups, messages: [], isLive: true
+          });
+          custTicketId.textContent = liveTicket.id;
+          log('New live ticket <b>' + liveTicket.id + '</b> opened from Customer Portal.');
+        } else {
+          liveTicket.matches = matches; liveTicket.confidence = confidence;
+          liveTicket.escalate = esc.escalate; liveTicket.escalateReason = esc.reason;
+          liveTicket.investigate = reply.investigate; liveTicket.nextAction = reply.missingWhat;
+          liveTicket.priority = priority; liveTicket.followups = followups;
+          liveTicket.module = moduleOf(matches);
+          liveTicket.reasoning = reply.reasoning;
+          persistTicketUpdate(liveTicket);
+        }
+        // Section 4: at most one clarifying question per turn, and at most two rounds per ticket.
+        if(reply.askedClarification) liveTicket.clarificationRounds = (liveTicket.clarificationRounds || 0) + 1;
+        liveTicket.lastSourceDoc = reply.resolvedSourceDoc || liveTicket.lastSourceDoc || null;
+        liveTicket.lastTopicLabel = reply.resolvedTopicLabel || liveTicket.lastTopicLabel || null;
+        liveTicket.messages.push({ role:'user', parts: parts });
+        custStatusBadge.className = 'badge ' + statusClass(liveTicket.status);
+        custStatusBadge.textContent = liveTicket.status;
+
+        addBotMessage(displayReply);
+        var transcript = 'Understanding: ' + displayReply.understanding + '\n\nAnswer: ' + displayReply.answer +
+          (displayReply.nextStep ? ('\n\nNext step: ' + displayReply.nextStep) : '') +
+          '\n\nFurther investigation required: ' + (reply.investigate ? 'YES' : 'NO');
+        liveTicket.messages.push({ role:'bot', parts:[{type:'text', value: transcript}] });
+
+        if(matches.length){ liveTicket.draft = matches[0].entry.answer; liveTicket.originalDraft = matches[0].entry.answer; liveTicket.draftIsHtml = false; }
+        renderQueue();
+
+        sendBtn.disabled = false;
+        composer.focus();
       }
-      // Section 4: at most one clarifying question per turn, and at most two rounds per ticket.
-      if(reply.askedClarification) liveTicket.clarificationRounds = (liveTicket.clarificationRounds || 0) + 1;
-      liveTicket.lastSourceDoc = reply.resolvedSourceDoc || liveTicket.lastSourceDoc || null;
-      liveTicket.lastTopicLabel = reply.resolvedTopicLabel || liveTicket.lastTopicLabel || null;
-      liveTicket.messages.push({ role:'user', parts: parts });
-      custStatusBadge.className = 'badge ' + statusClass(liveTicket.status);
-      custStatusBadge.textContent = liveTicket.status;
 
-      addBotMessage(reply);
-      var transcript = 'Understanding: ' + reply.understanding + '\n\nAnswer: ' + reply.answer +
-        (reply.nextStep ? ('\n\nNext step: ' + reply.nextStep) : '') +
-        '\n\nFurther investigation required: ' + (reply.investigate ? 'YES' : 'NO');
-      liveTicket.messages.push({ role:'bot', parts:[{type:'text', value: transcript}] });
-
-      if(matches.length){ liveTicket.draft = matches[0].entry.answer; liveTicket.originalDraft = matches[0].entry.answer; liveTicket.draftIsHtml = false; }
-      renderQueue();
-
-      sendBtn.disabled = false;
-      composer.focus();
+      // LLM first, keyword fallback: the local engine above already did all retrieval,
+      // validation, and honesty-gating (never guesses) — the LLM call only asks for a more
+      // naturally-phrased draft of the SAME already-validated matches, and only replaces the
+      // wording if it actually grounds itself in one of those matches and says it's confident.
+      // Any missing key, network failure, or low-confidence response falls straight back to
+      // the exact reply this app has always produced.
+      if(nexisLlmAvailable && matches.length && text){
+        apiPost('/api/ask', { question: text, candidates: matches.slice(0, 8).map(function(m){ return m.entry; }) })
+          .then(function(llm){
+            var usedRealMatch = llm && Array.isArray(llm.usedIds) && llm.usedIds.some(function(id){
+              return matches.some(function(m){ return m.entry.id === id; });
+            });
+            if(llm && llm.available && llm.confident && usedRealMatch){
+              finish({
+                understanding: llm.understanding || reply.understanding,
+                answer: llm.answer || reply.answer,
+                nextStep: llm.nextStep || reply.nextStep,
+                citation: reply.citation, investigate: reply.investigate, missingWhat: reply.missingWhat
+              });
+            } else {
+              finish(reply);
+            }
+          })
+          .catch(function(){ finish(reply); });
+      } else {
+        finish(reply);
+      }
     });
   }
 
@@ -2503,6 +2549,81 @@
     });
   });
 
+  // ---- Upload a document -> AI-proposed entries -> reviewed -> saved individually via
+  // the same POST /api/kb used above. Nothing from an upload is ever saved automatically.
+  document.getElementById('kbUploadBtn').addEventListener('click', function(){
+    var fileInput = document.getElementById('kbUploadFile');
+    var msg = document.getElementById('kbUploadMsg');
+    var review = document.getElementById('kbUploadReview');
+    var file = fileInput.files && fileInput.files[0];
+    if(!file){ msg.style.color = 'var(--danger)'; msg.textContent = 'Choose a file first.'; return; }
+    var btn = document.getElementById('kbUploadBtn');
+    btn.disabled = true;
+    msg.style.color = ''; msg.textContent = 'Reading and analyzing the document…';
+    review.innerHTML = '';
+    var fd = new FormData();
+    fd.append('file', file);
+    fetch('/api/upload', { method: 'POST', body: fd })
+      .then(function(r){ return r.json().then(function(body){ return { ok: r.ok, body: body }; }); })
+      .then(function(res){
+        btn.disabled = false;
+        if(!res.ok){ msg.style.color = 'var(--danger)'; msg.textContent = res.body.error || 'Upload failed.'; return; }
+        var entries = res.body.entries || [];
+        if(!entries.length){ msg.style.color = 'var(--danger)'; msg.textContent = 'No entries could be extracted from this document.'; return; }
+        msg.style.color = 'var(--success)';
+        msg.textContent = entries.length + ' proposed entries — review, edit, and save the ones you want.';
+        renderUploadReview(entries, res.body.defaultSourceDoc);
+      })
+      .catch(function(){
+        btn.disabled = false; msg.style.color = 'var(--danger)'; msg.textContent = 'Could not reach the server.';
+      });
+  });
+
+  function renderUploadReview(entries, defaultSourceDoc){
+    var review = document.getElementById('kbUploadReview');
+    review.innerHTML = entries.map(function(e, i){
+      return '<div class="card mini-card upload-review-row" data-idx="' + i + '" style="margin-top:10px;">' +
+        '<label><input type="checkbox" class="ur-include" checked/> Include this entry</label>' +
+        '<label>Title</label><input type="text" class="ur-title" value="' + escapeHtml(e.title || '') + '"/>' +
+        '<label>Source</label><input type="text" class="ur-source" value="' + escapeHtml(e.sourceDoc || defaultSourceDoc || '') + '"/>' +
+        '<label>Keywords (comma-separated)</label><input type="text" class="ur-keywords" value="' + escapeHtml((e.keywords || []).join(', ')) + '"/>' +
+        '<label>Answer</label><textarea class="ur-answer" rows="3">' + escapeHtml(e.answer || '') + '</textarea>' +
+      '</div>';
+    }).join('') + '<button class="btn primary" id="kbUploadSaveBtn" type="button" style="margin-top:10px;">' + ic('plus') + 'Save selected entries</button>';
+
+    document.getElementById('kbUploadSaveBtn').addEventListener('click', function(){
+      var rows = Array.prototype.slice.call(document.querySelectorAll('.upload-review-row'));
+      var toSave = rows.filter(function(row){ return row.querySelector('.ur-include').checked; }).map(function(row){
+        return {
+          title: row.querySelector('.ur-title').value.trim(),
+          sourceDoc: row.querySelector('.ur-source').value.trim() || 'Uploaded document',
+          page: 1,
+          keywords: row.querySelector('.ur-keywords').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean),
+          answer: row.querySelector('.ur-answer').value.trim()
+        };
+      }).filter(function(e){ return e.title && e.answer; });
+      if(!toSave.length){ toast('Nothing selected to save.', 'danger'); return; }
+      var saveBtn = document.getElementById('kbUploadSaveBtn');
+      saveBtn.disabled = true;
+      Promise.all(toSave.map(function(e){ return apiPost('/api/kb', e); })).then(function(saved){
+        saved.forEach(function(entry){ KB.push(entry); });
+        docFreqCache = null;
+        document.getElementById('kbUploadReview').innerHTML = '';
+        document.getElementById('kbUploadFile').value = '';
+        var msg = document.getElementById('kbUploadMsg');
+        msg.style.color = 'var(--success)';
+        msg.textContent = 'Saved ' + saved.length + ' entries — the knowledge base now has ' + KB.length + ' entries.';
+        updateKbStats();
+        renderKbList();
+        toast('Saved ' + saved.length + ' entries from the uploaded document.', 'success');
+        loadLog();
+      }).catch(function(){
+        saveBtn.disabled = false;
+        toast('Could not save one or more entries — check the server is running.', 'danger');
+      });
+    });
+  }
+
   function loadLog(){
     apiGet('/api/log').then(function(entries){
       learningLog = (entries || []).map(function(e){
@@ -2521,6 +2642,10 @@
   var appShell = document.getElementById('appShell');
   var retryBootBtn = document.getElementById('retryBootBtn');
 
+  // Set once at boot; checked before every LLM-drafted-answer attempt so a missing/unconfigured
+  // key skips straight to the local keyword engine instead of a doomed round-trip per message.
+  var nexisLlmAvailable = false;
+
   function boot(){
     appLoading.classList.remove('err-state');
     apiGet('/api/kb').then(function(kb){
@@ -2534,6 +2659,7 @@
       renderKbList();
       loadLog();
       renderQueue();
+      apiGet('/api/llm-status').then(function(s){ nexisLlmAvailable = !!(s && s.available); }).catch(function(){ nexisLlmAvailable = false; });
     }).catch(function(){
       appLoading.classList.add('err-state');
     });
