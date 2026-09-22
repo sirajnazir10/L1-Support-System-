@@ -668,7 +668,7 @@
   // Abbreviations are expanded on word boundaries only, so "cp" in "cp not working"
   // expands but the "cp" inside another word never does.
   var ABBREVIATIONS = {
-    "cp": "copilot4devops", "c4do": "copilot4devops", "copilot": "copilot4devops",
+    "cp": "copilot4devops", "c4do": "copilot4devops", "cp4do": "copilot4devops", "copilot": "copilot4devops",
     "ado": "azure devops", "vsts": "azure devops", "tfs": "azure devops server",
     "mr4do": "modern requirements4devops", "mr4devops": "modern requirements4devops",
     "tcm": "test case management", "wi": "work item", "wits": "work items",
@@ -1212,7 +1212,7 @@
     if(!settled) return null; // unsettled replies build their own ask
     switch(intent){
       case 'config':
-        return 'Try the steps above in your own project. If a setting on your screen does not match what is described, tell me what you see and I will take it from there.';
+        return "If what you see in your own project doesn't quite match this, tell me what's different and I'll take it from there.";
       case 'error':
         return 'Work through the steps above. If the same error comes back, send me the exact error text or a screenshot and I will check it against the known issues.';
       case 'licensing':
@@ -1430,11 +1430,20 @@
     }
 
     // --- Settled answer ----------------------------------------------------------------
-    var understanding = named
-      ? ('You are asking about ' + named + (intent === 'how-it-works' ? ' and how it works.' : '.'))
-      : ('You are asking about "' + excerpt(text, 70) + '".');
-    if(assumption) understanding += ' I am assuming this is ' + assumption + ' — tell me if you meant something else.';
-    if(attachments.count) understanding += ' I can see you attached ' + attachments.names.join(', ') + '; an agent will need to open it, as I cannot read image contents directly.';
+    // Only state "you're asking about X" when that's new information — a confidently named
+    // entity is about to be restated by the answer itself anyway ("Copilot4DevOps offers 16
+    // functions..."), so repeating the name right before it is pure filler. It's worth keeping
+    // when the topic was inferred rather than named (so the customer can catch a wrong guess),
+    // or when there's a real caveat (an assumption, or an attachment) to flag.
+    var understandingParts = [];
+    if(!named){
+      understandingParts.push('You are asking about "' + excerpt(text, 70) + '".');
+    } else if(assumption){
+      understandingParts.push('You are asking about ' + named + (intent === 'how-it-works' ? ' and how it works.' : '.'));
+    }
+    if(assumption) understandingParts.push('I am assuming this is ' + assumption + ' — tell me if you meant something else.');
+    if(attachments.count) understandingParts.push('I can see you attached ' + attachments.names.join(', ') + '; an agent will need to open it, as I cannot read image contents directly.');
+    var understanding = understandingParts.length ? understandingParts.join(' ') : null;
 
     reasoning.requiredInvestigation = null;
     return {
@@ -2423,7 +2432,8 @@
         custStatusBadge.textContent = liveTicket.status;
 
         addBotMessage(displayReply);
-        var transcript = 'Understanding: ' + displayReply.understanding + '\n\nAnswer: ' + displayReply.answer +
+        var transcript = (displayReply.understanding ? ('Understanding: ' + displayReply.understanding + '\n\n') : '') +
+          'Answer: ' + displayReply.answer +
           (displayReply.nextStep ? ('\n\nNext step: ' + displayReply.nextStep) : '') +
           '\n\nFurther investigation required: ' + (reply.investigate ? 'YES' : 'NO');
         liveTicket.messages.push({ role:'bot', parts:[{type:'text', value: transcript}] });

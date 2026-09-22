@@ -4943,13 +4943,20 @@
       "copilot4devops system requirements",
       "iis web server role",
       "websocket enabled iis",
-      "net core runtime 8",
+      "net core runtime 10",
+      "uninstall aspnet core runtime 8",
+      "iis url rewrite module",
+      "uninstall webdav common http feature",
       "visual c++ redistributable 2022",
       "mongodb 7.0.2",
-      "virtualization technology vt-x"
+      "virtualization technology vt-x",
+      "azure devops server 2022 support",
+      "copilot4devops on premises",
+      "prerequisites for copilot4devops",
+      "installing copilot4devops"
     ],
-    "answer": "Before installing Copilot4DevOps on-premises, the server needs: the IIS Web Server role (Windows Server Roles), Web Socket enabled in IIS through Windows Features, Microsoft ASP.NET Core Runtime 8.0.x (the Hosting Bundle, which includes IIS support), the Microsoft Visual C++ Redistributable package-2022 (restart the system after installing this), and MongoDB version 7.0.2 or later. Virtualization Technology (VT-x) must also be enabled and supported on the server, since Copilot4DevOps requires a Docker-based Redis Stack Server running via WSL2 — if the server is a cloud virtual machine, nested virtualization must be enabled too.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "Before installing Copilot4DevOps on-premises (v9), the server needs: the IIS Web Server role (Windows Server Roles) with Web Socket enabled through Windows Features; the WebDAV Common HTTP Feature uninstalled if present, followed by a restart; the IIS URL Rewrite module installed and visible in IIS's Web Server section; Microsoft ASP.NET Core Runtime 10.0.x (the Hosting Bundle) — uninstall any older 8.0.x Hosting Bundle first; the Microsoft Visual C++ Redistributable package-2022 (restart the system after installing this); and MongoDB version 7.0.2 or later. Virtualization Technology (VT-x) must also be enabled and supported on the server, since Copilot4DevOps requires a Docker-based Redis Stack Server running via WSL2 — if the server is a cloud virtual machine, nested virtualization must be enabled too. Copilot4DevOps v9 supports Azure DevOps Server 2022 and later versions.",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
   },
   {
     "id": "cp-onprem-enable-wsl-docker",
@@ -5081,21 +5088,22 @@
     "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
   },
   {
-    "id": "cp-onprem-upgrade-v6-to-v8",
-    "title": "Copilot4DevOps on-premises — upgrading from v6 (or later) to v8",
+    "id": "cp-onprem-upgrade-v6-to-v9",
+    "title": "Copilot4DevOps on-premises — upgrading from v6 (or later) to v9",
     "page": 3,
     "keywords": [
-      "upgrade copilot4devops v6 to v8",
+      "upgrade copilot4devops v6 to v9",
       "rename existing copilot4devops folder old",
       "stop and remove iis site before upgrade",
       "skip wsl docker steps already configured",
       "upgrade copilot4devops",
-      "v6 to v8",
+      "v6 to v9",
       "copilot4devops upgrade guide",
-      "upgrading copilot4devops"
+      "upgrading copilot4devops",
+      "uninstall old net core runtime before upgrade"
     ],
-    "answer": "To upgrade an existing on-premises Copilot4DevOps from v6 or later to v8: confirm the current install is fully functional with MongoDB 7.x+ first, then in IIS Manager stop the Copilot4DevOps site and remove it, and rename the existing install folder (e.g. C:\\Inetpub\\Copilot4DevOps → C:\\Inetpub\\Copilot4DevOpsOld) rather than deleting it. Because Copilot v6+ already requires the Docker-based Redis Stack Server, WSL2 and Docker are already enabled and configured on a v6+ server — you can skip straight to redeploying the files (extract the new version to the original path), recreating the IIS site, and updating appsettings.json's connection strings, SSL thumbprint, and allowed domains the same way as a fresh install. Only servers upgrading from a version earlier than v6 need to go through the full WSL/Docker/Redis Stack setup from scratch.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "To upgrade an existing on-premises Copilot4DevOps from v6 or later to v9: confirm the current install is fully functional with MongoDB 7.x+ first, verify Web Socket is enabled in IIS, uninstall the WebDAV Common HTTP Feature if present (restart after), and make sure IIS URL Rewrite is installed. Uninstall the older Microsoft ASP.NET Core Runtime 8.0.x Hosting Bundle and install .NET Core 10.0.x in its place, and confirm the Visual C++ Redistributable 2022 package is present. Then in IIS Manager stop the Copilot4DevOps site and remove it, and rename the existing install folder (e.g. C:\\Inetpub\\Copilot4DevOps → C:\\Inetpub\\Copilot4DevOpsOld, or append the old version number) rather than deleting it.\n\nIf the server's current setup already uses a Docker-based Redis Stack Server, an external Ubuntu Server VM running Redis Stack Server, or WSL-based Ubuntu with Redis Stack Server, you can skip the WSL/Docker/Redis Stack setup steps entirely and go straight to redeploying the files (extract the new v9 package to the original path), recreating the IIS site, and updating appsettings.json's connection strings, SSL thumbprint, and allowed domains the same way as a fresh install. Only servers upgrading from a version earlier than v6 need to go through the full WSL/Docker/Redis Stack setup from scratch. Copilot4DevOps v9 requires Azure DevOps Server 2022 or later.",
+    "sourceDoc": "On-Premises Copilot4DevOps Upgrade Guide"
   },
   {
     "id": "cp-onprem-integrate-with-mr4devops",
@@ -5112,5 +5120,78 @@
     ],
     "answer": "When Copilot4DevOps and Modern Requirements4DevOps run on the same server as separate IIS sites, MR4DevOps needs to be told where to find Copilot4DevOps. In IIS Manager, open the Copilot4DevOps site and copy its URL from the Browse Website panel. Then select the Modern Requirements4DevOps site, open Application Settings, and edit the Copilot4DevOps.ApplicationUrl property, setting its value to the URL you just copied. Restart the IIS web server for the change to take effect, then confirm the integration by using a Copilot4DevOps-powered feature from within Modern Requirements4DevOps.",
     "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-handler-mappings-put-verb",
+    "title": "Copilot4DevOps on-premises — allowing the PUT verb in IIS Handler Mappings and Request Filtering",
+    "page": 17,
+    "keywords": [
+      "extensionlessurlhandler-integrated-4.0 put verb",
+      "handler mappings request restriction verbs",
+      "request filtering http verbs allow put",
+      "copilot4devops put requests failing iis",
+      "add put verb iis",
+      "handler mappings",
+      "put verb",
+      "put requests failing",
+      "put method not allowed copilot4devops"
+    ],
+    "answer": "Copilot4DevOps needs the PUT HTTP verb allowed in two separate IIS settings on its site, or certain requests will fail. First, in IIS Manager, open the Copilot4DevOps site's Handler Mappings, find ExtensionlessUrlHandler-Integrated-4.0, double-click it, click Request Restrictions, switch to the Verbs tab, and either select \"All verbs\" or select \"One of the following verbs\" and explicitly append `,PUT` to the list (e.g. `GET,HEAD,POST,DEBUG,PUT`). Second, open Request Filtering on the same site, go to the HTTP Verbs tab: if PUT is listed with Allowed = False, right-click it and choose Remove; if it isn't listed at all, click Allow Verb and add PUT.",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-encryption-env-vars-apppool",
+    "title": "Copilot4DevOps on-premises — setting the MR_COPILOT_ENCRYPTION environment variables on the app pool",
+    "page": 19,
+    "keywords": [
+      "mr_copilot_encryption_legacy_key",
+      "mr_copilot_encryption_legacy_ivhex",
+      "mr_copilot_encryption_utility_aeskey",
+      "mr_copilot_encryption_utility_aesiv",
+      "appcmd set config applicationpools environmentvariables",
+      "appcmd recycle apppool copilot4devops",
+      "set environment variables copilot4devops app pool"
+    ],
+    "answer": "Copilot4DevOps's application pool needs four encryption-related environment variables set directly on it. In an elevated Command Prompt, run `cd C:\\Windows\\System32\\inetsrv`, then use `appcmd set config -section:system.applicationHost/applicationPools /+\"[name='Copilot4DevOps'].environmentVariables.[name='<VAR_NAME>',value='<value>']\" /commit:apphost` once each for MR_COPILOT_ENCRYPTION_LEGACY_KEY, MR_COPILOT_ENCRYPTION_LEGACY_IVHEX, MR_COPILOT_ENCRYPTION_UTILITY_AESKEY, and MR_COPILOT_ENCRYPTION_UTILITY_AESIV (use the exact values provided for your deployment, not placeholders), then run `appcmd recycle apppool /apppool.name:\"Copilot4DevOps\"` to apply them. Because these commands are long, paste them into Notepad first and check they haven't been split or line-wrapped incorrectly before copying each one into Command Prompt — a broken command here is a common cause of the app pool failing to pick up the keys.",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-docker-autostart-task-scheduler",
+    "title": "Copilot4DevOps on-premises — starting Docker automatically after a server reboot",
+    "page": 26,
+    "keywords": [
+      "docker not running after server restart",
+      "start docker on server boot",
+      "task scheduler docker desktop startup",
+      "redis stack not running after reboot",
+      "docker-startup scheduled task",
+      "auto start docker desktop windows server",
+      "docker not running",
+      "docker not starting",
+      "redis stack container down",
+      "docker after reboot"
+    ],
+    "answer": "Since Copilot4DevOps depends on the Redis Stack Server container, Docker Desktop needs to come back up automatically whenever the server reboots — it doesn't do this on its own by default. Create a Windows Task Scheduler task (taskschd.msc): on the General tab, run whether the user is logged on or not, with highest privileges; on the Triggers tab, trigger \"At startup\" with a ~30 second delay (to avoid conflicting with other services still starting); on the Actions tab, start a program pointing at Docker Desktop's executable (e.g. `\"C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe\"`); on the Conditions tab, uncheck all the idle/power/network conditions; and on the Settings tab, allow the task to run on demand, run it as soon as possible after a missed start, retry every 5 minutes up to 3 attempts on failure, and force-stop it if it doesn't end when requested. After saving, restart the server and confirm both the scheduled task ran (Task Scheduler's Last Run Result) and the Redis Stack container is up (`docker ps` in PowerShell).",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-deploy-extension-azure-devops-server",
+    "title": "Copilot4DevOps on-premises — generating and installing the Copilot4DevOps extension in Azure DevOps Server",
+    "page": 31,
+    "keywords": [
+      "copilot4devops extension maker vsix",
+      "generate copilot4devops vsix package",
+      "deploy copilot4devops extension azure devops server",
+      "browse local extensions copilot4devops",
+      "upload extension manage extensions azure devops server",
+      "get it free copilot4devops azure boards",
+      "install copilot4devops extension team project collection",
+      "edevtech-mr.copilot4devops vsix",
+      "azure devops server",
+      "copilot4devops extension",
+      "install extension azure devops server"
+    ],
+    "answer": "After deploying the Copilot4DevOps web application itself, it still needs to be installed as an extension in Azure DevOps Server (on-premises only) before it shows up on Azure Boards. Run the Extension Maker executable (provided by the Modern Requirements team), enter the Copilot4DevOps site's URL when prompted, and generate the .vsix package (edevtech-mr.CoPilot4DevOps-x.x.x.vsix) — save it somewhere secure.\n\nThen, signed in to Azure DevOps Server as an account with permission to install extensions: open the Marketplace icon → Manage Extensions → Browse local extensions → Manage Extensions (button) → Upload Extension, and upload the .vsix file. Once it's installed, refresh Browse Local Extensions, select the CoPilot4DevOps tile, click \"Get it free\", choose the Team Project Collection to install it into, and click Install. Once done, the extension appears on the Azure Boards tiles for that collection, and opening it shows the Copilot4DevOps chat screen (Chat, Elicit, Analyze, Impact Assessment, etc.).",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
   }
 ]
