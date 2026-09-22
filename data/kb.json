@@ -3231,7 +3231,7 @@
       "query view",
       "tfs 2017 update 1"
     ],
-    "answer": "With TFS 2017 Update 1, the embedded version lets you generate Smart Reports, initiate Reviews, create a Baseline, and perform an Impact Assessment, all using the right-click context menu in both the Backlog view and the Query view."
+    "answer": "With TFS 2017 Update 1, the embedded version lets you generate Smart Reports, initiate Reviews, create a Baseline, and perform an Impact Assessment, all using the right-click context menu in both the Backlog view and the Query view.\n\nNote: this describes the TFS 2017 Update 1 era context menu specifically. The current MR4DevOps Frontier (2026) context menu has a longer, different list of actions — see \"ADO Context Menu — available quick-launch actions\"."
   },
   {
     "id": "embed-tfs2017u1-query-toolbar-smart-report-review-baseline",
@@ -4724,5 +4724,474 @@
     ],
     "answer": "For the Standalone version (as opposed to the Embedded version inside Azure DevOps/TFS), reach the License Activation page by opening a browser and navigating to http://[hostname]:8028/User/SignIn (replace [hostname] with your server name), then click Sign In. If the system has not yet been activated, you'll be redirected to the License Activation Page, where you can choose User Based, Floating, or Offline Activation as usual.",
     "sourceDoc": "modernrequirements.com — Activating Modern Requirements4DevOps"
+  },
+  {
+    "id": "frontier-favorites-tab",
+    "title": "Favorites Tab (personal quick-access bookmarks)",
+    "page": 6,
+    "keywords": [
+      "favorites tab",
+      "favourite items",
+      "bookmark documents",
+      "quick access",
+      "my favorites",
+      "star an item"
+    ],
+    "answer": "Every module in MR4DevOps Frontier has a Browse page (the main listing view for documents, matrices, packages, baselines, and reports), and at the top of each Browse page is a Favorites tab — a personal quick-access area. Mark any item as a favorite and it appears there, saving you from scrolling through long lists to find something you use regularly. Favorites are personal to your account: each user maintains their own set independently of colleagues, and items can be added or removed at any time.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-ado-style-filter-panel",
+    "title": "ADO-Style Filter Panel",
+    "page": 7,
+    "keywords": [
+      "filter panel",
+      "ado-style filter",
+      "search work item type state assigned to",
+      "narrow results",
+      "filter documents matrix"
+    ],
+    "answer": "Every module in MR4DevOps Frontier includes an ADO-style filter panel, available on the Browse page and main views. It supports multiple search criteria at once — work item type, state, assigned-to, tags, and more — in a layout that mirrors Azure DevOps's own filtering, so it feels familiar with no learning curve. This works whether you're searching documents, a traceability matrix, a version package, or a baseline. Filters can be combined and adjusted freely, and the panel collapses when not in use to keep the workspace uncluttered.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-smart-edit-unified-view",
+    "title": "Smart Edit — unified work item editing window",
+    "page": 6,
+    "keywords": [
+      "smart edit",
+      "edit work item single window",
+      "linked artifacts tab",
+      "variants hierarchy tab",
+      "up down navigation work items",
+      "mention team member @",
+      "reference work item #"
+    ],
+    "answer": "Smart Edit is MR4DevOps Frontier's unified work item editing experience: everything needed to view, edit, and manage a work item lives in a single organized window, so you never have to jump between screens. You can edit all work item fields directly, manage Links and Attachments through dedicated editable tabs, and open Linked Artifacts from its own tab for structured cross-item navigation. A Variants Hierarchy tab gives a visual overview of related variants, Tags and Discussion fields are shown inline, and Up/Down navigation arrows let you move through work items in sequence without reopening each one. When editing HTML fields, use @ to mention team members and # to reference other work items, matching the native Azure DevOps experience.\n\nNote: this is distinct from the Smart View side-by-side revision/variant comparison feature, which is a separate capability that also lives under the Smart Edit/Smart View name.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-smart-report-overview",
+    "title": "Smart Report — automated document and report generation",
+    "page": 5,
+    "keywords": [
+      "smart report",
+      "generate report from smart docs",
+      "traceability report export",
+      "export word pdf html",
+      "custom dotx word template",
+      "report designer tab",
+      "report stylesheet"
+    ],
+    "answer": "Smart Report is the reporting engine built into both Smart Docs and Traceability (this is separate from the Reporting/Advanced Reports module, which is for reports built from scratch). Select a template and stylesheet, preview the output, and export as Word, PDF, or HTML — or save directly to the Document Management Library. Templates are created and customized in a built-in Designer tab, where you choose which work item types, fields, and sections to include. Organizations that need branded or regulated document formats can upload custom .dotx Word templates instead of using the built-in ones.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-ai-edit-modes",
+    "title": "AI Edit — the four editing modes and Ask Anything chat",
+    "page": 30,
+    "keywords": [
+      "ai edit modes",
+      "explore review work item content",
+      "edit descriptions and details",
+      "refine specific sections",
+      "get ai-powered suggestions",
+      "ask anything chat work item",
+      "save changes ai edit"
+    ],
+    "answer": "AI Edit's panel presents four structured modes on its left side: Explore and Review Work Item Content (understand what's already in the item), Edit Descriptions and Details (update and improve field content with AI assistance), Refine Specific Sections (target one particular area for refinement), and Get AI-Powered Suggestions (receive proactive improvement recommendations). Below these is a free-form \"Ask Anything\" chat input for a direct conversation with the AI about the selected work item — requesting rewrites, adjusting reading level, changing length, adding acceptance criteria, or applying polish, all without switching tools. Edits are saved back to ADO with the Save Changes button. AI Edit is meant for quick, in-context assistance on one work item at a time, as opposed to opening the full Copilot4DevOps interface.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-ado-context-menu-actions",
+    "title": "ADO Context Menu — available quick-launch actions",
+    "page": 34,
+    "keywords": [
+      "ado context menu actions",
+      "right click work item menu",
+      "send for review from context menu",
+      "create package from work item",
+      "create baseline from work item",
+      "reuse work items into baseline",
+      "what actions are in the ado context menu",
+      "context menu actions list",
+      "mr4devops context menu options"
+    ],
+    "answer": "MR4DevOps Frontier adds a group of its own actions into the Azure DevOps work item context menu (right-click a work item in a backlog, board, or query result list, or use the ⋮ options menu). The available actions are: Copilot4DevOps (launch the full AI assistant), AI Edit (open the AI work item editor), Smart Edit (open the side pane to update work item fields), Smart Report (generate a report for the selected item), Send for Review (start a formal review request), Create Package (create a Version Package from the selected items), Create Baseline (capture a baseline snapshot), and Reuse Work Items (copy the selected items into an existing baseline in the current project). This lets you kick off any of these workflows without navigating away from wherever you're already working in Azure DevOps.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-agent4devops-overview",
+    "title": "Agent4DevOps — AI agent automation and governance platform",
+    "page": 28,
+    "keywords": [
+      "agent4devops",
+      "agents4devops",
+      "ai agent automation",
+      "jobs tab agent execution history",
+      "job explorer",
+      "execution agent",
+      "assisted autonomous agent",
+      "skills tab agents",
+      "agent library",
+      "agent governance admin panel"
+    ],
+    "answer": "Agent4DevOps (also referred to as Agents4DevOps) is MR4DevOps Frontier's end-to-end platform for configuring, running, and governing AI agents across DevOps projects. Its core workspaces: a Jobs tab is the master execution history, where every agent run appears as a filterable job with status, credit-usage dashboards, and controls to refresh, terminate, or delete runs; a Job Explorer gives a deep dive into individual runs (run details, agent responses, interactive approval tasks, an integrated chat assistant). The Agents workspace shows all system and custom agents in a filterable grid, and supports creating two kinds: execution agents (built from natural-language instructions, uploaded code/config, or library templates) and assisted autonomous agents (built with AI, manually, or from templates, with configurable triggers, approvals, tools, and notifications). A Skills tab centralizes reusable capabilities agents draw on, and a Library provides prebuilt agents and skills to start from instead of building everything from scratch.\n\nGovernance lives in the Admin Panel: administrators define how agents connect to backend services (personal access tokens, base URLs), configure outbound email (SMTP or SendGrid, with test emails and audit logs), and set daily credit-consumption alerts that can automatically disable the highest-consuming agents to protect the monthly quota. They can also assign prioritized AI models per module (with fallbacks), pick a consistent Chat Assistant model, and use a Global Tool Call section to enable/disable specific agent capabilities. A permission model covers twelve key actions (managing, deleting, executing, and enabling agents/skills, plus job and task operations) both globally and per project, with inheritance and allow/deny/not-set options.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-test-case-management-virtual-work-items",
+    "title": "Test Case Management — the five Virtual Work Items and Virtual Linking",
+    "page": 23,
+    "keywords": [
+      "virtual work items test case management",
+      "requirement category test point test run test result test step run",
+      "virtual linking",
+      "test execution insight",
+      "who ran which test"
+    ],
+    "answer": "Azure DevOps's native testing hierarchy (Test Plan → Test Suite → Test Case) covers basic organization but doesn't capture who ran which test, the outcome at each step, or which bugs were raised. MR4DevOps Frontier's Test Case Management extends this through five Virtual Work Items: Requirement Category, Test Point, Test Run, Test Result, and Test Step Run. These sit alongside your real ADO work items and are connected through Virtual Linking, giving a complete end-to-end view of the test lifecycle — from the original requirement down to the individual test step outcome and any bugs filed — without changing your existing ADO process. All of this virtual work item data feeds directly into the Traceability and Smart Report modules for compliance-ready test reporting, and Test Results support multiple iterations, screen recordings, and user action log attachments.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-review-approve-all-response-filters",
+    "title": "Review — Approve All/Reject All and Response panel filters",
+    "page": 13,
+    "keywords": [
+      "approve all reject all review",
+      "response panel filter my response all responses all comments summary",
+      "reviews assigned to me queue",
+      "mark as reviewed"
+    ],
+    "answer": "In the Review module, reviewers work through assigned items one by one, adding comments and submitting a response before clicking Mark as Reviewed. Approvers can Approve or Reject individual items, or act on the full set at once with Approve All or Reject All — any rejection requires a comment, creating an automatic audit trail. Recipients access their assigned reviews directly from a \"Reviews Assigned To Me\" queue without needing to navigate to the source document. The Response panel can be filtered to show: your own responses (My Response), all reviewer feedback (All Responses), all comments (All Comments), or a full Summary — making it easy for the request owner to track progress and close out the review.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-traceability-views-heatmap",
+    "title": "Traceability — Grid, List, and Heatmap views and coverage colors",
+    "page": 15,
+    "keywords": [
+      "traceability matrix grid view list view heatmap view",
+      "coverage heatmap color",
+      "intersection matrix horizontal matrix",
+      "coverage percentage gap analysis"
+    ],
+    "answer": "Once a Traceability matrix is generated (via Intersection Matrix, mapping two work item types against each other, or Horizontal Matrix, expanding a linked hierarchy), the Traceability Matrix tab offers three views: Grid View shows a compact two-dimensional grid with checkmark cells where links exist and lets you add/remove links directly; List View shows each row as a card with linked items as chips and flags uncovered items with an N/A badge; Heatmap View shows a color-coded coverage bar per row — Grey (0%), Teal (1–49%), Orange (50–79%), Green (80–100%). An Analytics tab provides gap analysis by work item type, overall coverage percentage, and state distribution.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-baseline-merge-copy-difference-report",
+    "title": "Baseline — merging, copying to another project, and the Difference Report",
+    "page": 17,
+    "keywords": [
+      "merge two baselines",
+      "copy baseline to another project",
+      "reuse work items from existing baseline",
+      "difference report word document",
+      "baseline compliance tracking"
+    ],
+    "answer": "Beyond simply capturing a point-in-time snapshot, Baseline in MR4DevOps Frontier supports: copying a baseline to another project, reusing work items from an existing baseline into a new one, and merging two baselines into one consolidated baseline. The Compare tab shows the current state of all constituent work items against the baseline, or against another baseline directly. A Difference Report can be generated from any comparison — a structured Word document recording every change — which the guide describes as an essential tool for regulated industries that need formal change records. A baseline itself is immutable once captured and cannot be altered.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-version-package-variants-compare-lock",
+    "title": "Version Package — variants, color-coded comparison, and locking",
+    "page": 9,
+    "keywords": [
+      "version package variants",
+      "compare package to previous version",
+      "compare package against variant",
+      "lock package",
+      "color-coded diff added changed removed moved"
+    ],
+    "answer": "Version Package groups related work items into a managed, versioned package (typically a release, system configuration, or requirements set), built from a query that auto-populates its work items. Packages support variants — parallel configurations of the same requirement set for different products, regions, or customer targets. The key capability is comparison: compare a package against a previous version with a color-coded difference view (added, changed, removed, moved), or compare a package against one of its variants side by side. Packages can be locked at key milestones to prevent unintended changes, and a Variants tab shows all source/target variant relationships.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-admin-panel-tabs-2026",
+    "title": "Admin Panel tabs (Frontier, 2026 edition)",
+    "page": 36,
+    "keywords": [
+      "admin panel tabs frontier",
+      "licensing tab general tab",
+      "organization level configuration",
+      "collection administrator settings"
+    ],
+    "answer": "In the 2026 Frontier edition, the Admin Panel (Azure DevOps Organization Settings → the MR4DevOps Frontier section, Collection Administrators only) is structured into: a Licensing tab (current license status and seat allocation), a General tab (organization-wide settings applying to all modules), and dedicated configuration tabs for Smart Docs, Baseline, Review, and Copilot4DevOps, each exposing that module's own settings and defaults (field requirements, default templates, integration options, which features are enabled for end users).\n\nNote: this is the current Frontier tab set. An older description of the Admin Panel (from the Admin Configuration Guide) lists seven sections instead — the tab set has evolved between versions, so check which edition you're on if the tabs you see don't match one of these lists.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "frontier-copilot4devops-capability-groups",
+    "title": "Copilot4DevOps — the four capability groups",
+    "page": 26,
+    "keywords": [
+      "copilot4devops capability groups",
+      "refine and convert elicit analyze convert transform",
+      "visualize and design diagram mockup",
+      "assistant and support chat qa impact assessment",
+      "advanced tools generate dynamic prompt sop document generator"
+    ],
+    "answer": "MR4DevOps Frontier organizes Copilot4DevOps's functions into four capability groups. Refine and Convert: Elicit (generate backlog/test items from requirements), Analyze (evaluate requirements against 6C's, INVEST, and MoSCoW frameworks), Convert (express requirements as user stories or use cases), and Transform (summarize, paraphrase, elaborate, or translate content). Visualize and Design: Diagram (visual requirement diagrams) and Mockup (instant UI wireframe generation). Assistant and Support: a conversational Chat interface, a Q&A Assistant that elicits detailed requirements through structured questions, and an Impact Assessment tool for evaluating how a proposed change affects existing work items. Advanced Tools: Generate (requirements into pseudocode, test scripts, or AI specs), Dynamic Prompt (custom templates for repeatable AI workflows), and SOP/Document Generator (structured documents in seconds). It's accessible from Smart Docs, Version Package, and the ADO work item context menu, and all capabilities operate on your live ADO data.",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+  },
+  {
+    "id": "cp-onprem-prerequisites",
+    "title": "Copilot4DevOps on-premises — prerequisites before installing",
+    "page": 3,
+    "keywords": [
+      "copilot4devops prerequisites",
+      "copilot4devops system requirements",
+      "iis web server role",
+      "websocket enabled iis",
+      "net core runtime 10",
+      "uninstall aspnet core runtime 8",
+      "iis url rewrite module",
+      "uninstall webdav common http feature",
+      "visual c++ redistributable 2022",
+      "mongodb 7.0.2",
+      "virtualization technology vt-x",
+      "azure devops server 2022 support",
+      "copilot4devops on premises",
+      "prerequisites for copilot4devops",
+      "installing copilot4devops"
+    ],
+    "answer": "Before installing Copilot4DevOps on-premises (v9), the server needs: the IIS Web Server role (Windows Server Roles) with Web Socket enabled through Windows Features; the WebDAV Common HTTP Feature uninstalled if present, followed by a restart; the IIS URL Rewrite module installed and visible in IIS's Web Server section; Microsoft ASP.NET Core Runtime 10.0.x (the Hosting Bundle) — uninstall any older 8.0.x Hosting Bundle first; the Microsoft Visual C++ Redistributable package-2022 (restart the system after installing this); and MongoDB version 7.0.2 or later. Virtualization Technology (VT-x) must also be enabled and supported on the server, since Copilot4DevOps requires a Docker-based Redis Stack Server running via WSL2 — if the server is a cloud virtual machine, nested virtualization must be enabled too. Copilot4DevOps v9 supports Azure DevOps Server 2022 and later versions.",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-enable-wsl-docker",
+    "title": "Copilot4DevOps on-premises — enabling WSL2 and installing Docker Desktop",
+    "page": 7,
+    "keywords": [
+      "enable wsl windows server",
+      "enable virtual machine platform",
+      "enable containers feature powershell",
+      "install docker desktop windows",
+      "wsl 2 based engine instead of hyper-v",
+      "wsl --update --set-default-version 2"
+    ],
+    "answer": "To prepare a Windows Server for the Redis Stack Server Copilot4DevOps needs: in an elevated PowerShell, run `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart`, then `-FeatureName VirtualMachinePlatform -NoRestart`, then `-FeatureName Containers -All -NoRestart`, and restart the computer (`Restart-Computer`) — don't skip the restart. Next, install the WSL2 kernel update (wsl_update_x64.msi), then in an elevated PowerShell run `wsl --update` followed by `wsl --set-default-version 2`. Finally, install Docker Desktop for Windows, choosing \"Use WSL 2 based engine instead of Hyper-V\" during setup, log out and back in, launch Docker Desktop, and confirm it's working with `docker version` (you should see both Client and Server details in the output).",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-redis-stack-docker",
+    "title": "Copilot4DevOps on-premises — installing Redis Stack Server via Docker",
+    "page": 9,
+    "keywords": [
+      "redis stack server docker",
+      "docker pull redis-stack-server",
+      "docker run redis-stack requirepass",
+      "redis stack persistence password",
+      "docker ps verify redis running",
+      "redis stack server",
+      "install redis for copilot4devops",
+      "redis for copilot4devops",
+      "set up redis stack"
+    ],
+    "answer": "With Docker Desktop running, pull the image with `docker pull redis/redis-stack-server:latest`. Create a host folder for persistence, e.g. `mkdir C:\\redis\\redis-data`. Then run the container: `docker run -d --name redis-stack -p 6379:6379 -v \"C:/redis/redis-data:/data\" --restart always redis/redis-stack-server:latest redis-stack-server --requirepass \"redispass\" --dir /data` (change the password from the example). This runs Redis Stack on port 6379 with the host directory mounted for persistence. Confirm it's running with `docker ps`.\n\nNote: if Copilot4DevOps is being installed on a server that already runs Modern Requirements4DevOps (which has its own Redis on 6379), map Redis Stack to a different host port instead — e.g. `-p 6079:6379` — to avoid a port conflict, and use that port in Copilot4DevOps's own connection string.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-mongodb-fresh-install",
+    "title": "Copilot4DevOps on-premises — installing MongoDB 7.0.2 (fresh install)",
+    "page": 4,
+    "keywords": [
+      "install mongodb 7.0.2 copilot4devops",
+      "mongodb msi installer complete",
+      "mongodb service network service user",
+      "mongodb compass install"
+    ],
+    "answer": "For a server with no existing MongoDB, download the MongoDB 7.0.2 MSI installer (mongodb-windows-x86_64-7.0.2-signed.msi) and run it choosing Complete installation. Install the MongoDB service running as the Network Service user, keeping the default Service Name and data/log directories. Optionally select Install MongoDB Compass for a GUI to browse the database, then finish the wizard.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-mongodb-second-instance",
+    "title": "Copilot4DevOps on-premises — running a second MongoDB instance alongside an existing one",
+    "page": 5,
+    "keywords": [
+      "second mongodb instance same server",
+      "mongodb port conflict mr4devops copilot4devops",
+      "install mongod as a service uncheck",
+      "mongod.exe --install --servicename custom port",
+      "net start mongodbv7"
+    ],
+    "answer": "If the server already runs Modern Requirements4DevOps with its own MongoDB (on the default port 27017), install Copilot4DevOps's required MongoDB 7.0.2 as a second, separate instance rather than replacing the existing one. In the MongoDB installer, choose Custom/Advanced installation and uncheck \"Install MongoD as a Service\" (don't let the installer register it automatically). Create separate data and log folders (e.g. C:\\Program Files\\MongoDB\\dbv7 and \\logv7). In an elevated Command Prompt, register it manually on a different port: `\"C:\\Program Files\\MongoDB\\Server\\7.0\\bin\\mongod.exe\" --dbpath=\"C:\\Program Files\\MongoDB\\dbv7\" --logpath=\"C:\\Program Files\\MongoDB\\logv7\\mongod.log\" --port 21018 --install --serviceName \"MongoDBv7\" --serviceDisplayName \"MongoDBv7\"`, then start it with `net start MongoDBv7`. Verify both services in services.msc: the original MongoDB on 27017 (used by ModernRequirements4DevOps) and MongoDBv7 on 21018 (used by Copilot4DevOps), both set to start automatically.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-deploy-iis-site",
+    "title": "Copilot4DevOps on-premises — deploying the files and creating the IIS site",
+    "page": 13,
+    "keywords": [
+      "deploy copilot4devops iis",
+      "copilot4devops application pool settings",
+      "enable 32-bit applications false",
+      "net clr version integrated pipeline mode",
+      "add website https binding copilot4devops"
+    ],
+    "answer": "Download the latest Copilot4DevOps package from the link provided by the Modern Requirements Support team, and extract it to the IIS web server location (e.g. C:\\Inetpub\\Copilot4DevOps). In IIS Manager, create a new Application Pool for Copilot4DevOps (.NET CLR version and Integrated managed pipeline mode as required), then open its Advanced Settings and set Enable 32-Bit Applications to False. Add a new Website with that site name, application pool, and physical path, choosing HTTPS (or HTTP, depending on your organization's requirements) as the binding type, with the appropriate host name and SSL certificate.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-appsettings-connections",
+    "title": "Copilot4DevOps on-premises — configuring appsettings.json connection strings",
+    "page": 11,
+    "keywords": [
+      "appsettings.json copilot4devops",
+      "database connectionstring dbname",
+      "vectorstore redis connection string",
+      "filestorage mongo",
+      "semantickernel filespersistence cache connectionstring",
+      "target mongodb"
+    ],
+    "answer": "In the deployed Copilot4DevOps folder's appsettings.json, point every connection setting at your MongoDB and Redis instances: Database → ConnectionString and DBName, FileStorage → Mongo ConnectionString, SemanticKernel's ChatHistory and FilesPersistence database connection strings, VectorStore's Redis connection string (format: `<host>:<port>,password=<password>,abortConnect=false`), Cache → ConnectionString, and the Logging section's Target/MongoDB connection string — all normally `mongodb://localhost:<port>` for MongoDB, or `<host>:<port>,password=...` for the VectorStore/Redis entry. When Copilot4DevOps shares a server with an existing Modern Requirements4DevOps install, these ports must point at Copilot4DevOps's own separate MongoDB/Redis instances (e.g. mongodb://localhost:21018 and localhost:6079), not the ones ModernRequirements4DevOps already uses (27017 and 6379) — using the same ports/database names for both products isn't supported and will cause conflicts.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-ssl-thumbprint-allowed-domains",
+    "title": "Copilot4DevOps on-premises — SSL certificate thumbprint and Allowed Domains",
+    "page": 14,
+    "keywords": [
+      "bypasssslthumbprints appsettings",
+      "retrieve ssl certificate thumbprint iis",
+      "get-childitem cert localmachine my",
+      "alloweddomains copilot4devops",
+      "ssl thumbprint uppercase"
+    ],
+    "answer": "Copilot4DevOps's appsettings.json needs the site's SSL certificate thumbprint in ByPassSSLThumbprints, and the site's domain name in AllowedDomains. To get the thumbprint: in IIS Manager, open the site's bindings, click Edit, then View on the SSL certificate, and copy the value from the \"Thumbprint\" field on the Details tab — or in PowerShell, run `Get-ChildItem -Path cert:\\LocalMachine\\My | Where-Object { $_.Subject -eq \"CN=<your-domain>\" }` (replace `<your-domain>` with your certificate's domain name) and copy the Thumbprint column. Paste the thumbprint into ByPassSSLThumbprints in uppercase, and add the site's domain to AllowedDomains — multiple entries for either setting are separated with a pipe (`|`) character.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-unlock-websocket-iis",
+    "title": "Copilot4DevOps on-premises — unlocking WebSocket and restarting IIS",
+    "page": 15,
+    "keywords": [
+      "unlock websocket configuration section iis",
+      "appcmd unlock config system.webserver websocket",
+      "net stop was net start w3svc",
+      "restart iis services command prompt"
+    ],
+    "answer": "Copilot4DevOps needs the WebSocket configuration section unlocked in IIS. In an elevated Command Prompt, run: `%windir%\\system32\\inetsrv\\appcmd unlock config /section:system.webServer/webSocket`. Then restart IIS's services: `net stop was /y` followed by `net start w3svc`. These two steps unlock WebSocket support and bring IIS back up with the change applied — do this after configuring appsettings.json and before testing the site.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-verify-running",
+    "title": "Copilot4DevOps on-premises — verifying the deployment worked",
+    "page": 16,
+    "keywords": [
+      "copilot4devops application is running message",
+      "verify copilot4devops deployment",
+      "test copilot4devops in azure devops",
+      "multi-lingual mode enabled build version"
+    ],
+    "answer": "After deploying and configuring the site, open its URL in a browser (from IIS Manager's \"Browse Website\" action, or the URL you bound it to). A working deployment shows a plain-text confirmation like \"Copilot4DevOps vX.X (Build: v0.x.x.x) application is running.\" with a multilingual-mode status line — this page appearing means IIS, the app pool, and the appsettings.json connections are all correctly wired up. From there, log into your Azure DevOps account and exercise the actual Copilot4DevOps functionality (or check the About section for the version) to confirm it's fully working, not just that the site responds.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-upgrade-v6-to-v9",
+    "title": "Copilot4DevOps on-premises — upgrading from v6 (or later) to v9",
+    "page": 3,
+    "keywords": [
+      "upgrade copilot4devops v6 to v9",
+      "rename existing copilot4devops folder old",
+      "stop and remove iis site before upgrade",
+      "skip wsl docker steps already configured",
+      "upgrade copilot4devops",
+      "v6 to v9",
+      "copilot4devops upgrade guide",
+      "upgrading copilot4devops",
+      "uninstall old net core runtime before upgrade"
+    ],
+    "answer": "To upgrade an existing on-premises Copilot4DevOps from v6 or later to v9: confirm the current install is fully functional with MongoDB 7.x+ first, verify Web Socket is enabled in IIS, uninstall the WebDAV Common HTTP Feature if present (restart after), and make sure IIS URL Rewrite is installed. Uninstall the older Microsoft ASP.NET Core Runtime 8.0.x Hosting Bundle and install .NET Core 10.0.x in its place, and confirm the Visual C++ Redistributable 2022 package is present. Then in IIS Manager stop the Copilot4DevOps site and remove it, and rename the existing install folder (e.g. C:\\Inetpub\\Copilot4DevOps → C:\\Inetpub\\Copilot4DevOpsOld, or append the old version number) rather than deleting it.\n\nIf the server's current setup already uses a Docker-based Redis Stack Server, an external Ubuntu Server VM running Redis Stack Server, or WSL-based Ubuntu with Redis Stack Server, you can skip the WSL/Docker/Redis Stack setup steps entirely and go straight to redeploying the files (extract the new v9 package to the original path), recreating the IIS site, and updating appsettings.json's connection strings, SSL thumbprint, and allowed domains the same way as a fresh install. Only servers upgrading from a version earlier than v6 need to go through the full WSL/Docker/Redis Stack setup from scratch. Copilot4DevOps v9 requires Azure DevOps Server 2022 or later.",
+    "sourceDoc": "On-Premises Copilot4DevOps Upgrade Guide"
+  },
+  {
+    "id": "cp-onprem-integrate-with-mr4devops",
+    "title": "Integrating Copilot4DevOps with an existing Modern Requirements4DevOps install",
+    "page": 17,
+    "keywords": [
+      "copilot4devops.applicationurl setting",
+      "integrate copilot4devops with modern requirements4devops",
+      "mr4devops application settings copilot url",
+      "link copilot4devops to mr4devops site",
+      "integrate copilot4devops",
+      "connect copilot4devops to modern requirements4devops",
+      "applicationurl"
+    ],
+    "answer": "When Copilot4DevOps and Modern Requirements4DevOps run on the same server as separate IIS sites, MR4DevOps needs to be told where to find Copilot4DevOps. In IIS Manager, open the Copilot4DevOps site and copy its URL from the Browse Website panel. Then select the Modern Requirements4DevOps site, open Application Settings, and edit the Copilot4DevOps.ApplicationUrl property, setting its value to the URL you just copied. Restart the IIS web server for the change to take effect, then confirm the integration by using a Copilot4DevOps-powered feature from within Modern Requirements4DevOps.",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-handler-mappings-put-verb",
+    "title": "Copilot4DevOps on-premises — allowing the PUT verb in IIS Handler Mappings and Request Filtering",
+    "page": 17,
+    "keywords": [
+      "extensionlessurlhandler-integrated-4.0 put verb",
+      "handler mappings request restriction verbs",
+      "request filtering http verbs allow put",
+      "copilot4devops put requests failing iis",
+      "add put verb iis",
+      "handler mappings",
+      "put verb",
+      "put requests failing",
+      "put method not allowed copilot4devops"
+    ],
+    "answer": "Copilot4DevOps needs the PUT HTTP verb allowed in two separate IIS settings on its site, or certain requests will fail. First, in IIS Manager, open the Copilot4DevOps site's Handler Mappings, find ExtensionlessUrlHandler-Integrated-4.0, double-click it, click Request Restrictions, switch to the Verbs tab, and either select \"All verbs\" or select \"One of the following verbs\" and explicitly append `,PUT` to the list (e.g. `GET,HEAD,POST,DEBUG,PUT`). Second, open Request Filtering on the same site, go to the HTTP Verbs tab: if PUT is listed with Allowed = False, right-click it and choose Remove; if it isn't listed at all, click Allow Verb and add PUT.",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-encryption-env-vars-apppool",
+    "title": "Copilot4DevOps on-premises — setting the MR_COPILOT_ENCRYPTION environment variables on the app pool",
+    "page": 19,
+    "keywords": [
+      "mr_copilot_encryption_legacy_key",
+      "mr_copilot_encryption_legacy_ivhex",
+      "mr_copilot_encryption_utility_aeskey",
+      "mr_copilot_encryption_utility_aesiv",
+      "appcmd set config applicationpools environmentvariables",
+      "appcmd recycle apppool copilot4devops",
+      "set environment variables copilot4devops app pool"
+    ],
+    "answer": "Copilot4DevOps's application pool needs four encryption-related environment variables set directly on it. In an elevated Command Prompt, run `cd C:\\Windows\\System32\\inetsrv`, then use `appcmd set config -section:system.applicationHost/applicationPools /+\"[name='Copilot4DevOps'].environmentVariables.[name='<VAR_NAME>',value='<value>']\" /commit:apphost` once each for MR_COPILOT_ENCRYPTION_LEGACY_KEY, MR_COPILOT_ENCRYPTION_LEGACY_IVHEX, MR_COPILOT_ENCRYPTION_UTILITY_AESKEY, and MR_COPILOT_ENCRYPTION_UTILITY_AESIV (use the exact values provided for your deployment, not placeholders), then run `appcmd recycle apppool /apppool.name:\"Copilot4DevOps\"` to apply them. Because these commands are long, paste them into Notepad first and check they haven't been split or line-wrapped incorrectly before copying each one into Command Prompt — a broken command here is a common cause of the app pool failing to pick up the keys.",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-docker-autostart-task-scheduler",
+    "title": "Copilot4DevOps on-premises — starting Docker automatically after a server reboot",
+    "page": 26,
+    "keywords": [
+      "docker not running after server restart",
+      "start docker on server boot",
+      "task scheduler docker desktop startup",
+      "redis stack not running after reboot",
+      "docker-startup scheduled task",
+      "auto start docker desktop windows server",
+      "docker not running",
+      "docker not starting",
+      "redis stack container down",
+      "docker after reboot"
+    ],
+    "answer": "Since Copilot4DevOps depends on the Redis Stack Server container, Docker Desktop needs to come back up automatically whenever the server reboots — it doesn't do this on its own by default. Create a Windows Task Scheduler task (taskschd.msc): on the General tab, run whether the user is logged on or not, with highest privileges; on the Triggers tab, trigger \"At startup\" with a ~30 second delay (to avoid conflicting with other services still starting); on the Actions tab, start a program pointing at Docker Desktop's executable (e.g. `\"C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe\"`); on the Conditions tab, uncheck all the idle/power/network conditions; and on the Settings tab, allow the task to run on demand, run it as soon as possible after a missed start, retry every 5 minutes up to 3 attempts on failure, and force-stop it if it doesn't end when requested. After saving, restart the server and confirm both the scheduled task ran (Task Scheduler's Last Run Result) and the Redis Stack container is up (`docker ps` in PowerShell).",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+  },
+  {
+    "id": "cp-onprem-deploy-extension-azure-devops-server",
+    "title": "Copilot4DevOps on-premises — generating and installing the Copilot4DevOps extension in Azure DevOps Server",
+    "page": 31,
+    "keywords": [
+      "copilot4devops extension maker vsix",
+      "generate copilot4devops vsix package",
+      "deploy copilot4devops extension azure devops server",
+      "browse local extensions copilot4devops",
+      "upload extension manage extensions azure devops server",
+      "get it free copilot4devops azure boards",
+      "install copilot4devops extension team project collection",
+      "edevtech-mr.copilot4devops vsix",
+      "azure devops server",
+      "copilot4devops extension",
+      "install extension azure devops server"
+    ],
+    "answer": "After deploying the Copilot4DevOps web application itself, it still needs to be installed as an extension in Azure DevOps Server (on-premises only) before it shows up on Azure Boards. Run the Extension Maker executable (provided by the Modern Requirements team), enter the Copilot4DevOps site's URL when prompted, and generate the .vsix package (edevtech-mr.CoPilot4DevOps-x.x.x.vsix) — save it somewhere secure.\n\nThen, signed in to Azure DevOps Server as an account with permission to install extensions: open the Marketplace icon → Manage Extensions → Browse local extensions → Manage Extensions (button) → Upload Extension, and upload the .vsix file. Once it's installed, refresh Browse Local Extensions, select the CoPilot4DevOps tile, click \"Get it free\", choose the Team Project Collection to install it into, and click Install. Once done, the extension appears on the Azure Boards tiles for that collection, and opening it shows the Copilot4DevOps chat screen (Chat, Elicit, Analyze, Impact Assessment, etc.).",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
   }
 ]
