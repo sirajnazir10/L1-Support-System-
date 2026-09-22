@@ -2,6 +2,7 @@
   {
     "id": "install-sw-req",
     "title": "General Software Requirements",
+    "sourceDoc": "Installation Guide",
     "page": 4,
     "keywords": [
       "system requirement",
@@ -21,12 +22,12 @@
       "nextgen",
       "azure app service"
     ],
-    "answer": "Before installing Modern Requirements4DevOps, your machine needs:\n\n1. Operating System: Windows Server 2019 or 2022 (both 32-bit and 64-bit supported)\n2. Browser: Microsoft Edge, Internet Explorer 10+, Chrome, or Firefox 47.0.1+\n3. Screen resolution: 1280 x 960 or higher\n4. IIS: version 7 or higher\n5. Microsoft .NET Framework: 4.5 or higher\n6. ASP.NET: version matching your installed .NET Framework (e.g. .NET 4.7.2 → ASP.NET 4.7.2)\n7. Multilingual support: Language Pack for IE & Save as Word\n\nThe account installing the application needs administrator rights on the machine, and for regular team projects, admin rights on the TFS Collection (or added in the application domain in IIS).\n\nImportant: for HTTPS, the application must be bound with a trusted CA-signed SSL certificate — a self-signed certificate isn't supported.\n\nNote: this describes the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), on-premise Azure DevOps Server support now requires ADO Server 2022 or later, supported browsers are current versions of Chrome, Firefox, and Microsoft Edge (Internet Explorer is no longer supported), and hosting moved to a cloud-native Azure App Service model — the Windows Server/IIS/.NET Framework requirements above apply only to the legacy on-premise installation. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "Before installing Modern Requirements4DevOps, your machine needs:\n\n1. Operating System: Windows Server 2019 or 2022 (both 32-bit and 64-bit supported)\n2. Browser: Microsoft Edge, Internet Explorer 10+, Chrome, or Firefox 47.0.1+\n3. Screen resolution: 1280 x 960 or higher\n4. IIS: version 7 or higher\n5. Microsoft .NET Framework: 4.5 or higher\n6. ASP.NET: version matching your installed .NET Framework (e.g. .NET 4.7.2 → ASP.NET 4.7.2)\n7. Multilingual support: Language Pack for IE & Save as Word\n\nThe account installing the application needs administrator rights on the machine, and for regular team projects, admin rights on the TFS Collection (or added in the application domain in IIS).\n\nImportant: for HTTPS, the application must be bound with a trusted CA-signed SSL certificate — a self-signed certificate isn't supported.\n\nNote: this describes the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), on-premise Azure DevOps Server support now requires ADO Server 2022 or later, supported browsers are current versions of Chrome, Firefox, and Microsoft Edge (Internet Explorer is no longer supported), and hosting moved to a cloud-native Azure App Service model — the Windows Server/IIS/.NET Framework requirements above apply only to the legacy on-premise installation. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-word-ver",
     "title": "Supported Microsoft Word Versions",
+    "sourceDoc": "Installation Guide",
     "page": 5,
     "keywords": [
       "word import",
@@ -40,12 +41,12 @@
       "nextgen",
       "smart import"
     ],
-    "answer": "For Word Import, Modern Requirements4DevOps supports Microsoft Word 2010 or higher, with .docx, .dotx, .docm, and .dotm file extensions.\n\nNote: this describes the legacy on-premise (Classic) Word Import feature. In MR4DevOps NextGen (released June 2026), Word Import has been replaced by Smart Import — a guided wizard (Upload → Parse → Map & Classify → Link → Preview → Import) that accepts .docx and PDF files, with duplicate detection and field validation. See the \"Smart Import: turning Word/PDF documents into work items (NextGen)\" entry. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "For Word Import, Modern Requirements4DevOps supports Microsoft Word 2010 or higher, with .docx, .dotx, .docm, and .dotm file extensions.\n\nNote: this describes the legacy on-premise (Classic) Word Import feature. In MR4DevOps NextGen (released June 2026), Word Import has been replaced by Smart Import — a guided wizard (Upload → Parse → Map & Classify → Link → Preview → Import) that accepts .docx and PDF files, with duplicate detection and field validation. See the \"Smart Import: turning Word/PDF documents into work items (NextGen)\" entry. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-tfs-req",
     "title": "Team Foundation Server Requirements",
+    "sourceDoc": "Installation Guide",
     "page": 5,
     "keywords": [
       "team foundation server",
@@ -58,12 +59,12 @@
       "azure devops 2022",
       "nextgen"
     ],
-    "answer": "For the embedded build with Single Sign-On, Modern Requirements4DevOps requires Azure DevOps 2019 or 2022.\n\nNote: this describes the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), on-premise Azure DevOps Server support requires ADO Server 2022 or later — Azure DevOps 2019 is no longer supported. Azure DevOps Services (cloud) is supported on all versions, auto-updated by Microsoft. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "For the embedded build with Single Sign-On, Modern Requirements4DevOps requires Azure DevOps 2019 or 2022.\n\nNote: this describes the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), on-premise Azure DevOps Server support requires ADO Server 2022 or later — Azure DevOps 2019 is no longer supported. Azure DevOps Services (cloud) is supported on all versions, auto-updated by Microsoft. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-hw-req",
     "title": "Hardware Requirements",
+    "sourceDoc": "Installation Guide",
     "page": 5,
     "keywords": [
       "hardware requirement",
@@ -76,12 +77,12 @@
       "nextgen",
       "azure app service"
     ],
-    "answer": "Minimum hardware: at least 32 GB of RAM (or higher) if you're executing TFS work item queries greater than 100,000 items, and 256 GB of hard drive/SSD space.\n\nNote: this describes the legacy on-premise (Classic) version, where you provision and size your own server. In MR4DevOps NextGen (released June 2026), the platform runs on a managed, cloud-native Azure App Service with Azure App auto-scaling, so this kind of manual server capacity planning no longer applies. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "Minimum hardware: at least 32 GB of RAM (or higher) if you're executing TFS work item queries greater than 100,000 items, and 256 GB of hard drive/SSD space.\n\nNote: this describes the legacy on-premise (Classic) version, where you provision and size your own server. In MR4DevOps NextGen (released June 2026), the platform runs on a managed, cloud-native Azure App Service with Azure App auto-scaling, so this kind of manual server capacity planning no longer applies. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-redis-hw",
     "title": "Minimum Hardware Requirements for Redis",
+    "sourceDoc": "Installation Guide",
     "page": 5,
     "keywords": [
       "redis hardware",
@@ -91,12 +92,12 @@
       "nextgen",
       "cosmos db"
     ],
-    "answer": "Redis uses approximately 477.8495 KB (0.4666 MB) of memory per user. The maximum hard drive space required is 1.5 × your memory size — e.g. 8 GB of RAM means up to 12 GB of hard drive space for Redis. Make sure your machine has sufficient hardware before installing.\n\nNote: this describes the legacy on-premise (Classic) version, which self-hosts Redis and MongoDB. In MR4DevOps NextGen (released June 2026), MongoDB was replaced by Azure Cosmos DB as the managed primary data store, and the platform runs on Azure App Service — there is no self-hosted Redis/MongoDB sizing to plan for. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "Redis uses approximately 477.8495 KB (0.4666 MB) of memory per user. The maximum hard drive space required is 1.5 × your memory size — e.g. 8 GB of RAM means up to 12 GB of hard drive space for Redis. Make sure your machine has sufficient hardware before installing.\n\nNote: this describes the legacy on-premise (Classic) version, which self-hosts Redis and MongoDB. In MR4DevOps NextGen (released June 2026), MongoDB was replaced by Azure Cosmos DB as the managed primary data store, and the platform runs on Azure App Service — there is no self-hosted Redis/MongoDB sizing to plan for. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-install-guide",
     "title": "Installation Guidelines",
+    "sourceDoc": "Installation Guide",
     "page": 6,
     "keywords": [
       "installation guideline",
@@ -109,12 +110,12 @@
       "nextgen",
       "azure app service"
     ],
-    "answer": "Users get a single installation file: Modern Requirements4DevOps 202x.exe. Since it's web-based, it's best installed on a server, though any machine with IIS 7+ works. Installation is required only once — after that, all users with proper access rights can use it without installing anything locally.\n\nRecommendation: install MR on a separate server or VM from Azure DevOps for better scalability, performance, and to avoid resource conflicts with ADO.\n\nNote: this describes the legacy on-premise (Classic) installer model. In MR4DevOps NextGen (released June 2026), the product is delivered as a managed, cloud-native Azure App Service aligned natively to Azure DevOps rather than a locally installed .exe. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "Users get a single installation file: Modern Requirements4DevOps 202x.exe. Since it's web-based, it's best installed on a server, though any machine with IIS 7+ works. Installation is required only once — after that, all users with proper access rights can use it without installing anything locally.\n\nRecommendation: install MR on a separate server or VM from Azure DevOps for better scalability, performance, and to avoid resource conflicts with ADO.\n\nNote: this describes the legacy on-premise (Classic) installer model. In MR4DevOps NextGen (released June 2026), the product is delivered as a managed, cloud-native Azure App Service aligned natively to Azure DevOps rather than a locally installed .exe. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-install-steps",
     "title": "Installing Modern Requirements4DevOps — Step by Step",
+    "sourceDoc": "Installation Guide",
     "page": 6,
     "keywords": [
       "how to install",
@@ -128,12 +129,12 @@
       "step by step",
       "nextgen"
     ],
-    "answer": "1. Double-click the Modern Requirements4DevOps 202x Update 1.exe file to start.\n2. Check the license terms and conditions checkbox, then click Next.\n3. Select the build type: Embedded (recommended) or Standalone.\n4. Select the installation type: Single sign-on (TFS 2017 Update 3 / 2018 Update 1 and above only) or Standard.\n5. Click Next.\n6. Configure the MongoDB installation options and click Next/Install.\n7. Configure the Redis Installation options and click Install.\n8. Click Yes on the warning message box — the relevant files are copied and installed.\n9. Click Finish or Run to complete. For the standalone version, that's the last step.\n\nFor the embedded version, a TFS deployment instruction page opens after Finish, walking you through deploying the TFS Extension using the generated VSIX file.\n\nNote: this describes the legacy on-premise (Classic) installation wizard, including its local MongoDB and Redis setup steps. In MR4DevOps NextGen (released June 2026), the platform is hosted on a managed Azure App Service with Azure Cosmos DB as its data store, so these local database installation steps no longer apply. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "1. Double-click the Modern Requirements4DevOps 202x Update 1.exe file to start.\n2. Check the license terms and conditions checkbox, then click Next.\n3. Select the build type: Embedded (recommended) or Standalone.\n4. Select the installation type: Single sign-on (TFS 2017 Update 3 / 2018 Update 1 and above only) or Standard.\n5. Click Next.\n6. Configure the MongoDB installation options and click Next/Install.\n7. Configure the Redis Installation options and click Install.\n8. Click Yes on the warning message box — the relevant files are copied and installed.\n9. Click Finish or Run to complete. For the standalone version, that's the last step.\n\nFor the embedded version, a TFS deployment instruction page opens after Finish, walking you through deploying the TFS Extension using the generated VSIX file.\n\nNote: this describes the legacy on-premise (Classic) installation wizard, including its local MongoDB and Redis setup steps. In MR4DevOps NextGen (released June 2026), the platform is hosted on a managed Azure App Service with Azure Cosmos DB as its data store, so these local database installation steps no longer apply. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-mongodb",
     "title": "MongoDB Installation Options",
+    "sourceDoc": "Installation Guide",
     "page": 12,
     "keywords": [
       "mongodb",
@@ -144,12 +145,12 @@
       "nextgen",
       "cosmos db"
     ],
-    "answer": "Auto Install/use existing MongoDB is recommended if MongoDB isn't already on the target machine. If it is, provide the machine name/IP where it's installed (same for a load-balancing server). The default MongoDB port is 27017 — use the same port you used during MongoDB's own install if different. Get the MongoDB user/password from your network department if set. The Replica Set field is for data replication/mirroring.\n\nNote: this describes the legacy on-premise (Classic) installer. In MR4DevOps NextGen (released June 2026), MongoDB has been replaced by Azure Cosmos DB as the managed primary data store — there's no MongoDB to install or configure. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "Auto Install/use existing MongoDB is recommended if MongoDB isn't already on the target machine. If it is, provide the machine name/IP where it's installed (same for a load-balancing server). The default MongoDB port is 27017 — use the same port you used during MongoDB's own install if different. Get the MongoDB user/password from your network department if set. The Replica Set field is for data replication/mirroring.\n\nNote: this describes the legacy on-premise (Classic) installer. In MR4DevOps NextGen (released June 2026), MongoDB has been replaced by Azure Cosmos DB as the managed primary data store — there's no MongoDB to install or configure. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-redis-cfg",
     "title": "Redis Installation Options",
+    "sourceDoc": "Installation Guide",
     "page": 13,
     "keywords": [
       "redis installation",
@@ -159,12 +160,12 @@
       "redis config",
       "nextgen"
     ],
-    "answer": "Auto Install/use existing Redis is recommended if Redis isn't already installed. If it is, provide the machine name/IP (same for load-balancing setups). The default Redis port is 6379. Get the Redis password from your network department if applicable. The password and Use SSL options aren't mandatory — it depends on your organization's procedures.\n\nNote: this describes the legacy on-premise (Classic) installer. In MR4DevOps NextGen (released June 2026), the platform runs on Azure App Service with Azure Cosmos DB as the managed data store, so there's no self-hosted Redis to configure. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "Auto Install/use existing Redis is recommended if Redis isn't already installed. If it is, provide the machine name/IP (same for load-balancing setups). The default Redis port is 6379. Get the Redis password from your network department if applicable. The password and Use SSL options aren't mandatory — it depends on your organization's procedures.\n\nNote: this describes the legacy on-premise (Classic) installer. In MR4DevOps NextGen (released June 2026), the platform runs on Azure App Service with Azure Cosmos DB as the managed data store, so there's no self-hosted Redis to configure. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-patch-install",
     "title": "Installing a Modern Requirements4DevOps Patch",
+    "sourceDoc": "Installation Guide",
     "page": 16,
     "keywords": [
       "patch",
@@ -172,12 +173,12 @@
       "update patch",
       "hotfix"
     ],
-    "answer": "Patches include important updates and require the core MR4DevOps release to already be installed. Patches are cumulative — if Patch 2 is released after Patch 1, installing Patch 2 alone includes everything from Patch 1.\n\nTo install: navigate to the relevant folder, double-click the patch .exe file, and click Close once it completes.",
-    "sourceDoc": "Installation Guide"
+    "answer": "Patches include important updates and require the core MR4DevOps release to already be installed. Patches are cumulative — if Patch 2 is released after Patch 1, installing Patch 2 alone includes everything from Patch 1.\n\nTo install: navigate to the relevant folder, double-click the patch .exe file, and click Close once it completes."
   },
   {
     "id": "install-patch-info",
     "title": "Patch Version Info",
+    "sourceDoc": "Installation Guide",
     "page": 17,
     "keywords": [
       "patch version",
@@ -186,12 +187,12 @@
       "which patch",
       "build number"
     ],
-    "answer": "A change to the fourth digit of the build version means a patch with bug fixes was released on that build (there can be multiple patches per build). Check your current build version and license status under Organization Settings → Modern Requirements4DevOps → Licensing in Azure DevOps.",
-    "sourceDoc": "Installation Guide"
+    "answer": "A change to the fourth digit of the build version means a patch with bug fixes was released on that build (there can be multiple patches per build). Check your current build version and license status under Organization Settings → Modern Requirements4DevOps → Licensing in Azure DevOps."
   },
   {
     "id": "install-vsix-deploy",
     "title": "Deploying the TFS Extension Using the VSIX File",
+    "sourceDoc": "Installation Guide",
     "page": 18,
     "keywords": [
       "vsix",
@@ -205,12 +206,12 @@
       "mockup",
       "convert to use case"
     ],
-    "answer": "1. Log into your TFS.\n2. Click the Marketplace icon, then select Manage extensions.\n3. Click Browse local extensions.\n4. Click Manage extensions, then Upload new extension.\n5. Click Browse, select the VSIX file generated at the end of installation, then click Upload.\n6. Select the desired team project collection and click Continue.\n7. Review the requested permissions (Code read/write/manage, Code status, Identity read, Work items read/write) and click Confirm.\n\nAfterward, the Modern Requirements4DevOps Embed options appear under the Work tab (Diagram, Simulation and Use Case, Review, Trace Analysis, Baseline, etc.).\n\nNote: the Simulation and Use Case modules named above are from the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), Simulation was replaced by the Mockup module and Use Case by the Convert to Use Case function, both part of Copilot4DevOps. (Source: modernrequirements.com/resources/product-version-history-2026)",
-    "sourceDoc": "Installation Guide"
+    "answer": "1. Log into your TFS.\n2. Click the Marketplace icon, then select Manage extensions.\n3. Click Browse local extensions.\n4. Click Manage extensions, then Upload new extension.\n5. Click Browse, select the VSIX file generated at the end of installation, then click Upload.\n6. Select the desired team project collection and click Continue.\n7. Review the requested permissions (Code read/write/manage, Code status, Identity read, Work items read/write) and click Confirm.\n\nAfterward, the Modern Requirements4DevOps Embed options appear under the Work tab (Diagram, Simulation and Use Case, Review, Trace Analysis, Baseline, etc.).\n\nNote: the Simulation and Use Case modules named above are from the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), Simulation was replaced by the Mockup module and Use Case by the Convert to Use Case function, both part of Copilot4DevOps. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "install-vsix-gui",
     "title": "Can't Find the VSIX File? — GUI Method",
+    "sourceDoc": "Installation Guide",
     "page": 24,
     "keywords": [
       "can't find vsix",
@@ -221,12 +222,12 @@
       "regenerate vsix",
       "vsix file"
     ],
-    "answer": "You can generate the VSIX manually two ways: via Windows GUI or Command Prompt.\n\nGUI method:\n1. Go to the Modern Requirements4DevOps installation folder (e.g. C:\\Program Files (x86)\\Modern Requirements\\Modern Requirements4DevOps 2019 Update 2).\n2. Open TFS Extension Maker, then the Standard or Single Sign On folder matching your install type.\n3. Double-click TFSExtensionMaker.exe.\n4. Provide the Modern Requirements4DevOps URI (e.g. http://steve:8028) and an Output Directory, then click Generate.\n5. Click OK — the VSIX is created at that location (you'll be asked before overwriting an existing one).\n\nThen follow the normal 'Deploying TFS Extension' steps to deploy it.",
-    "sourceDoc": "Installation Guide"
+    "answer": "You can generate the VSIX manually two ways: via Windows GUI or Command Prompt.\n\nGUI method:\n1. Go to the Modern Requirements4DevOps installation folder (e.g. C:\\Program Files (x86)\\Modern Requirements\\Modern Requirements4DevOps 2019 Update 2).\n2. Open TFS Extension Maker, then the Standard or Single Sign On folder matching your install type.\n3. Double-click TFSExtensionMaker.exe.\n4. Provide the Modern Requirements4DevOps URI (e.g. http://steve:8028) and an Output Directory, then click Generate.\n5. Click OK — the VSIX is created at that location (you'll be asked before overwriting an existing one).\n\nThen follow the normal 'Deploying TFS Extension' steps to deploy it."
   },
   {
     "id": "install-vsix-cmd",
     "title": "Can't Find the VSIX File? — Command Prompt Method",
+    "sourceDoc": "Installation Guide",
     "page": 27,
     "keywords": [
       "command prompt vsix",
@@ -236,12 +237,12 @@
       "cli vsix",
       "cmd vsix"
     ],
-    "answer": "1. Open Command Prompt as Administrator.\n2. Navigate to the TFS Extension Maker folder inside your installation folder (e.g. ...\\Modern Requirements4DevOps 2019 Update 2\\TFS Extension Maker\\Standard).\n3. Run:\nTFSExtensionMaker.exe --baseuri \"http://<server name>:8028\" --out \"<Output directory path>\" --override true --publisher \"edevtech-mr\" --version <TFS Extension Maker version> --scope \"full\" --exttype \"project\"\n4. Check the output location for the .vsix file.\n5. In a browser, go to http://<server name>:8028/VSOInteGreat4TFS/EmbedOMInstructions and follow the on-page instructions to deploy it.\n6. Once installed, go to the project → Manage Features / Preview Features, and enable the modules you want — they'll then appear under the Work tab.",
-    "sourceDoc": "Installation Guide"
+    "answer": "1. Open Command Prompt as Administrator.\n2. Navigate to the TFS Extension Maker folder inside your installation folder (e.g. ...\\Modern Requirements4DevOps 2019 Update 2\\TFS Extension Maker\\Standard).\n3. Run:\nTFSExtensionMaker.exe --baseuri \"http://<server name>:8028\" --out \"<Output directory path>\" --override true --publisher \"edevtech-mr\" --version <TFS Extension Maker version> --scope \"full\" --exttype \"project\"\n4. Check the output location for the .vsix file.\n5. In a browser, go to http://<server name>:8028/VSOInteGreat4TFS/EmbedOMInstructions and follow the on-page instructions to deploy it.\n6. Once installed, go to the project → Manage Features / Preview Features, and enable the modules you want — they'll then appear under the Work tab."
   },
   {
     "id": "install-update-ext",
     "title": "Updating the Extension",
+    "sourceDoc": "Installation Guide",
     "page": 32,
     "keywords": [
       "update extension",
@@ -251,12 +252,12 @@
       "version control error",
       "extension error"
     ],
-    "answer": "When updating with a newly created VSIX, uninstall and remove the existing MR extension first to avoid version-control errors — don't upload the new VSIX on top of it.\n\n1. Delete from the Extension Page: go to Extensions in Azure DevOps, find Modern Requirements4DevOps, click Uninstall.\n2. Remove from Manage Extensions: go to Manage Extensions, select the extension, click Remove, and confirm.\n\nOnly then upload the new VSIX file.",
-    "sourceDoc": "Installation Guide"
+    "answer": "When updating with a newly created VSIX, uninstall and remove the existing MR extension first to avoid version-control errors — don't upload the new VSIX on top of it.\n\n1. Delete from the Extension Page: go to Extensions in Azure DevOps, find Modern Requirements4DevOps, click Uninstall.\n2. Remove from Manage Extensions: go to Manage Extensions, select the extension, click Remove, and confirm.\n\nOnly then upload the new VSIX file."
   },
   {
     "id": "install-activate-embedded",
     "title": "Activating the Embedded Version",
+    "sourceDoc": "Installation Guide",
     "page": 34,
     "keywords": [
       "activation",
@@ -266,12 +267,12 @@
       "activate embedded",
       "activate product"
     ],
-    "answer": "1. Access your TFS in a browser and select Modern Requirements4DevOps under the Settings (gear) tab.\n2. If not activated, you'll see 'Your product is not activated' with an Activate License option.\n3. Click Activate — you're taken to the License Activation page, where you choose User Based, Floating, or Offline Activation.",
-    "sourceDoc": "Installation Guide"
+    "answer": "1. Access your TFS in a browser and select Modern Requirements4DevOps under the Settings (gear) tab.\n2. If not activated, you'll see 'Your product is not activated' with an Activate License option.\n3. Click Activate — you're taken to the License Activation page, where you choose User Based, Floating, or Offline Activation."
   },
   {
     "id": "install-user-activation",
     "title": "User Based Activation",
+    "sourceDoc": "Installation Guide",
     "page": 36,
     "keywords": [
       "user based activation",
@@ -279,24 +280,24 @@
       "username license",
       "activate with key"
     ],
-    "answer": "1. Select the User Based license type (if not already) — your license binds to the provided username.\n2. Enter the license key and click Activate.\n\nOn success, you're taken to the Browse page to open any team project.",
-    "sourceDoc": "Installation Guide"
+    "answer": "1. Select the User Based license type (if not already) — your license binds to the provided username.\n2. Enter the license key and click Activate.\n\nOn success, you're taken to the Browse page to open any team project."
   },
   {
     "id": "install-floating-activation",
     "title": "Floating Activation",
+    "sourceDoc": "Installation Guide",
     "page": 37,
     "keywords": [
       "floating activation",
       "floating license",
       "floating url"
     ],
-    "answer": "1. Select the Floating license type.\n2. Enter the Floating URL and click Activate.\n\nOn success, you're taken to the Browse page to open any team project.",
-    "sourceDoc": "Installation Guide"
+    "answer": "1. Select the Floating license type.\n2. Enter the Floating URL and click Activate.\n\nOn success, you're taken to the Browse page to open any team project."
   },
   {
     "id": "install-offline-activation",
     "title": "Offline Activation",
+    "sourceDoc": "Installation Guide",
     "page": 38,
     "keywords": [
       "offline activation",
@@ -306,12 +307,12 @@
       "license file",
       "no internet connection"
     ],
-    "answer": "For a machine without internet access:\n1. Select the Activate Offline checkbox.\n2. Click Generate Request File.\n3. Email the generated request file to support@modernrequirements.com.\n4. Once you receive a license file back, click Apply License File to complete activation.",
-    "sourceDoc": "Installation Guide"
+    "answer": "For a machine without internet access:\n1. Select the Activate Offline checkbox.\n2. Click Generate Request File.\n3. Email the generated request file to support@modernrequirements.com.\n4. Once you receive a license file back, click Apply License File to complete activation."
   },
   {
     "id": "install-activation-error",
     "title": "Activation Unsuccessful Error",
+    "sourceDoc": "Installation Guide",
     "page": 39,
     "keywords": [
       "activation unsuccessful",
@@ -322,12 +323,12 @@
       "firewall license",
       "activation not working"
     ],
-    "answer": "This is almost always an internet connectivity issue. If a firewall or proxy is blocking the connection, ask your network/IT department to whitelist:\nhttps://modernrequirements.compliance.flexnetoperations.com:443/deviceservices\n\nOnce allowed through, retry activation.",
-    "sourceDoc": "Installation Guide"
+    "answer": "This is almost always an internet connectivity issue. If a firewall or proxy is blocking the connection, ask your network/IT department to whitelist:\nhttps://modernrequirements.compliance.flexnetoperations.com:443/deviceservices\n\nOnce allowed through, retry activation."
   },
   {
     "id": "install-redirect-uri",
     "title": "Configuring redirectUri for MR Credentials (Azure DevOps Services only)",
+    "sourceDoc": "Installation Guide",
     "page": 40,
     "keywords": [
       "mr credentials",
@@ -339,12 +340,12 @@
       "site can't be reached",
       "localhost refused"
     ],
-    "answer": "This only applies on Azure DevOps Services (VSTS) — not Embedded/Standalone installs on your own machine.\n\n1. Open IIS Manager.\n2. Select ModernRequirements4DevOps UI under Sites.\n3. Open Application Settings.\n4. Find redirectUri and double-click to edit.\n5. Set the Value to your base URL and port, e.g. https://steve:8028/\n6. Click OK to save.\n\nSkip this and MR Credentials will fail during E-Signature approval in Review — you'll see a Microsoft sign-in prompt followed by a 'This site can't be reached / localhost refused to connect' error.",
-    "sourceDoc": "Installation Guide"
+    "answer": "This only applies on Azure DevOps Services (VSTS) — not Embedded/Standalone installs on your own machine.\n\n1. Open IIS Manager.\n2. Select ModernRequirements4DevOps UI under Sites.\n3. Open Application Settings.\n4. Find redirectUri and double-click to edit.\n5. Set the Value to your base URL and port, e.g. https://steve:8028/\n6. Click OK to save.\n\nSkip this and MR Credentials will fail during E-Signature approval in Review — you'll see a Microsoft sign-in prompt followed by a 'This site can't be reached / localhost refused to connect' error."
   },
   {
     "id": "install-cookies-chrome",
     "title": "Enabling Third-Party Cookies — Google Chrome",
+    "sourceDoc": "Installation Guide",
     "page": 44,
     "keywords": [
       "enable cookies chrome",
@@ -353,12 +354,12 @@
       "chrome cookies",
       "chrome browser cookies"
     ],
-    "answer": "Modern Requirements4DevOps requires third-party cookies to be enabled.\n\nIn Chrome:\n1. Click the three dots (top right) → Settings.\n2. Click Privacy and security → Third-party cookies.\n3. Select Allow third-party cookies.\n4. To scope it to just your MR site, scroll to 'Sites allowed to use third-party cookies', click Add, enter the site URL (e.g. https://dev.azure.com), and click Add.",
-    "sourceDoc": "Installation Guide"
+    "answer": "Modern Requirements4DevOps requires third-party cookies to be enabled.\n\nIn Chrome:\n1. Click the three dots (top right) → Settings.\n2. Click Privacy and security → Third-party cookies.\n3. Select Allow third-party cookies.\n4. To scope it to just your MR site, scroll to 'Sites allowed to use third-party cookies', click Add, enter the site URL (e.g. https://dev.azure.com), and click Add."
   },
   {
     "id": "install-cookies-edge",
     "title": "Enabling Third-Party Cookies — Microsoft Edge",
+    "sourceDoc": "Installation Guide",
     "page": 48,
     "keywords": [
       "enable cookies edge",
@@ -367,12 +368,12 @@
       "edge cookies",
       "edge browser cookies"
     ],
-    "answer": "In Microsoft Edge:\n1. Click the three dots (top right) → Settings.\n2. Click Privacy, search, and services → Cookies and site permissions.\n3. Toggle off Block third-party cookies, or scroll to 'Allowed to save cookies' and click Add site.\n4. Enter the site URL, check 'Include third-party cookies on this site', and click Add.",
-    "sourceDoc": "Installation Guide"
+    "answer": "In Microsoft Edge:\n1. Click the three dots (top right) → Settings.\n2. Click Privacy, search, and services → Cookies and site permissions.\n3. Toggle off Block third-party cookies, or scroll to 'Allowed to save cookies' and click Add site.\n4. Enter the site URL, check 'Include third-party cookies on this site', and click Add."
   },
   {
     "id": "install-enable-https",
     "title": "Enabling HTTPS",
+    "sourceDoc": "Installation Guide",
     "page": 53,
     "keywords": [
       "https",
@@ -383,13 +384,12 @@
       "ssl certificate binding",
       "port 8028"
     ],
-    "answer": "By default, Modern Requirements4DevOps runs on port 8028 (<Host Name>:8028). To use HTTPS or a different port:\n1. Run inetmgr (IIS Manager) via Windows Run.\n2. Expand the root node, then Sites.\n3. Right-click your Modern Requirements4DevOps site → Edit Bindings.\n4. Click Add, change Type from http to https.\n5. Enter your desired port (e.g. 443).\n6. Select your SSL certificate and click OK.\n\nThe certificate must be a trusted CA-signed certificate — self-signed certificates aren't supported.",
-    "sourceDoc": "Installation Guide"
+    "answer": "By default, Modern Requirements4DevOps runs on port 8028 (<Host Name>:8028). To use HTTPS or a different port:\n1. Run inetmgr (IIS Manager) via Windows Run.\n2. Expand the root node, then Sites.\n3. Right-click your Modern Requirements4DevOps site → Edit Bindings.\n4. Click Add, change Type from http to https.\n5. Enter your desired port (e.g. 443).\n6. Select your SSL certificate and click OK.\n\nThe certificate must be a trusted CA-signed certificate — self-signed certificates aren't supported."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-intro-scope",
     "title": "What the Test Case Management guide covers and who it is for",
+    "sourceDoc": "Test Case Management Technote",
     "page": 4,
     "keywords": [
       "test reporting",
@@ -404,9 +404,9 @@
     "answer": "Modern Requirements NextGen brings the test plan, the tests, the results, and the reasons behind those results into one place on top of Azure DevOps. Azure DevOps' built-in reporting only understands Test Plans, Test Suites and Test Cases — everything that happens once testing starts (runs, pass/fail results, step outcomes, screenshots, tester comments, bugs) is hard to report on natively. Modern Requirements NextGen closes that gap.\n\nWho it's for: testers, test leads, business analysts, and project managers working with Azure DevOps Test Plans alongside Modern Requirements NextGen. No technical background is needed — everything is done through menus, checkboxes and dropdowns.\n\nTest reporting is available in two places: Smart Report (Test Plans hub, Smart Docs, Queries), where reports appear as formatted documents, and Trace Analysis, where they appear as an interactive matrix."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-report-building-blocks",
     "title": "The building blocks a test report is made from",
+    "sourceDoc": "Test Case Management Technote",
     "page": 4,
     "keywords": [
       "test plan",
@@ -424,9 +424,9 @@
     "answer": "A test report in Modern Requirements NextGen is assembled from these building blocks:\n\n- Test Plan — the overall test plan the report is based on.\n- Test Suite — a group of test cases within the plan.\n- Requirement Category — the requirement (user story, backlog item, etc.) a suite was created to verify; only appears when a suite is linked to a requirement.\n- Test Case — an individual test, including its steps.\n- Test Point — one specific instance of a test case: that test case, in one suite, run against one configuration.\n- Test Run — one testing session, manual or automated.\n- Test Result — the outcome of a test case for one run (passed, failed, blocked, etc.).\n- Test Step Run — the outcome of one individual step within a test result.\n- Bug — a bug filed because of a failed test.\n\nTest Plan, Test Suite, Test Case and Bug are native Azure DevOps items. Requirement Category, Test Point, Test Run, Test Result and Test Step Run are virtual work items added by Modern Requirements NextGen and linked in automatically. You choose which blocks to include and NextGen assembles them into a single connected report, whether as a Smart Report document or a Trace Analysis matrix."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-vwi-test-suite-requirement-fields",
     "title": "Fields available for Test Suite and Requirement Category",
+    "sourceDoc": "Test Case Management Technote",
     "page": 6,
     "keywords": [
       "test suite fields",
@@ -441,9 +441,9 @@
     "answer": "Test Suite fields: ID (the suite's identifier), Title (the suite's name), State (the suite's current state).\n\nRequirement Category fields: ID (the requirement's identifier), Title (the requirement's name), Work Item Type (User Story, Product Backlog Item, Requirement, or a custom type your organization uses).\n\nThese fields are added to a report through Column Options in Trace Analysis, or the Report Designer in Smart Report."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-vwi-test-point-run-fields",
     "title": "Fields available for Test Point and Test Run",
+    "sourceDoc": "Test Case Management Technote",
     "page": 6,
     "keywords": [
       "test point fields",
@@ -458,9 +458,9 @@
     "answer": "Test Point fields: ID (the test point's identifier), Title (the test case name), Outcome (Passed, Failed, Active, etc.), Last Step Expected Result (the anticipated outcome of the test case's last step), Last Step Run Comment (observations recorded during execution of that last step).\n\nTest Run fields: ID (the run's identifier), Title (the run's name), Attachment (any file attached to the run itself from the Run Summary tab in Azure DevOps)."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-vwi-test-result-fields",
     "title": "Fields available for Test Result",
+    "sourceDoc": "Test Case Management Technote",
     "page": 7,
     "keywords": [
       "test result fields",
@@ -476,9 +476,9 @@
     "answer": "Test Result fields: ID, Title, Outcome (the outcome of this particular result), Config Name (the test configuration the result was produced against), Detail Comments (the comments recorded for each attempt during execution — click the link to view), Comment (a comment added afterwards, when reviewing or updating the result rather than while executing it), Result Attachment (files attached to the result while it was being executed — click the link to view), Test Parameter (the parameter values used by this result), and Details (the full breakdown of each individual attempt/iteration, including its own comment and attachments)."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-vwi-test-step-run-fields",
     "title": "Fields available for Test Step Run",
+    "sourceDoc": "Test Case Management Technote",
     "page": 7,
     "keywords": [
       "test step run fields",
@@ -492,9 +492,9 @@
     "answer": "Test Step Run fields: ID (the step's identifier), Title (the step's action), Comment (the note recorded against this step, typically when it is marked failed — click the link to view it), Attachment (any screenshot or file captured against this step — click the link to view it), Test Parameter (the parameter value used by this step, if the test case is parameterized)."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-where-to-build-report",
     "title": "Where you can build a test report",
+    "sourceDoc": "Test Case Management Technote",
     "page": 7,
     "keywords": [
       "where to build report",
@@ -508,9 +508,9 @@
     "answer": "Test reporting can be generated from wherever you're working:\n\n- Smart Report from the Test Plans hub — right-click a Test Suite under Test Plans in Azure DevOps and choose Smart Report. Gives a formatted report for that suite, and optionally its sub-suites, with runs and results.\n- Smart Report from Smart Docs — insert Test Plan, Test Suite or Test Case items under any hierarchy, then generate the Smart Report. Merges the related test information into your document.\n- Smart Report from Queries — open a query that returns test cases, then choose Smart Report from the toolbar. Covers the tests your query returned.\n- Trace Analysis (Horizontal Matrix, Mode: Test reporting) — a complete test report as an interactive hierarchy/matrix.\n\nNote: for test reporting, you can also generate smart reports containing the test execution data."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-smart-report-designer",
     "title": "Designing a Smart Report template in the Report Designer",
+    "sourceDoc": "Test Case Management Technote",
     "page": 8,
     "keywords": [
       "report designer",
@@ -523,9 +523,9 @@
     "answer": "Smart Report renders test information as a formatted document. Every building block (Test Plan, Test Suite, Requirement Category, Test Case, Test Point, Test Run, Test Result, Test Step Run, Bug) is available as an item type in the Report Designer, so you can create a section for each one you want to include. Pick a building block from the item type dropdown to start a new section for it, then add the fields you want to show from that item's field list."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-smart-report-test-plans-hub-generate",
     "title": "Generating a Smart Report from the Test Plans hub (Generate Report vs. Suites Hierarchy)",
+    "sourceDoc": "Test Case Management Technote",
     "page": 9,
     "keywords": [
       "generate report",
@@ -538,9 +538,9 @@
     "answer": "Right-click a Test Suite under Test Plans in Azure DevOps and choose Smart Report to open the module scoped to that suite. Two generation options are offered:\n\n1. Generate Report — shows data pertaining exclusively to the Test Suite the Smart Report was invoked from, for users who want to focus on that single suite's insights and metrics.\n2. Generate Report Including Suites Hierarchy — opens a pop-up letting you select the invoking Test Suite along with its child suites via checkboxes, so you can choose one, several, or all suites to include in the report.\n\nWhen generating with the suite hierarchy included, up to 25 suites are auto-selected at a time; an administrator can raise this limit if you need more."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-smart-report-test-config-filter",
     "title": "Filtering a Smart Report by Test Configuration",
+    "sourceDoc": "Test Case Management Technote",
     "page": 10,
     "keywords": [
       "test configuration filter",
@@ -552,9 +552,9 @@
     "answer": "The Settings icon on the Smart Report's Report tab opens a test configuration picker for the project. By default, all configurations are selected. Narrow the selection to generate the report with test results only for the selected test configurations (e.g. a specific OS or browser)."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-smart-report-from-smart-docs",
     "title": "Generating a Smart Report from Smart Docs",
+    "sourceDoc": "Test Case Management Technote",
     "page": 11,
     "keywords": [
       "smart docs report",
@@ -565,9 +565,9 @@
     "answer": "You can generate comprehensive test reports directly from Smart Docs — the report consolidates test information for the work items included in the Smart Doc, letting you review test coverage and results alongside your documented requirements.\n\nTip: insert a Section or a Requirement item first, then add Test Plan, Test Suite and Test Case items beneath it (created from the Test Plan hub and added via the right panel) to build full traceability from requirement to test result within a single structured document."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-smart-report-from-queries",
     "title": "Generating a Smart Report from the Queries tab",
+    "sourceDoc": "Test Case Management Technote",
     "page": 12,
     "keywords": [
       "queries tab report",
@@ -579,9 +579,9 @@
     "answer": "Smart Report can also be generated from a work item query. For the test-specific information to come through, the query needs to return Test Plan, Test Suite and Test Case items — otherwise that part of the report will not be generated. If the query also returns other items such as Bugs, those are included the normal way, on the same smart part containing all the test-related work items.\n\nNote: linking of virtual work items is supported only when the report is generated from the toolbar."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-trace-analysis-plan-suite-selection",
     "title": "Starting a test report in Trace Analysis: Type of Matrix and selecting Test Plan/Suite",
+    "sourceDoc": "Test Case Management Technote",
     "page": 13,
     "keywords": [
       "trace analysis test reporting mode",
@@ -593,9 +593,9 @@
     "answer": "In Trace Analysis, test reporting is one of the modes available when creating a new matrix. Set Type of Matrix to Horizontal and Mode to Test Reporting to open the test report editor. Choose a single Test Plan from the plans available in your project, then choose one or more of its Test Suites — you can generate a report for one suite on its own, or several at once."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-trace-analysis-config-and-toggles",
     "title": "Filtering by Test Configuration and choosing what to include in a Trace Analysis report",
+    "sourceDoc": "Test Case Management Technote",
     "page": 14,
     "keywords": [
       "trace analysis test configuration",
@@ -606,9 +606,9 @@
     "answer": "In Trace Analysis you can choose one or more Test Configurations (e.g. a browser or OS) to scope the report to; by default every configuration in the project is included.\n\nEvery building block is listed with a toggle next to it — turning a toggle On adds that level to the report, Off leaves it out, so the report stays focused on exactly what you need. The Requirement Category toggle only becomes available once you've selected a suite that is linked to a requirement; when enabled, it's automatically added beneath that suite."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-trace-analysis-column-options-required-blocks",
     "title": "Column Options and required building block combinations in Trace Analysis",
+    "sourceDoc": "Test Case Management Technote",
     "page": 15,
     "keywords": [
       "column options trace analysis",
@@ -621,9 +621,9 @@
     "answer": "Each level included in a Trace Analysis report has its own Column Options, where you choose exactly which fields appear for that level (from the properties in the Virtual Work Item Properties section). Only fields relevant to that level are offered.\n\nRequired building block rules:\n- A Test Suite needs a Test Plan above it.\n- A Test Case, Test Point, or Requirement Category needs a Test Suite above it.\n- A Test Result needs something to attach to: a Test Run, a Test Point, or a Test Case.\n- A Test Step Run and a Bug both need a Test Result above them.\n\nIf a required building block is missing from your selection, the row is outlined so you can see what needs fixing before you run the report. See the Report Paths reference for the valid combinations."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-attachments-mapping",
     "title": "Where test attachments show up in a report, based on where they were added",
+    "sourceDoc": "Test Case Management Technote",
     "page": 17,
     "keywords": [
       "attachments in report",
@@ -637,9 +637,9 @@
     "answer": "Attachments recorded during testing are picked up automatically wherever the report is generated (Test Plans hub, Smart Docs, Queries tab). Where an attachment appears depends on where it was added while the test was being run:\n\n- Added to a test run from the Run Summary tab → appears under Test Run as an \"Attachment\" link.\n- Added to a result while running a test case with no step selected (also covers Capture user actions, Record screen, and Record screen with audio) → appears under Test Result as a \"Result Attachment\" link.\n- Added to an individual step using Capture screenshot while executing that step → appears under Test Step Run as an \"Attachment\" link.\n\nEach of these fields can be added to a report the same way as any other field — via the Report Designer in Smart Report, or Column Options in Trace Analysis."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-comments-mapping",
     "title": "Where test comments show up in a report, based on where they were entered",
+    "sourceDoc": "Test Case Management Technote",
     "page": 19,
     "keywords": [
       "comments in report",
@@ -650,9 +650,9 @@
     "answer": "Comments recorded during testing are also surfaced automatically:\n\n- Entered on a result while executing a test, for each attempt → appears under Test Result as \"Detail Comments\", with every attempt's comment kept as its own line so nothing is lost.\n- Entered on an individual step, typically when it's marked failed → appears under Test Step Run as \"Comment\"."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-shared-steps-test-parameters",
     "title": "Shared Steps and Test Parameters in a report",
+    "sourceDoc": "Test Case Management Technote",
     "page": 20,
     "keywords": [
       "shared steps",
@@ -663,9 +663,9 @@
     "answer": "Shared steps and parameters used within test case steps are tracked all the way through to the report. Add the \"Test Parameter\" field to see the parameter values used in a test case, and the \"Actions\" field to see its steps, including any shared steps. Both are available through the Report Designer in Smart Report and Column Options in Trace Analysis."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-reporting-by-requirement",
     "title": "Reporting by Requirement (Requirement Category)",
+    "sourceDoc": "Test Case Management Technote",
     "page": 21,
     "keywords": [
       "reporting by requirement",
@@ -676,9 +676,9 @@
     "answer": "A requirement-based test suite is how Azure DevOps ties tests back to what they're meant to verify — creating a suite from a requirement automatically fills it with the linked test cases. Modern Requirements NextGen surfaces that requirement as its own level (Requirement Category) sitting under the Test Suite. This works regardless of what your project calls its requirements (User Story, Product Backlog Item, Requirement, or a custom type), with no extra configuration needed.\n\nIn Smart Report, the Requirement Category section of the template is filled in automatically for requirement-based suites. In Trace Analysis, the Requirement Category checkbox becomes available once a requirement-linked suite is selected."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-report-paths-reference",
     "title": "Reference: valid report paths you can build (structure-only, run-rooted, plan-rooted, requirement-rooted)",
+    "sourceDoc": "Test Case Management Technote",
     "page": 22,
     "keywords": [
       "report paths",
@@ -693,9 +693,9 @@
     "answer": "The building blocks can be combined in several valid ways (see Section 6.5 rules for what each block requires above it). Common groups of paths:\n\nStructure only: Test Plan > Test Suite; Test Plan > Test Suite > Test Case; Test Plan > Test Suite > Test Point.\n\nRooted in a Test Run: Test Run; Test Run > Test Result; Test Run > Test Result > Test Step Run; Test Run > Test Result > Bug; Test Run > Test Result > Test Step Run > Bug.\n\nRooted in a Test Plan, with execution and bugs: Test Plan > Test Suite > Test Run > Test Result > Bug (and variants adding Test Step Run, Test Case, or Test Point into the chain).\n\nWithout a Test Run: Test Plan > Test Suite > Test Case > Test Point > Test Result (and variants adding Test Step Run and/or Bug); Test Plan > Test Suite > Test Point > Test Result > Bug (and with Test Step Run).\n\nRequirement-rooted: Test Plan > Test Suite > Requirement Category > Test Case (or Test Point) > ... > Test Result > Test Step Run > Bug, in several combinations.\n\n23 named paths in total are documented — use the one that matches whether you're reporting structure only, execution results, or requirement traceability."
   },
   {
-    "sourceDoc": "Test Case Management Technote",
     "id": "tcm-good-to-know",
     "title": "Good to know: suite limits, valid combinations, and query requirements for test reports",
+    "sourceDoc": "Test Case Management Technote",
     "page": 23,
     "keywords": [
       "good to know",
@@ -3977,6 +3977,7 @@
   {
     "id": "site-agents4devops-overview",
     "title": "What is Agents4DevOps",
+    "sourceDoc": "modernrequirements.com — Agents4DevOps",
     "page": 1,
     "keywords": [
       "agents4devops",
@@ -3988,12 +3989,12 @@
       "modern requirements agents4devops",
       "autonomous execution"
     ],
-    "answer": "Agents4DevOps is Modern Requirements' product for \"Autonomous AI agents for DevOps execution\" (per modernrequirements.com). It's the fifth product in the Modern Requirements suite, alongside Modern Requirements4DevOps (\"End-to-end requirements management in Azure DevOps\"), Copilot4DevOps (\"AI-powered assistance for DevOps workflows\"), Compliance4DevOps (\"Compliance management, built into Azure DevOps\"), and AI Sync Bridge (\"Real-time data sync across tools and systems\"). Within that suite, Agents4DevOps sits at the most automated end: Copilot4DevOps provides AI-assisted guidance that a user acts on, while Agents4DevOps is positioned to execute DevOps work autonomously. As of this writing, the public product page is a lightweight landing page (tagline plus \"Start Free Trial\" / \"Book a Demo\" calls to action) without a detailed published feature list.",
-    "sourceDoc": "modernrequirements.com — Agents4DevOps"
+    "answer": "Agents4DevOps is Modern Requirements' product for \"Autonomous AI agents for DevOps execution\" (per modernrequirements.com). It's the fifth product in the Modern Requirements suite, alongside Modern Requirements4DevOps (\"End-to-end requirements management in Azure DevOps\"), Copilot4DevOps (\"AI-powered assistance for DevOps workflows\"), Compliance4DevOps (\"Compliance management, built into Azure DevOps\"), and AI Sync Bridge (\"Real-time data sync across tools and systems\"). Within that suite, Agents4DevOps sits at the most automated end: Copilot4DevOps provides AI-assisted guidance that a user acts on, while Agents4DevOps is positioned to execute DevOps work autonomously. As of this writing, the public product page is a lightweight landing page (tagline plus \"Start Free Trial\" / \"Book a Demo\" calls to action) without a detailed published feature list."
   },
   {
     "id": "site-compliance4devops-overview",
     "title": "What is Compliance4DevOps",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps",
     "page": 1,
     "keywords": [
       "compliance4devops",
@@ -4002,12 +4003,12 @@
       "audit evidence azure devops",
       "compliance record"
     ],
-    "answer": "Compliance4DevOps is Modern Requirements' compliance management product, described on modernrequirements.com as \"Compliance management, built into Azure DevOps.\" It manages standards, clauses, assessments, and audit evidence within Azure DevOps — where the engineering work already happens — aiming to replace scattered spreadsheets and manual audit preparation with a system that tracks regulatory standards clause-by-clause and produces audit-ready evidence packages. It targets regulated industries: medical devices, pharmaceuticals, defense, aerospace, large infrastructure, utilities, manufacturing, automotive, and government. Per the product page, Compliance4DevOps went \"Live in September\" (2026), with its AI capabilities \"coming in October.\"",
-    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+    "answer": "Compliance4DevOps is Modern Requirements' compliance management product, described on modernrequirements.com as \"Compliance management, built into Azure DevOps.\" It manages standards, clauses, assessments, and audit evidence within Azure DevOps — where the engineering work already happens — aiming to replace scattered spreadsheets and manual audit preparation with a system that tracks regulatory standards clause-by-clause and produces audit-ready evidence packages. It targets regulated industries: medical devices, pharmaceuticals, defense, aerospace, large infrastructure, utilities, manufacturing, automotive, and government. Per the product page, Compliance4DevOps went \"Live in September\" (2026), with its AI capabilities \"coming in October.\""
   },
   {
     "id": "site-compliance4devops-capabilities",
     "title": "Key capabilities of Compliance4DevOps",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps",
     "page": 1,
     "keywords": [
       "compliance4devops features",
@@ -4019,12 +4020,12 @@
       "clause tracking",
       "compliance verdict"
     ],
-    "answer": "According to modernrequirements.com, Compliance4DevOps's core capabilities are:\n\n1. Standard Management — maintain a library of compliance frameworks or import custom ones; approve applicability and track versions.\n2. Evidence Mapping — connect controls to requirements and attach proof pulled from Azure DevOps and Modern Requirements work items.\n3. Assessment & Verdict — AI proposes a compliance verdict for each requirement, which the team then confirms.\n4. Audit Package Generation — produces \"a frozen, point-in-time audit package of requirements, evidence and decisions.\"\n5. Compliance Timeline — tracks internal audits, external audits, gap assessments, and certifications over time.\n6. Clause Tracking — a dashboard shows assessment progress across standards (the page's own example: \"88 of 152 assessed\").",
-    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+    "answer": "According to modernrequirements.com, Compliance4DevOps's core capabilities are:\n\n1. Standard Management — maintain a library of compliance frameworks or import custom ones; approve applicability and track versions.\n2. Evidence Mapping — connect controls to requirements and attach proof pulled from Azure DevOps and Modern Requirements work items.\n3. Assessment & Verdict — AI proposes a compliance verdict for each requirement, which the team then confirms.\n4. Audit Package Generation — produces \"a frozen, point-in-time audit package of requirements, evidence and decisions.\"\n5. Compliance Timeline — tracks internal audits, external audits, gap assessments, and certifications over time.\n6. Clause Tracking — a dashboard shows assessment progress across standards (the page's own example: \"88 of 152 assessed\")."
   },
   {
     "id": "site-compliance4devops-standards",
     "title": "Which compliance standards and regulations does Compliance4DevOps support",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps",
     "page": 1,
     "keywords": [
       "compliance4devops standards",
@@ -4048,12 +4049,12 @@
       "iec 62443",
       "which standards does compliance4devops support"
     ],
-    "answer": "Per modernrequirements.com, Compliance4DevOps covers standards across several industries:\n\n- Medical devices & pharma: ISO 13485, IEC 62304, ISO 14971, FDA 21 CFR Part 11, EU MDR\n- Defense & aerospace: CMMC, NIST 800-171, NIST 800-53, AS9100, DO-178C\n- Automotive & manufacturing: ISO 26262, IATF 16949, ASPICE, ISO 9001\n- Information security: ISO 27001, SOC 2, HIPAA, GDPR\n- Energy & infrastructure: NERC CIP, IEC 61508, IEC 62443\n\nCompliance4DevOps maintains a library of these frameworks (or lets you import custom ones) and tracks progress against them clause by clause.",
-    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+    "answer": "Per modernrequirements.com, Compliance4DevOps covers standards across several industries:\n\n- Medical devices & pharma: ISO 13485, IEC 62304, ISO 14971, FDA 21 CFR Part 11, EU MDR\n- Defense & aerospace: CMMC, NIST 800-171, NIST 800-53, AS9100, DO-178C\n- Automotive & manufacturing: ISO 26262, IATF 16949, ASPICE, ISO 9001\n- Information security: ISO 27001, SOC 2, HIPAA, GDPR\n- Energy & infrastructure: NERC CIP, IEC 61508, IEC 62443\n\nCompliance4DevOps maintains a library of these frameworks (or lets you import custom ones) and tracks progress against them clause by clause."
   },
   {
     "id": "site-compliance4devops-relationship-mr4devops",
     "title": "How Compliance4DevOps relates to Modern Requirements4DevOps",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps",
     "page": 1,
     "keywords": [
       "compliance4devops vs mr4devops",
@@ -4062,12 +4063,12 @@
       "how does compliance4devops work with modern requirements4devops",
       "compliance4devops relationship"
     ],
-    "answer": "Compliance4DevOps is designed to complement Modern Requirements4DevOps rather than replace it. Per modernrequirements.com: \"MR4DevOps produces the evidence. Compliance4DevOps maps it to your standards and builds the audit package. Together, the engineering record and the compliance record stay connected.\" In short, MR4DevOps handles requirements, traceability, and the engineering work itself, while Compliance4DevOps layers standards/clause tracking and audit-package generation on top, linking proof directly back to that engineering work.",
-    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+    "answer": "Compliance4DevOps is designed to complement Modern Requirements4DevOps rather than replace it. Per modernrequirements.com: \"MR4DevOps produces the evidence. Compliance4DevOps maps it to your standards and builds the audit package. Together, the engineering record and the compliance record stay connected.\" In short, MR4DevOps handles requirements, traceability, and the engineering work itself, while Compliance4DevOps layers standards/clause tracking and audit-package generation on top, linking proof directly back to that engineering work."
   },
   {
     "id": "site-compliance4devops-availability",
     "title": "When did Compliance4DevOps become available",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps",
     "page": 1,
     "keywords": [
       "compliance4devops release date",
@@ -4075,12 +4076,12 @@
       "compliance4devops launch date",
       "is compliance4devops available"
     ],
-    "answer": "Modern Requirements' Compliance4DevOps product page states it went \"Live in September\" (2026), with its AI-powered capabilities (such as AI-proposed compliance verdicts) described as \"coming in October.\"",
-    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+    "answer": "Modern Requirements' Compliance4DevOps product page states it went \"Live in September\" (2026), with its AI-powered capabilities (such as AI-proposed compliance verdicts) described as \"coming in October.\""
   },
   {
     "id": "site-ai-sync-bridge-overview",
     "title": "What is AI Sync Bridge",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge",
     "page": 1,
     "keywords": [
       "ai sync bridge",
@@ -4089,12 +4090,12 @@
       "azure devops jira migration",
       "ai-powered connector"
     ],
-    "answer": "AI Sync Bridge is Modern Requirements' product for syncing and migrating work items between Azure DevOps and Jira, marketed as \"The AI-Powered Connector for Azure DevOps and Jira.\" It lets teams synchronize or migrate work items across platforms using AI-assisted field/type mapping, aiming to eliminate duplicated work items, prevent field synchronization issues, and reduce manual migration effort. Target users called out on the product page are DevOps leaders, QA teams, project managers, and implementation consultants.",
-    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+    "answer": "AI Sync Bridge is Modern Requirements' product for syncing and migrating work items between Azure DevOps and Jira, marketed as \"The AI-Powered Connector for Azure DevOps and Jira.\" It lets teams synchronize or migrate work items across platforms using AI-assisted field/type mapping, aiming to eliminate duplicated work items, prevent field synchronization issues, and reduce manual migration effort. Target users called out on the product page are DevOps leaders, QA teams, project managers, and implementation consultants."
   },
   {
     "id": "site-ai-sync-bridge-mapping",
     "title": "How AI Sync Bridge's AI-assisted mapping works",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge",
     "page": 1,
     "keywords": [
       "ai sync bridge mapping",
@@ -4104,12 +4105,12 @@
       "parent child relationships sync",
       "tested-by links sync"
     ],
-    "answer": "Per modernrequirements.com, AI Sync Bridge's AI-assisted mapping automatically analyzes the source and target structures (e.g. an Azure DevOps project and a Jira project) and recommends field mappings. It suggests work item type correspondences (for example, Epic to Epic, Task to Task), and identifies and preserves parent-child relationships, references, and \"tested-by\" connections. It also copies attachments and maintains hierarchy during transfers.",
-    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+    "answer": "Per modernrequirements.com, AI Sync Bridge's AI-assisted mapping automatically analyzes the source and target structures (e.g. an Azure DevOps project and a Jira project) and recommends field mappings. It suggests work item type correspondences (for example, Epic to Epic, Task to Task), and identifies and preserves parent-child relationships, references, and \"tested-by\" connections. It also copies attachments and maintains hierarchy during transfers."
   },
   {
     "id": "site-ai-sync-bridge-sync-paths",
     "title": "What sync paths and modes does AI Sync Bridge support",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge",
     "page": 1,
     "keywords": [
       "ai sync bridge sync paths",
@@ -4120,12 +4121,12 @@
       "cross-organization sync",
       "sync template"
     ],
-    "answer": "AI Sync Bridge supports three primary sync paths, per modernrequirements.com: Azure DevOps to Azure DevOps, Azure DevOps to Jira, and Jira to Jira. Syncs can be configured as one-way or bi-directional, and the product supports cross-organization and cross-instance workflows. Once a saved mapping template is applied, synchronization can be turned on with a single toggle. It's also used for organizational consolidation, team merging, and legacy project cleanup, with a real-time progress dashboard showing success/failure summaries by work item type and duration analytics.",
-    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+    "answer": "AI Sync Bridge supports three primary sync paths, per modernrequirements.com: Azure DevOps to Azure DevOps, Azure DevOps to Jira, and Jira to Jira. Syncs can be configured as one-way or bi-directional, and the product supports cross-organization and cross-instance workflows. Once a saved mapping template is applied, synchronization can be turned on with a single toggle. It's also used for organizational consolidation, team merging, and legacy project cleanup, with a real-time progress dashboard showing success/failure summaries by work item type and duration analytics."
   },
   {
     "id": "site-ai-sync-bridge-setup",
     "title": "How do you set up a connection in AI Sync Bridge",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge",
     "page": 1,
     "keywords": [
       "ai sync bridge setup",
@@ -4134,12 +4135,12 @@
       "how to connect azure devops and jira",
       "ai sync bridge server"
     ],
-    "answer": "Per modernrequirements.com, connecting a system in AI Sync Bridge is a three-step process: (1) name the server, (2) provide authentication tokens, and (3) test and save the connection. All integrations are kept encrypted and isolated within private environments.",
-    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+    "answer": "Per modernrequirements.com, connecting a system in AI Sync Bridge is a three-step process: (1) name the server, (2) provide authentication tokens, and (3) test and save the connection. All integrations are kept encrypted and isolated within private environments."
   },
   {
     "id": "site-ai-sync-bridge-monitoring",
     "title": "How does AI Sync Bridge monitor syncs and troubleshoot errors",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge",
     "page": 1,
     "keywords": [
       "ai sync bridge monitoring",
@@ -4149,12 +4150,12 @@
       "sync failures",
       "analytics dashboard"
     ],
-    "answer": "AI Sync Bridge includes an analytics dashboard that tracks successfully synced items, pinpoints failure points, displays operation duration metrics, and flags field mappings that need adjustment. It also keeps an error log with timestamped entries, categorization, work item ID references, and full context logs for debugging, per modernrequirements.com.",
-    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+    "answer": "AI Sync Bridge includes an analytics dashboard that tracks successfully synced items, pinpoints failure points, displays operation duration metrics, and flags field mappings that need adjustment. It also keeps an error log with timestamped entries, categorization, work item ID references, and full context logs for debugging, per modernrequirements.com."
   },
   {
     "id": "site-ai-sync-bridge-roadmap",
     "title": "AI Sync Bridge roadmap (Version 1 vs Version 2)",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge",
     "page": 1,
     "keywords": [
       "ai sync bridge roadmap",
@@ -4164,12 +4165,12 @@
       "quality center integration",
       "ai sync bridge future plans"
     ],
-    "answer": "Per modernrequirements.com, AI Sync Bridge Version 1 focuses on enhanced sync intelligence and conditional rules. Version 2 is planned to add multi-tenant cloud deployment with self-service provisioning. Future integrations mentioned on the page include HP ALM / Quality Center.",
-    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+    "answer": "Per modernrequirements.com, AI Sync Bridge Version 1 focuses on enhanced sync intelligence and conditional rules. Version 2 is planned to add multi-tenant cloud deployment with self-service provisioning. Future integrations mentioned on the page include HP ALM / Quality Center."
   },
   {
     "id": "site-copilot4devops-overview",
     "title": "What is Copilot4DevOps (product overview)",
+    "sourceDoc": "modernrequirements.com — Copilot4DevOps",
     "page": 1,
     "keywords": [
       "copilot4devops",
@@ -4179,12 +4180,12 @@
       "copilot4devops overview",
       "number one ai assistant"
     ],
-    "answer": "Copilot4DevOps is marketed on modernrequirements.com as the \"AI Assistant for Azure DevOps\" — described as \"the only AI integration built directly inside Azure DevOps,\" intended to \"turn months of manual requirements, gap analysis, and test case creation into minutes.\" The product page describes it as working directly inside Azure DevOps with \"no tool switching,\" and calls it the \"#1 AI Assistant for Azure DevOps,\" built for enterprise teams. It's part of the broader Modern Requirements suite alongside Modern Requirements4DevOps, Agents4DevOps, Compliance4DevOps, and AI Sync Bridge. Note: the NextGen Online Help documentation separately describes 16 distinct Copilot4DevOps functions available inside Modern Requirements4DevOps (see the KB entry on \"Copilot4DevOps functions and where to access them\"); the public product page markets a set of 12 AI-powered tools/categories (AI Chat, Elicit, Analyze, Generate, Transform, Convert, Mockup Tool, Diagramming, Impact Assessment, Q&A Assistant, SOP/Document generation, Dynamic Prompt).",
-    "sourceDoc": "modernrequirements.com — Copilot4DevOps"
+    "answer": "Copilot4DevOps is marketed on modernrequirements.com as the \"AI Assistant for Azure DevOps\" — described as \"the only AI integration built directly inside Azure DevOps,\" intended to \"turn months of manual requirements, gap analysis, and test case creation into minutes.\" The product page describes it as working directly inside Azure DevOps with \"no tool switching,\" and calls it the \"#1 AI Assistant for Azure DevOps,\" built for enterprise teams. It's part of the broader Modern Requirements suite alongside Modern Requirements4DevOps, Agents4DevOps, Compliance4DevOps, and AI Sync Bridge. Note: the NextGen Online Help documentation separately describes 16 distinct Copilot4DevOps functions available inside Modern Requirements4DevOps (see the KB entry on \"Copilot4DevOps functions and where to access them\"); the public product page markets a set of 12 AI-powered tools/categories (AI Chat, Elicit, Analyze, Generate, Transform, Convert, Mockup Tool, Diagramming, Impact Assessment, Q&A Assistant, SOP/Document generation, Dynamic Prompt)."
   },
   {
     "id": "site-copilot4devops-value-props",
     "title": "Copilot4DevOps efficiency claims (speed, cost, manual work reduction)",
+    "sourceDoc": "modernrequirements.com — Copilot4DevOps",
     "page": 1,
     "keywords": [
       "copilot4devops roi",
@@ -4195,12 +4196,12 @@
       "80 percent faster",
       "90 percent less manual work"
     ],
-    "answer": "The Copilot4DevOps product page on modernrequirements.com advertises three headline efficiency claims: \"80% Faster Delivery\" (instant generation of requirements, test cases, and documentation), \"60% Cost Reduction\" (from consolidating tooling overhead and rework costs), and \"90% Less Manual Work\" (from automating repetitive tasks). These are marketing figures published on the product page, not independently verified benchmarks.",
-    "sourceDoc": "modernrequirements.com — Copilot4DevOps"
+    "answer": "The Copilot4DevOps product page on modernrequirements.com advertises three headline efficiency claims: \"80% Faster Delivery\" (instant generation of requirements, test cases, and documentation), \"60% Cost Reduction\" (from consolidating tooling overhead and rework costs), and \"90% Less Manual Work\" (from automating repetitive tasks). These are marketing figures published on the product page, not independently verified benchmarks."
   },
   {
     "id": "site-copilot4devops-byollm",
     "title": "What is BYOLLM (Bring Your Own LLM) in Copilot4DevOps",
+    "sourceDoc": "modernrequirements.com — Copilot4DevOps",
     "page": 1,
     "keywords": [
       "byollm",
@@ -4209,12 +4210,12 @@
       "copilot4devops llm training",
       "custom ai model azure devops"
     ],
-    "answer": "BYOLLM (Bring Your Own LLM) is an add-on feature of Copilot4DevOps, per modernrequirements.com, that lets organizations upload documents, Azure DevOps wikis, and work items to train/customize the underlying AI model on their own data. It's called out as an additional-cost add-on rather than a feature included in base plans.",
-    "sourceDoc": "modernrequirements.com — Copilot4DevOps"
+    "answer": "BYOLLM (Bring Your Own LLM) is an add-on feature of Copilot4DevOps, per modernrequirements.com, that lets organizations upload documents, Azure DevOps wikis, and work items to train/customize the underlying AI model on their own data. It's called out as an additional-cost add-on rather than a feature included in base plans."
   },
   {
     "id": "site-copilot4devops-pricing-tiers",
     "title": "Copilot4DevOps pricing tiers (Lite, Plus, Ultimate)",
+    "sourceDoc": "modernrequirements.com — Copilot4DevOps",
     "page": 1,
     "keywords": [
       "copilot4devops pricing",
@@ -4225,12 +4226,12 @@
       "copilot4devops cost",
       "how much does copilot4devops cost"
     ],
-    "answer": "Per the Copilot4DevOps page on modernrequirements.com, Copilot4DevOps is offered in three tiers based on monthly AI token allowance: Lite (2M tokens, free), Plus (30M tokens, roughly $30–40/month), and Ultimate (100M tokens, roughly $40–50/month). These figures are as published on the product page and may change — confirm current pricing with Modern Requirements sales.",
-    "sourceDoc": "modernrequirements.com — Copilot4DevOps"
+    "answer": "Per the Copilot4DevOps page on modernrequirements.com, Copilot4DevOps is offered in three tiers based on monthly AI token allowance: Lite (2M tokens, free), Plus (30M tokens, roughly $30–40/month), and Ultimate (100M tokens, roughly $40–50/month). These figures are as published on the product page and may change — confirm current pricing with Modern Requirements sales."
   },
   {
     "id": "site-mr4devops-performance-claims",
     "title": "Modern Requirements4DevOps NextGen performance claims vs the 2025 (Classic) version",
+    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps",
     "page": 1,
     "keywords": [
       "mr4devops nextgen performance",
@@ -4240,12 +4241,12 @@
       "auto scaling azure app service",
       "60 percent faster"
     ],
-    "answer": "Per modernrequirements.com's Modern Requirements4DevOps product page, NextGen is described as 60% faster for comparisons, file opens, reports, and traceability versus the MR 2025 (Classic) version, with 90%+ of known issues from the previous version resolved. The page also notes NextGen auto-scales on Azure App Service, removing the need for manual capacity planning.",
-    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps"
+    "answer": "Per modernrequirements.com's Modern Requirements4DevOps product page, NextGen is described as 60% faster for comparisons, file opens, reports, and traceability versus the MR 2025 (Classic) version, with 90%+ of known issues from the previous version resolved. The page also notes NextGen auto-scales on Azure App Service, removing the need for manual capacity planning."
   },
   {
     "id": "site-mr4devops-ai-edit",
     "title": "What is AI Edit in Modern Requirements4DevOps",
+    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps",
     "page": 1,
     "keywords": [
       "ai edit",
@@ -4254,12 +4255,12 @@
       "ai edit context menu",
       "ai edit quality check"
     ],
-    "answer": "AI Edit, per the Modern Requirements4DevOps product page on modernrequirements.com, is a one-click AI assistance feature accessible from the Azure DevOps context menu. It's aimed at focused, single-item editing and quality checks on individual work items (rather than bulk operations).",
-    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps"
+    "answer": "AI Edit, per the Modern Requirements4DevOps product page on modernrequirements.com, is a one-click AI assistance feature accessible from the Azure DevOps context menu. It's aimed at focused, single-item editing and quality checks on individual work items (rather than bulk operations)."
   },
   {
     "id": "site-mr4devops-compliance-standards",
     "title": "Which compliance standards is Modern Requirements4DevOps built for",
+    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps",
     "page": 1,
     "keywords": [
       "mr4devops compliance standards",
@@ -4271,12 +4272,12 @@
       "aspice",
       "which standards does mr4devops support"
     ],
-    "answer": "Modern Requirements4DevOps's product page on modernrequirements.com states it's \"purpose-built\" for regulated-industry standards including FDA 21 CFR Part 11, ISO 13485, IEC 62304, DO-178C, ISO 26262, and ASPICE. (For dedicated clause-by-clause compliance tracking and audit-package generation across a broader standards list, see Compliance4DevOps — a separate companion product.)",
-    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps"
+    "answer": "Modern Requirements4DevOps's product page on modernrequirements.com states it's \"purpose-built\" for regulated-industry standards including FDA 21 CFR Part 11, ISO 13485, IEC 62304, DO-178C, ISO 26262, and ASPICE. (For dedicated clause-by-clause compliance tracking and audit-package generation across a broader standards list, see Compliance4DevOps — a separate companion product.)"
   },
   {
     "id": "site-pricing-plans-overview",
     "title": "Modern Requirements pricing plans and what's included",
+    "sourceDoc": "modernrequirements.com — Pricing",
     "page": 1,
     "keywords": [
       "pricing plans",
@@ -4288,12 +4289,12 @@
       "modern requirements packages",
       "licensing plans"
     ],
-    "answer": "Modern Requirements' pricing page (modernrequirements.com/pricing/) lists four packages: Frontier (\"the mainline platform\"), Frontier AI (\"Frontier + AI capabilities,\" marked Popular), Engineering (\"for systems engineering\"), and Engineering AI (\"Engineering + AI capabilities,\" marked Popular). All plans include native AI features (Elicitation, Analysis, Convert, Transform) plus Smart Docs, Smart Report, Document Management, Word Import, Test Hub Reporting, Review Management, Trace Analysis, and Baseline. The AI-tier plans (Frontier AI and Engineering AI) add the full AI capability set: Chat, Diagram Generation, Mockup, Pseudocode & Test Scripts, Dynamic Prompt, SOP/Document Generator, Transform, and Q&A Assistant. The Engineering-tier plans (Engineering and Engineering AI) add Variant Management and Parameterized Requirements. The page does not publish specific per-user or subscription prices — it uses \"Request Pricing\" buttons throughout.",
-    "sourceDoc": "modernrequirements.com — Pricing"
+    "answer": "Modern Requirements' pricing page (modernrequirements.com/pricing/) lists four packages: Frontier (\"the mainline platform\"), Frontier AI (\"Frontier + AI capabilities,\" marked Popular), Engineering (\"for systems engineering\"), and Engineering AI (\"Engineering + AI capabilities,\" marked Popular). All plans include native AI features (Elicitation, Analysis, Convert, Transform) plus Smart Docs, Smart Report, Document Management, Word Import, Test Hub Reporting, Review Management, Trace Analysis, and Baseline. The AI-tier plans (Frontier AI and Engineering AI) add the full AI capability set: Chat, Diagram Generation, Mockup, Pseudocode & Test Scripts, Dynamic Prompt, SOP/Document Generator, Transform, and Q&A Assistant. The Engineering-tier plans (Engineering and Engineering AI) add Variant Management and Parameterized Requirements. The page does not publish specific per-user or subscription prices — it uses \"Request Pricing\" buttons throughout."
   },
   {
     "id": "site-pricing-support-tiers",
     "title": "Modern Requirements support tiers by plan",
+    "sourceDoc": "modernrequirements.com — Pricing",
     "page": 1,
     "keywords": [
       "support tiers",
@@ -4305,12 +4306,12 @@
       "agents4devops early access",
       "what support do i get"
     ],
-    "answer": "Per modernrequirements.com/pricing/, support level differs by plan: Frontier includes Basic Support plus MR Academy access; Frontier AI includes Priority Support plus MR Academy and AI4DevOps Academy access; Engineering AI includes Premium Support plus early access to new features and to Agents4DevOps. This indicates Agents4DevOps is currently being rolled out as an early-access feature for Engineering AI customers rather than being generally available on all plans.",
-    "sourceDoc": "modernrequirements.com — Pricing"
+    "answer": "Per modernrequirements.com/pricing/, support level differs by plan: Frontier includes Basic Support plus MR Academy access; Frontier AI includes Priority Support plus MR Academy and AI4DevOps Academy access; Engineering AI includes Premium Support plus early access to new features and to Agents4DevOps. This indicates Agents4DevOps is currently being rolled out as an early-access feature for Engineering AI customers rather than being generally available on all plans."
   },
   {
     "id": "site-help-center-overview",
     "title": "Where to find self-study videos, tutorials, and learning resources for Modern Requirements4DevOps",
+    "sourceDoc": "modernrequirements.com — Help Center",
     "page": 1,
     "keywords": [
       "help center",
@@ -4321,12 +4322,12 @@
       "learning resources",
       "how to learn modern requirements"
     ],
-    "answer": "Modern Requirements' Help Center / learning hub (modernrequirements.com/resources/help-center/) hosts a 4-week \"Bootcamp\" video series covering requirements-workflow fundamentals, plus text-based Product Tutorials on Smart Docs, Traceability, Smart Report, Review Management, Baseline, and Document Management (these overlap with the feature documentation already covered in the NextGen Online Help). It also links to blog articles (including industry-specific guides for standards like GAMP 5, 21 CFR Part 11, DO-178C, DO-254, and ASPICE), gated whitepapers (DO-254, DO-178C, Data Dictionaries, AS9100, ISO 13485) that require a download/form submission, and recorded webinars on compliance, AI, and healthcare topics.",
-    "sourceDoc": "modernrequirements.com — Help Center"
+    "answer": "Modern Requirements' Help Center / learning hub (modernrequirements.com/resources/help-center/) hosts a 4-week \"Bootcamp\" video series covering requirements-workflow fundamentals, plus text-based Product Tutorials on Smart Docs, Traceability, Smart Report, Review Management, Baseline, and Document Management (these overlap with the feature documentation already covered in the NextGen Online Help). It also links to blog articles (including industry-specific guides for standards like GAMP 5, 21 CFR Part 11, DO-178C, DO-254, and ASPICE), gated whitepapers (DO-254, DO-178C, Data Dictionaries, AS9100, ISO 13485) that require a download/form submission, and recorded webinars on compliance, AI, and healthcare topics."
   },
   {
     "id": "site-mr-academy-overview",
     "title": "What is MR Academy and how do you enroll",
+    "sourceDoc": "modernrequirements.com — MR Academy",
     "page": 1,
     "keywords": [
       "mr academy",
@@ -4336,12 +4337,12 @@
       "mr academy courses",
       "free certification azure devops"
     ],
-    "answer": "MR Academy is Modern Requirements' free Learning Management System offering self-paced courses and certifications in requirements management and Azure DevOps, at modernrequirements.com/mr-academy/. Enrollment is a three-step process that requires entering the activation key \"Learn\" (case-sensitive). Featured certification courses listed on the page are: AI Powered Requirements, Smart Reporting, Trace Analysis, Document Authoring, Use Case Management, and Impact Assessment — each with a \"Register to get certified\" link.",
-    "sourceDoc": "modernrequirements.com — MR Academy"
+    "answer": "MR Academy is Modern Requirements' free Learning Management System offering self-paced courses and certifications in requirements management and Azure DevOps, at modernrequirements.com/mr-academy/. Enrollment is a three-step process that requires entering the activation key \"Learn\" (case-sensitive). Featured certification courses listed on the page are: AI Powered Requirements, Smart Reporting, Trace Analysis, Document Authoring, Use Case Management, and Impact Assessment — each with a \"Register to get certified\" link."
   },
   {
     "id": "site-glossary-acceptance-criteria",
     "title": "What are acceptance criteria (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "acceptance criteria",
@@ -4349,12 +4350,12 @@
       "what does acceptance criteria mean",
       "definition of acceptance criteria"
     ],
-    "answer": "Per the Modern Requirements Glossary (modernrequirements.com/glossary/): Acceptance criteria are \"the specific, testable conditions a user story or requirement must meet to be considered complete.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary (modernrequirements.com/glossary/): Acceptance criteria are \"the specific, testable conditions a user story or requirement must meet to be considered complete.\""
   },
   {
     "id": "site-glossary-azure-devops-work-item",
     "title": "What is an Azure DevOps work item (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "azure devops work item",
@@ -4362,12 +4363,12 @@
       "what does work item mean",
       "definition of work item"
     ],
-    "answer": "Per the Modern Requirements Glossary: An Azure DevOps work item is \"a record used to track a single piece of work, such as a user story, bug, task, feature, or epic.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: An Azure DevOps work item is \"a record used to track a single piece of work, such as a user story, bug, task, feature, or epic.\""
   },
   {
     "id": "site-glossary-change-impact-analysis",
     "title": "What is change impact analysis (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "change impact analysis",
@@ -4375,12 +4376,12 @@
       "what does change impact analysis mean",
       "impact assessment definition"
     ],
-    "answer": "Per the Modern Requirements Glossary: Change impact analysis is \"the process of working out what a proposed change to a requirement will affect before the change is made.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Change impact analysis is \"the process of working out what a proposed change to a requirement will affect before the change is made.\""
   },
   {
     "id": "site-glossary-ears-notation",
     "title": "What is EARS notation (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "ears notation",
@@ -4388,12 +4389,12 @@
       "easy approach to requirements syntax",
       "what does ears mean"
     ],
-    "answer": "Per the Modern Requirements Glossary: EARS notation stands for \"Easy Approach to Requirements Syntax — a set of simple sentence templates for writing clear, testable requirements.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: EARS notation stands for \"Easy Approach to Requirements Syntax — a set of simple sentence templates for writing clear, testable requirements.\""
   },
   {
     "id": "site-glossary-epic",
     "title": "What is an Epic in Azure DevOps (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "epic",
@@ -4401,12 +4402,12 @@
       "what does epic mean in azure devops",
       "definition of epic"
     ],
-    "answer": "Per the Modern Requirements Glossary: An Epic is \"the highest level of work item in Azure DevOps, representing a large body of work that spans multiple features and often several months.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: An Epic is \"the highest level of work item in Azure DevOps, representing a large body of work that spans multiple features and often several months.\""
   },
   {
     "id": "site-glossary-feature-work-item",
     "title": "What is a Feature work item in Azure DevOps (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "feature work item",
@@ -4414,12 +4415,12 @@
       "what does feature mean azure devops",
       "definition of feature work item"
     ],
-    "answer": "Per the Modern Requirements Glossary: A Feature is \"a mid-level work item in Azure DevOps that represents a distinct capability a product delivers, sitting below an epic and above user stories.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A Feature is \"a mid-level work item in Azure DevOps that represents a distinct capability a product delivers, sitting below an epic and above user stories.\""
   },
   {
     "id": "site-glossary-functional-requirements",
     "title": "What are functional requirements (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "functional requirements",
@@ -4427,12 +4428,12 @@
       "what does functional requirement mean",
       "definition of functional requirement"
     ],
-    "answer": "Per the Modern Requirements Glossary: Functional requirements are \"descriptions of something a product must do — a specific behavior, feature, or response to a given input.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Functional requirements are \"descriptions of something a product must do — a specific behavior, feature, or response to a given input.\""
   },
   {
     "id": "site-glossary-non-functional-requirements",
     "title": "What are non-functional requirements (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "non-functional requirements",
@@ -4440,12 +4441,12 @@
       "what does non-functional requirement mean",
       "nfr definition"
     ],
-    "answer": "Per the Modern Requirements Glossary: Non-functional requirements are \"requirements that define how well a system must perform rather than what it does, covering qualities like speed, security, reliability, scalability, and usability.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Non-functional requirements are \"requirements that define how well a system must perform rather than what it does, covering qualities like speed, security, reliability, scalability, and usability.\""
   },
   {
     "id": "site-glossary-product-backlog",
     "title": "What is a product backlog (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "product backlog",
@@ -4453,12 +4454,12 @@
       "what does product backlog mean",
       "definition of product backlog"
     ],
-    "answer": "Per the Modern Requirements Glossary: A product backlog is \"an ordered list of everything a team might work on for a product, from features and user stories to fixes and improvements.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A product backlog is \"an ordered list of everything a team might work on for a product, from features and user stories to fixes and improvements.\""
   },
   {
     "id": "site-glossary-requirements-analysis",
     "title": "What is requirements analysis (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements analysis",
@@ -4466,12 +4467,12 @@
       "what does requirements analysis mean",
       "definition of requirements analysis"
     ],
-    "answer": "Per the Modern Requirements Glossary: Requirements analysis is \"the work of examining gathered requirements to ensure they are clear, complete, consistent, and feasible, then prioritizing and refining them.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Requirements analysis is \"the work of examining gathered requirements to ensure they are clear, complete, consistent, and feasible, then prioritizing and refining them.\""
   },
   {
     "id": "site-glossary-requirements-baseline",
     "title": "What is a requirements baseline (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements baseline",
@@ -4479,12 +4480,12 @@
       "what does requirements baseline mean",
       "definition of requirements baseline"
     ],
-    "answer": "Per the Modern Requirements Glossary: A requirements baseline is \"a reviewed and approved set of requirements, frozen at a point in time to serve as the agreed reference for the work ahead.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A requirements baseline is \"a reviewed and approved set of requirements, frozen at a point in time to serve as the agreed reference for the work ahead.\""
   },
   {
     "id": "site-glossary-requirements-elicitation",
     "title": "What is requirements elicitation (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements elicitation",
@@ -4492,12 +4493,12 @@
       "what does requirements elicitation mean",
       "definition of requirements elicitation"
     ],
-    "answer": "Per the Modern Requirements Glossary: Requirements elicitation is \"the work of drawing out what stakeholders actually need, using techniques like interviews, workshops, observation, and prototyping.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Requirements elicitation is \"the work of drawing out what stakeholders actually need, using techniques like interviews, workshops, observation, and prototyping.\""
   },
   {
     "id": "site-glossary-requirements-engineering",
     "title": "What is requirements engineering (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements engineering",
@@ -4505,12 +4506,12 @@
       "what does requirements engineering mean",
       "definition of requirements engineering"
     ],
-    "answer": "Per the Modern Requirements Glossary: Requirements engineering is \"the discipline of discovering, analyzing, documenting, validating, and managing the requirements for a system across its lifecycle.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Requirements engineering is \"the discipline of discovering, analyzing, documenting, validating, and managing the requirements for a system across its lifecycle.\""
   },
   {
     "id": "site-glossary-requirements-gathering",
     "title": "What is requirements gathering (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements gathering",
@@ -4518,12 +4519,12 @@
       "what does requirements gathering mean",
       "definition of requirements gathering"
     ],
-    "answer": "Per the Modern Requirements Glossary: Requirements gathering is \"the process of collecting the needs and expectations for a product from stakeholders, users, and other sources at the start of a project.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Requirements gathering is \"the process of collecting the needs and expectations for a product from stakeholders, users, and other sources at the start of a project.\""
   },
   {
     "id": "site-glossary-requirements-management",
     "title": "What is requirements management (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements management",
@@ -4531,24 +4532,24 @@
       "what does requirements management mean",
       "definition of requirements management"
     ],
-    "answer": "Per the Modern Requirements Glossary: Requirements management is \"the process of documenting, organizing, and tracking a product's requirements across its lifecycle, so that stakeholder needs are captured, agreed on, and traceable.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Requirements management is \"the process of documenting, organizing, and tracking a product's requirements across its lifecycle, so that stakeholder needs are captured, agreed on, and traceable.\""
   },
   {
     "id": "site-glossary-requirements-management-ado",
     "title": "What is requirements management in Azure DevOps (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements management in azure devops",
       "what is requirements management in azure devops",
       "azure devops requirements management definition"
     ],
-    "answer": "Per the Modern Requirements Glossary: Requirements management in Azure DevOps is \"the practice of capturing, organizing, and tracing requirements directly inside Azure DevOps, using work items like epics, features, and user stories.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Requirements management in Azure DevOps is \"the practice of capturing, organizing, and tracing requirements directly inside Azure DevOps, using work items like epics, features, and user stories.\""
   },
   {
     "id": "site-glossary-requirements-management-plan",
     "title": "What is a requirements management plan (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements management plan",
@@ -4556,12 +4557,12 @@
       "what does requirements management plan mean",
       "definition of requirements management plan"
     ],
-    "answer": "Per the Modern Requirements Glossary: A requirements management plan is \"a document that sets out how requirements will be handled on a project — how they are captured, tracked, changed, and traced, and who is responsible.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A requirements management plan is \"a document that sets out how requirements will be handled on a project — how they are captured, tracked, changed, and traced, and who is responsible.\""
   },
   {
     "id": "site-glossary-requirements-review",
     "title": "What is a requirements review (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements review",
@@ -4569,12 +4570,12 @@
       "what does requirements review mean",
       "definition of requirements review"
     ],
-    "answer": "Per the Modern Requirements Glossary: A requirements review is \"a structured check of requirements by stakeholders to confirm they are clear, complete, correct, and agreed before development starts.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A requirements review is \"a structured check of requirements by stakeholders to confirm they are clear, complete, correct, and agreed before development starts.\""
   },
   {
     "id": "site-glossary-requirements-traceability",
     "title": "What is requirements traceability (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements traceability",
@@ -4582,12 +4583,12 @@
       "what does requirements traceability mean",
       "definition of requirements traceability"
     ],
-    "answer": "Per the Modern Requirements Glossary: Requirements traceability is \"the practice of linking each requirement to its source and to everything downstream that fulfills or verifies it, such as designs, code, and test cases.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Requirements traceability is \"the practice of linking each requirement to its source and to everything downstream that fulfills or verifies it, such as designs, code, and test cases.\""
   },
   {
     "id": "site-glossary-rtm",
     "title": "What is a Requirements Traceability Matrix (RTM) (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements traceability matrix",
@@ -4596,12 +4597,12 @@
       "what does rtm mean",
       "definition of traceability matrix"
     ],
-    "answer": "Per the Modern Requirements Glossary: A Requirements Traceability Matrix (RTM) is \"a table that maps each requirement to the items that satisfy and verify it, such as design elements, test cases, and results.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A Requirements Traceability Matrix (RTM) is \"a table that maps each requirement to the items that satisfy and verify it, such as design elements, test cases, and results.\""
   },
   {
     "id": "site-glossary-requirements-versioning",
     "title": "What is requirements versioning (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "requirements versioning",
@@ -4609,12 +4610,12 @@
       "what does requirements versioning mean",
       "definition of requirements versioning"
     ],
-    "answer": "Per the Modern Requirements Glossary: Requirements versioning is \"the practice of tracking changes to requirements over time, keeping a record of what changed, when, and by whom.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Requirements versioning is \"the practice of tracking changes to requirements over time, keeping a record of what changed, when, and by whom.\""
   },
   {
     "id": "site-glossary-srs",
     "title": "What is a Software Requirements Specification (SRS) (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "software requirements specification",
@@ -4623,12 +4624,12 @@
       "what does srs mean",
       "definition of srs document"
     ],
-    "answer": "Per the Modern Requirements Glossary: A Software Requirements Specification (SRS) is \"a document that describes what a software system must do and the constraints it must work within.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A Software Requirements Specification (SRS) is \"a document that describes what a software system must do and the constraints it must work within.\""
   },
   {
     "id": "site-glossary-test-case-management-ado",
     "title": "What is test case management in Azure DevOps (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "test case management in azure devops",
@@ -4636,12 +4637,12 @@
       "azure test plans definition",
       "definition of test case management"
     ],
-    "answer": "Per the Modern Requirements Glossary: Test case management in Azure DevOps is \"the practice of creating, organizing, and running test cases within Azure Test Plans, and linking them to requirements and user stories.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Test case management in Azure DevOps is \"the practice of creating, organizing, and running test cases within Azure Test Plans, and linking them to requirements and user stories.\""
   },
   {
     "id": "site-glossary-traceability-ado",
     "title": "What is traceability in Azure DevOps (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "traceability in azure devops",
@@ -4649,12 +4650,12 @@
       "what does traceability mean azure devops",
       "definition of traceability azure devops"
     ],
-    "answer": "Per the Modern Requirements Glossary: Traceability in Azure DevOps is \"linking work items to each other and to code, builds, and tests, so a team can follow a requirement through to the work that delivers and verifies it.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Traceability in Azure DevOps is \"linking work items to each other and to code, builds, and tests, so a team can follow a requirement through to the work that delivers and verifies it.\""
   },
   {
     "id": "site-glossary-use-case",
     "title": "What is a use case (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "use case",
@@ -4662,12 +4663,12 @@
       "what does use case mean",
       "definition of use case"
     ],
-    "answer": "Per the Modern Requirements Glossary: A use case is \"a description of how a user or another system interacts with a system to achieve a specific goal, laid out as a sequence of steps.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A use case is \"a description of how a user or another system interacts with a system to achieve a specific goal, laid out as a sequence of steps.\""
   },
   {
     "id": "site-glossary-user-story",
     "title": "What is a user story (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "user story",
@@ -4676,12 +4677,12 @@
       "definition of user story",
       "as a user I want"
     ],
-    "answer": "Per the Modern Requirements Glossary: A user story is \"a short, plain-language description of a feature told from the point of view of the person who wants it,\" typically in the form \"as a [user], I want [goal], so that [benefit].\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: A user story is \"a short, plain-language description of a feature told from the point of view of the person who wants it,\" typically in the form \"as a [user], I want [goal], so that [benefit].\""
   },
   {
     "id": "site-glossary-verification-validation",
     "title": "What is verification and validation (V&V) (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "verification and validation",
@@ -4690,12 +4691,12 @@
       "what does v&v mean",
       "definition of verification and validation"
     ],
-    "answer": "Per the Modern Requirements Glossary: Verification and validation (V&V) are \"two complementary checks on a product — verification confirms the product meets specifications, while validation confirms it meets stakeholder needs.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: Verification and validation (V&V) are \"two complementary checks on a product — verification confirms the product meets specifications, while validation confirms it meets stakeholder needs.\""
   },
   {
     "id": "site-glossary-work-item-hierarchy",
     "title": "What is the work item hierarchy (Epic, Feature, Story) (Glossary)",
+    "sourceDoc": "modernrequirements.com — Glossary",
     "page": 1,
     "keywords": [
       "work item hierarchy",
@@ -4704,12 +4705,12 @@
       "azure devops work item levels",
       "definition of work item hierarchy"
     ],
-    "answer": "Per the Modern Requirements Glossary: The work item hierarchy (Epic, Feature, Story) is \"the parent-child structure in Azure DevOps that organizes work from broad to specific, typically Epic at the top, then Feature, then User Story, then Task.\"",
-    "sourceDoc": "modernrequirements.com — Glossary"
+    "answer": "Per the Modern Requirements Glossary: The work item hierarchy (Epic, Feature, Story) is \"the parent-child structure in Azure DevOps that organizes work from broad to specific, typically Epic at the top, then Feature, then User Story, then Task.\""
   },
   {
     "id": "article-activate-standalone-signin",
     "title": "Reaching the License Activation Page on the Standalone version",
+    "sourceDoc": "modernrequirements.com — Activating Modern Requirements4DevOps",
     "page": 1,
     "keywords": [
       "standalone activation",
@@ -4722,12 +4723,12 @@
       "hostname 8028 signin",
       "standalone license activation access"
     ],
-    "answer": "For the Standalone version (as opposed to the Embedded version inside Azure DevOps/TFS), reach the License Activation page by opening a browser and navigating to http://[hostname]:8028/User/SignIn (replace [hostname] with your server name), then click Sign In. If the system has not yet been activated, you'll be redirected to the License Activation Page, where you can choose User Based, Floating, or Offline Activation as usual.",
-    "sourceDoc": "modernrequirements.com — Activating Modern Requirements4DevOps"
+    "answer": "For the Standalone version (as opposed to the Embedded version inside Azure DevOps/TFS), reach the License Activation page by opening a browser and navigating to http://[hostname]:8028/User/SignIn (replace [hostname] with your server name), then click Sign In. If the system has not yet been activated, you'll be redirected to the License Activation Page, where you can choose User Based, Floating, or Offline Activation as usual."
   },
   {
     "id": "frontier-favorites-tab",
     "title": "Favorites Tab (personal quick-access bookmarks)",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 6,
     "keywords": [
       "favorites tab",
@@ -4737,12 +4738,12 @@
       "my favorites",
       "star an item"
     ],
-    "answer": "Every module in MR4DevOps Frontier has a Browse page (the main listing view for documents, matrices, packages, baselines, and reports), and at the top of each Browse page is a Favorites tab — a personal quick-access area. Mark any item as a favorite and it appears there, saving you from scrolling through long lists to find something you use regularly. Favorites are personal to your account: each user maintains their own set independently of colleagues, and items can be added or removed at any time.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Every module in MR4DevOps Frontier has a Browse page (the main listing view for documents, matrices, packages, baselines, and reports), and at the top of each Browse page is a Favorites tab — a personal quick-access area. Mark any item as a favorite and it appears there, saving you from scrolling through long lists to find something you use regularly. Favorites are personal to your account: each user maintains their own set independently of colleagues, and items can be added or removed at any time."
   },
   {
     "id": "frontier-ado-style-filter-panel",
     "title": "ADO-Style Filter Panel",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 7,
     "keywords": [
       "filter panel",
@@ -4751,12 +4752,12 @@
       "narrow results",
       "filter documents matrix"
     ],
-    "answer": "Every module in MR4DevOps Frontier includes an ADO-style filter panel, available on the Browse page and main views. It supports multiple search criteria at once — work item type, state, assigned-to, tags, and more — in a layout that mirrors Azure DevOps's own filtering, so it feels familiar with no learning curve. This works whether you're searching documents, a traceability matrix, a version package, or a baseline. Filters can be combined and adjusted freely, and the panel collapses when not in use to keep the workspace uncluttered.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Every module in MR4DevOps Frontier includes an ADO-style filter panel, available on the Browse page and main views. It supports multiple search criteria at once — work item type, state, assigned-to, tags, and more — in a layout that mirrors Azure DevOps's own filtering, so it feels familiar with no learning curve. This works whether you're searching documents, a traceability matrix, a version package, or a baseline. Filters can be combined and adjusted freely, and the panel collapses when not in use to keep the workspace uncluttered."
   },
   {
     "id": "frontier-smart-edit-unified-view",
     "title": "Smart Edit — unified work item editing window",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 6,
     "keywords": [
       "smart edit",
@@ -4767,12 +4768,12 @@
       "mention team member @",
       "reference work item #"
     ],
-    "answer": "Smart Edit is MR4DevOps Frontier's unified work item editing experience: everything needed to view, edit, and manage a work item lives in a single organized window, so you never have to jump between screens. You can edit all work item fields directly, manage Links and Attachments through dedicated editable tabs, and open Linked Artifacts from its own tab for structured cross-item navigation. A Variants Hierarchy tab gives a visual overview of related variants, Tags and Discussion fields are shown inline, and Up/Down navigation arrows let you move through work items in sequence without reopening each one. When editing HTML fields, use @ to mention team members and # to reference other work items, matching the native Azure DevOps experience.\n\nNote: this is distinct from the Smart View side-by-side revision/variant comparison feature, which is a separate capability that also lives under the Smart Edit/Smart View name.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Smart Edit is MR4DevOps Frontier's unified work item editing experience: everything needed to view, edit, and manage a work item lives in a single organized window, so you never have to jump between screens. You can edit all work item fields directly, manage Links and Attachments through dedicated editable tabs, and open Linked Artifacts from its own tab for structured cross-item navigation. A Variants Hierarchy tab gives a visual overview of related variants, Tags and Discussion fields are shown inline, and Up/Down navigation arrows let you move through work items in sequence without reopening each one. When editing HTML fields, use @ to mention team members and # to reference other work items, matching the native Azure DevOps experience.\n\nNote: this is distinct from the Smart View side-by-side revision/variant comparison feature, which is a separate capability that also lives under the Smart Edit/Smart View name."
   },
   {
     "id": "frontier-smart-report-overview",
     "title": "Smart Report — automated document and report generation",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 5,
     "keywords": [
       "smart report",
@@ -4783,12 +4784,12 @@
       "report designer tab",
       "report stylesheet"
     ],
-    "answer": "Smart Report is the reporting engine built into both Smart Docs and Traceability (this is separate from the Reporting/Advanced Reports module, which is for reports built from scratch). Select a template and stylesheet, preview the output, and export as Word, PDF, or HTML — or save directly to the Document Management Library. Templates are created and customized in a built-in Designer tab, where you choose which work item types, fields, and sections to include. Organizations that need branded or regulated document formats can upload custom .dotx Word templates instead of using the built-in ones.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Smart Report is the reporting engine built into both Smart Docs and Traceability (this is separate from the Reporting/Advanced Reports module, which is for reports built from scratch). Select a template and stylesheet, preview the output, and export as Word, PDF, or HTML — or save directly to the Document Management Library. Templates are created and customized in a built-in Designer tab, where you choose which work item types, fields, and sections to include. Organizations that need branded or regulated document formats can upload custom .dotx Word templates instead of using the built-in ones."
   },
   {
     "id": "frontier-ai-edit-modes",
     "title": "AI Edit — the four editing modes and Ask Anything chat",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 30,
     "keywords": [
       "ai edit modes",
@@ -4799,12 +4800,12 @@
       "ask anything chat work item",
       "save changes ai edit"
     ],
-    "answer": "AI Edit's panel presents four structured modes on its left side: Explore and Review Work Item Content (understand what's already in the item), Edit Descriptions and Details (update and improve field content with AI assistance), Refine Specific Sections (target one particular area for refinement), and Get AI-Powered Suggestions (receive proactive improvement recommendations). Below these is a free-form \"Ask Anything\" chat input for a direct conversation with the AI about the selected work item — requesting rewrites, adjusting reading level, changing length, adding acceptance criteria, or applying polish, all without switching tools. Edits are saved back to ADO with the Save Changes button. AI Edit is meant for quick, in-context assistance on one work item at a time, as opposed to opening the full Copilot4DevOps interface.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "AI Edit's panel presents four structured modes on its left side: Explore and Review Work Item Content (understand what's already in the item), Edit Descriptions and Details (update and improve field content with AI assistance), Refine Specific Sections (target one particular area for refinement), and Get AI-Powered Suggestions (receive proactive improvement recommendations). Below these is a free-form \"Ask Anything\" chat input for a direct conversation with the AI about the selected work item — requesting rewrites, adjusting reading level, changing length, adding acceptance criteria, or applying polish, all without switching tools. Edits are saved back to ADO with the Save Changes button. AI Edit is meant for quick, in-context assistance on one work item at a time, as opposed to opening the full Copilot4DevOps interface."
   },
   {
     "id": "frontier-ado-context-menu-actions",
     "title": "ADO Context Menu — available quick-launch actions",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 34,
     "keywords": [
       "ado context menu actions",
@@ -4817,12 +4818,12 @@
       "context menu actions list",
       "mr4devops context menu options"
     ],
-    "answer": "MR4DevOps Frontier adds a group of its own actions into the Azure DevOps work item context menu (right-click a work item in a backlog, board, or query result list, or use the ⋮ options menu). The available actions are: Copilot4DevOps (launch the full AI assistant), AI Edit (open the AI work item editor), Smart Edit (open the side pane to update work item fields), Smart Report (generate a report for the selected item), Send for Review (start a formal review request), Create Package (create a Version Package from the selected items), Create Baseline (capture a baseline snapshot), and Reuse Work Items (copy the selected items into an existing baseline in the current project). This lets you kick off any of these workflows without navigating away from wherever you're already working in Azure DevOps.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "MR4DevOps Frontier adds a group of its own actions into the Azure DevOps work item context menu (right-click a work item in a backlog, board, or query result list, or use the ⋮ options menu). The available actions are: Copilot4DevOps (launch the full AI assistant), AI Edit (open the AI work item editor), Smart Edit (open the side pane to update work item fields), Smart Report (generate a report for the selected item), Send for Review (start a formal review request), Create Package (create a Version Package from the selected items), Create Baseline (capture a baseline snapshot), and Reuse Work Items (copy the selected items into an existing baseline in the current project). This lets you kick off any of these workflows without navigating away from wherever you're already working in Azure DevOps."
   },
   {
     "id": "frontier-agent4devops-overview",
     "title": "Agent4DevOps — AI agent automation and governance platform",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 28,
     "keywords": [
       "agent4devops",
@@ -4836,12 +4837,12 @@
       "agent library",
       "agent governance admin panel"
     ],
-    "answer": "Agent4DevOps (also referred to as Agents4DevOps) is MR4DevOps Frontier's end-to-end platform for configuring, running, and governing AI agents across DevOps projects. Its core workspaces: a Jobs tab is the master execution history, where every agent run appears as a filterable job with status, credit-usage dashboards, and controls to refresh, terminate, or delete runs; a Job Explorer gives a deep dive into individual runs (run details, agent responses, interactive approval tasks, an integrated chat assistant). The Agents workspace shows all system and custom agents in a filterable grid, and supports creating two kinds: execution agents (built from natural-language instructions, uploaded code/config, or library templates) and assisted autonomous agents (built with AI, manually, or from templates, with configurable triggers, approvals, tools, and notifications). A Skills tab centralizes reusable capabilities agents draw on, and a Library provides prebuilt agents and skills to start from instead of building everything from scratch.\n\nGovernance lives in the Admin Panel: administrators define how agents connect to backend services (personal access tokens, base URLs), configure outbound email (SMTP or SendGrid, with test emails and audit logs), and set daily credit-consumption alerts that can automatically disable the highest-consuming agents to protect the monthly quota. They can also assign prioritized AI models per module (with fallbacks), pick a consistent Chat Assistant model, and use a Global Tool Call section to enable/disable specific agent capabilities. A permission model covers twelve key actions (managing, deleting, executing, and enabling agents/skills, plus job and task operations) both globally and per project, with inheritance and allow/deny/not-set options.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Agent4DevOps (also referred to as Agents4DevOps) is MR4DevOps Frontier's end-to-end platform for configuring, running, and governing AI agents across DevOps projects. Its core workspaces: a Jobs tab is the master execution history, where every agent run appears as a filterable job with status, credit-usage dashboards, and controls to refresh, terminate, or delete runs; a Job Explorer gives a deep dive into individual runs (run details, agent responses, interactive approval tasks, an integrated chat assistant). The Agents workspace shows all system and custom agents in a filterable grid, and supports creating two kinds: execution agents (built from natural-language instructions, uploaded code/config, or library templates) and assisted autonomous agents (built with AI, manually, or from templates, with configurable triggers, approvals, tools, and notifications). A Skills tab centralizes reusable capabilities agents draw on, and a Library provides prebuilt agents and skills to start from instead of building everything from scratch.\n\nGovernance lives in the Admin Panel: administrators define how agents connect to backend services (personal access tokens, base URLs), configure outbound email (SMTP or SendGrid, with test emails and audit logs), and set daily credit-consumption alerts that can automatically disable the highest-consuming agents to protect the monthly quota. They can also assign prioritized AI models per module (with fallbacks), pick a consistent Chat Assistant model, and use a Global Tool Call section to enable/disable specific agent capabilities. A permission model covers twelve key actions (managing, deleting, executing, and enabling agents/skills, plus job and task operations) both globally and per project, with inheritance and allow/deny/not-set options."
   },
   {
     "id": "frontier-test-case-management-virtual-work-items",
     "title": "Test Case Management — the five Virtual Work Items and Virtual Linking",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 23,
     "keywords": [
       "virtual work items test case management",
@@ -4850,12 +4851,12 @@
       "test execution insight",
       "who ran which test"
     ],
-    "answer": "Azure DevOps's native testing hierarchy (Test Plan → Test Suite → Test Case) covers basic organization but doesn't capture who ran which test, the outcome at each step, or which bugs were raised. MR4DevOps Frontier's Test Case Management extends this through five Virtual Work Items: Requirement Category, Test Point, Test Run, Test Result, and Test Step Run. These sit alongside your real ADO work items and are connected through Virtual Linking, giving a complete end-to-end view of the test lifecycle — from the original requirement down to the individual test step outcome and any bugs filed — without changing your existing ADO process. All of this virtual work item data feeds directly into the Traceability and Smart Report modules for compliance-ready test reporting, and Test Results support multiple iterations, screen recordings, and user action log attachments.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Azure DevOps's native testing hierarchy (Test Plan → Test Suite → Test Case) covers basic organization but doesn't capture who ran which test, the outcome at each step, or which bugs were raised. MR4DevOps Frontier's Test Case Management extends this through five Virtual Work Items: Requirement Category, Test Point, Test Run, Test Result, and Test Step Run. These sit alongside your real ADO work items and are connected through Virtual Linking, giving a complete end-to-end view of the test lifecycle — from the original requirement down to the individual test step outcome and any bugs filed — without changing your existing ADO process. All of this virtual work item data feeds directly into the Traceability and Smart Report modules for compliance-ready test reporting, and Test Results support multiple iterations, screen recordings, and user action log attachments."
   },
   {
     "id": "frontier-review-approve-all-response-filters",
     "title": "Review — Approve All/Reject All and Response panel filters",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 13,
     "keywords": [
       "approve all reject all review",
@@ -4863,12 +4864,12 @@
       "reviews assigned to me queue",
       "mark as reviewed"
     ],
-    "answer": "In the Review module, reviewers work through assigned items one by one, adding comments and submitting a response before clicking Mark as Reviewed. Approvers can Approve or Reject individual items, or act on the full set at once with Approve All or Reject All — any rejection requires a comment, creating an automatic audit trail. Recipients access their assigned reviews directly from a \"Reviews Assigned To Me\" queue without needing to navigate to the source document. The Response panel can be filtered to show: your own responses (My Response), all reviewer feedback (All Responses), all comments (All Comments), or a full Summary — making it easy for the request owner to track progress and close out the review.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "In the Review module, reviewers work through assigned items one by one, adding comments and submitting a response before clicking Mark as Reviewed. Approvers can Approve or Reject individual items, or act on the full set at once with Approve All or Reject All — any rejection requires a comment, creating an automatic audit trail. Recipients access their assigned reviews directly from a \"Reviews Assigned To Me\" queue without needing to navigate to the source document. The Response panel can be filtered to show: your own responses (My Response), all reviewer feedback (All Responses), all comments (All Comments), or a full Summary — making it easy for the request owner to track progress and close out the review."
   },
   {
     "id": "frontier-traceability-views-heatmap",
     "title": "Traceability — Grid, List, and Heatmap views and coverage colors",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 15,
     "keywords": [
       "traceability matrix grid view list view heatmap view",
@@ -4876,12 +4877,12 @@
       "intersection matrix horizontal matrix",
       "coverage percentage gap analysis"
     ],
-    "answer": "Once a Traceability matrix is generated (via Intersection Matrix, mapping two work item types against each other, or Horizontal Matrix, expanding a linked hierarchy), the Traceability Matrix tab offers three views: Grid View shows a compact two-dimensional grid with checkmark cells where links exist and lets you add/remove links directly; List View shows each row as a card with linked items as chips and flags uncovered items with an N/A badge; Heatmap View shows a color-coded coverage bar per row — Grey (0%), Teal (1–49%), Orange (50–79%), Green (80–100%). An Analytics tab provides gap analysis by work item type, overall coverage percentage, and state distribution.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Once a Traceability matrix is generated (via Intersection Matrix, mapping two work item types against each other, or Horizontal Matrix, expanding a linked hierarchy), the Traceability Matrix tab offers three views: Grid View shows a compact two-dimensional grid with checkmark cells where links exist and lets you add/remove links directly; List View shows each row as a card with linked items as chips and flags uncovered items with an N/A badge; Heatmap View shows a color-coded coverage bar per row — Grey (0%), Teal (1–49%), Orange (50–79%), Green (80–100%). An Analytics tab provides gap analysis by work item type, overall coverage percentage, and state distribution."
   },
   {
     "id": "frontier-baseline-merge-copy-difference-report",
     "title": "Baseline — merging, copying to another project, and the Difference Report",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 17,
     "keywords": [
       "merge two baselines",
@@ -4890,12 +4891,12 @@
       "difference report word document",
       "baseline compliance tracking"
     ],
-    "answer": "Beyond simply capturing a point-in-time snapshot, Baseline in MR4DevOps Frontier supports: copying a baseline to another project, reusing work items from an existing baseline into a new one, and merging two baselines into one consolidated baseline. The Compare tab shows the current state of all constituent work items against the baseline, or against another baseline directly. A Difference Report can be generated from any comparison — a structured Word document recording every change — which the guide describes as an essential tool for regulated industries that need formal change records. A baseline itself is immutable once captured and cannot be altered.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Beyond simply capturing a point-in-time snapshot, Baseline in MR4DevOps Frontier supports: copying a baseline to another project, reusing work items from an existing baseline into a new one, and merging two baselines into one consolidated baseline. The Compare tab shows the current state of all constituent work items against the baseline, or against another baseline directly. A Difference Report can be generated from any comparison — a structured Word document recording every change — which the guide describes as an essential tool for regulated industries that need formal change records. A baseline itself is immutable once captured and cannot be altered."
   },
   {
     "id": "frontier-version-package-variants-compare-lock",
     "title": "Version Package — variants, color-coded comparison, and locking",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 9,
     "keywords": [
       "version package variants",
@@ -4904,12 +4905,12 @@
       "lock package",
       "color-coded diff added changed removed moved"
     ],
-    "answer": "Version Package groups related work items into a managed, versioned package (typically a release, system configuration, or requirements set), built from a query that auto-populates its work items. Packages support variants — parallel configurations of the same requirement set for different products, regions, or customer targets. The key capability is comparison: compare a package against a previous version with a color-coded difference view (added, changed, removed, moved), or compare a package against one of its variants side by side. Packages can be locked at key milestones to prevent unintended changes, and a Variants tab shows all source/target variant relationships.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "Version Package groups related work items into a managed, versioned package (typically a release, system configuration, or requirements set), built from a query that auto-populates its work items. Packages support variants — parallel configurations of the same requirement set for different products, regions, or customer targets. The key capability is comparison: compare a package against a previous version with a color-coded difference view (added, changed, removed, moved), or compare a package against one of its variants side by side. Packages can be locked at key milestones to prevent unintended changes, and a Variants tab shows all source/target variant relationships."
   },
   {
     "id": "frontier-admin-panel-tabs-2026",
     "title": "Admin Panel tabs (Frontier, 2026 edition)",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 36,
     "keywords": [
       "admin panel tabs frontier",
@@ -4917,12 +4918,12 @@
       "organization level configuration",
       "collection administrator settings"
     ],
-    "answer": "In the 2026 Frontier edition, the Admin Panel (Azure DevOps Organization Settings → the MR4DevOps Frontier section, Collection Administrators only) is structured into: a Licensing tab (current license status and seat allocation), a General tab (organization-wide settings applying to all modules), and dedicated configuration tabs for Smart Docs, Baseline, Review, and Copilot4DevOps, each exposing that module's own settings and defaults (field requirements, default templates, integration options, which features are enabled for end users).\n\nNote: this is the current Frontier tab set. An older description of the Admin Panel (from the Admin Configuration Guide) lists seven sections instead — the tab set has evolved between versions, so check which edition you're on if the tabs you see don't match one of these lists.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "In the 2026 Frontier edition, the Admin Panel (Azure DevOps Organization Settings → the MR4DevOps Frontier section, Collection Administrators only) is structured into: a Licensing tab (current license status and seat allocation), a General tab (organization-wide settings applying to all modules), and dedicated configuration tabs for Smart Docs, Baseline, Review, and Copilot4DevOps, each exposing that module's own settings and defaults (field requirements, default templates, integration options, which features are enabled for end users).\n\nNote: this is the current Frontier tab set. An older description of the Admin Panel (from the Admin Configuration Guide) lists seven sections instead — the tab set has evolved between versions, so check which edition you're on if the tabs you see don't match one of these lists."
   },
   {
     "id": "frontier-copilot4devops-capability-groups",
     "title": "Copilot4DevOps — the four capability groups",
+    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)",
     "page": 26,
     "keywords": [
       "copilot4devops capability groups",
@@ -4931,12 +4932,12 @@
       "assistant and support chat qa impact assessment",
       "advanced tools generate dynamic prompt sop document generator"
     ],
-    "answer": "MR4DevOps Frontier organizes Copilot4DevOps's functions into four capability groups. Refine and Convert: Elicit (generate backlog/test items from requirements), Analyze (evaluate requirements against 6C's, INVEST, and MoSCoW frameworks), Convert (express requirements as user stories or use cases), and Transform (summarize, paraphrase, elaborate, or translate content). Visualize and Design: Diagram (visual requirement diagrams) and Mockup (instant UI wireframe generation). Assistant and Support: a conversational Chat interface, a Q&A Assistant that elicits detailed requirements through structured questions, and an Impact Assessment tool for evaluating how a proposed change affects existing work items. Advanced Tools: Generate (requirements into pseudocode, test scripts, or AI specs), Dynamic Prompt (custom templates for repeatable AI workflows), and SOP/Document Generator (structured documents in seconds). It's accessible from Smart Docs, Version Package, and the ADO work item context menu, and all capabilities operate on your live ADO data.",
-    "sourceDoc": "MR4DevOps Frontier Product Overview (2026)"
+    "answer": "MR4DevOps Frontier organizes Copilot4DevOps's functions into four capability groups. Refine and Convert: Elicit (generate backlog/test items from requirements), Analyze (evaluate requirements against 6C's, INVEST, and MoSCoW frameworks), Convert (express requirements as user stories or use cases), and Transform (summarize, paraphrase, elaborate, or translate content). Visualize and Design: Diagram (visual requirement diagrams) and Mockup (instant UI wireframe generation). Assistant and Support: a conversational Chat interface, a Q&A Assistant that elicits detailed requirements through structured questions, and an Impact Assessment tool for evaluating how a proposed change affects existing work items. Advanced Tools: Generate (requirements into pseudocode, test scripts, or AI specs), Dynamic Prompt (custom templates for repeatable AI workflows), and SOP/Document Generator (structured documents in seconds). It's accessible from Smart Docs, Version Package, and the ADO work item context menu, and all capabilities operate on your live ADO data."
   },
   {
     "id": "cp-onprem-prerequisites",
     "title": "Copilot4DevOps on-premises — prerequisites before installing",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide",
     "page": 3,
     "keywords": [
       "copilot4devops prerequisites",
@@ -4955,12 +4956,12 @@
       "prerequisites for copilot4devops",
       "installing copilot4devops"
     ],
-    "answer": "Before installing Copilot4DevOps on-premises (v9), the server needs: the IIS Web Server role (Windows Server Roles) with Web Socket enabled through Windows Features; the WebDAV Common HTTP Feature uninstalled if present, followed by a restart; the IIS URL Rewrite module installed and visible in IIS's Web Server section; Microsoft ASP.NET Core Runtime 10.0.x (the Hosting Bundle) — uninstall any older 8.0.x Hosting Bundle first; the Microsoft Visual C++ Redistributable package-2022 (restart the system after installing this); and MongoDB version 7.0.2 or later. Virtualization Technology (VT-x) must also be enabled and supported on the server, since Copilot4DevOps requires a Docker-based Redis Stack Server running via WSL2 — if the server is a cloud virtual machine, nested virtualization must be enabled too. Copilot4DevOps v9 supports Azure DevOps Server 2022 and later versions.",
-    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+    "answer": "Before installing Copilot4DevOps on-premises (v9), the server needs: the IIS Web Server role (Windows Server Roles) with Web Socket enabled through Windows Features; the WebDAV Common HTTP Feature uninstalled if present, followed by a restart; the IIS URL Rewrite module installed and visible in IIS's Web Server section; Microsoft ASP.NET Core Runtime 10.0.x (the Hosting Bundle) — uninstall any older 8.0.x Hosting Bundle first; the Microsoft Visual C++ Redistributable package-2022 (restart the system after installing this); and MongoDB version 7.0.2 or later. Virtualization Technology (VT-x) must also be enabled and supported on the server, since Copilot4DevOps requires a Docker-based Redis Stack Server running via WSL2 — if the server is a cloud virtual machine, nested virtualization must be enabled too. Copilot4DevOps v9 supports Azure DevOps Server 2022 and later versions."
   },
   {
     "id": "cp-onprem-enable-wsl-docker",
     "title": "Copilot4DevOps on-premises — enabling WSL2 and installing Docker Desktop",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 7,
     "keywords": [
       "enable wsl windows server",
@@ -4970,12 +4971,12 @@
       "wsl 2 based engine instead of hyper-v",
       "wsl --update --set-default-version 2"
     ],
-    "answer": "To prepare a Windows Server for the Redis Stack Server Copilot4DevOps needs: in an elevated PowerShell, run `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart`, then `-FeatureName VirtualMachinePlatform -NoRestart`, then `-FeatureName Containers -All -NoRestart`, and restart the computer (`Restart-Computer`) — don't skip the restart. Next, install the WSL2 kernel update (wsl_update_x64.msi), then in an elevated PowerShell run `wsl --update` followed by `wsl --set-default-version 2`. Finally, install Docker Desktop for Windows, choosing \"Use WSL 2 based engine instead of Hyper-V\" during setup, log out and back in, launch Docker Desktop, and confirm it's working with `docker version` (you should see both Client and Server details in the output).",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "To prepare a Windows Server for the Redis Stack Server Copilot4DevOps needs: in an elevated PowerShell, run `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -NoRestart`, then `-FeatureName VirtualMachinePlatform -NoRestart`, then `-FeatureName Containers -All -NoRestart`, and restart the computer (`Restart-Computer`) — don't skip the restart. Next, install the WSL2 kernel update (wsl_update_x64.msi), then in an elevated PowerShell run `wsl --update` followed by `wsl --set-default-version 2`. Finally, install Docker Desktop for Windows, choosing \"Use WSL 2 based engine instead of Hyper-V\" during setup, log out and back in, launch Docker Desktop, and confirm it's working with `docker version` (you should see both Client and Server details in the output)."
   },
   {
     "id": "cp-onprem-redis-stack-docker",
     "title": "Copilot4DevOps on-premises — installing Redis Stack Server via Docker",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 9,
     "keywords": [
       "redis stack server docker",
@@ -4988,12 +4989,12 @@
       "redis for copilot4devops",
       "set up redis stack"
     ],
-    "answer": "With Docker Desktop running, pull the image with `docker pull redis/redis-stack-server:latest`. Create a host folder for persistence, e.g. `mkdir C:\\redis\\redis-data`. Then run the container: `docker run -d --name redis-stack -p 6379:6379 -v \"C:/redis/redis-data:/data\" --restart always redis/redis-stack-server:latest redis-stack-server --requirepass \"redispass\" --dir /data` (change the password from the example). This runs Redis Stack on port 6379 with the host directory mounted for persistence. Confirm it's running with `docker ps`.\n\nNote: if Copilot4DevOps is being installed on a server that already runs Modern Requirements4DevOps (which has its own Redis on 6379), map Redis Stack to a different host port instead — e.g. `-p 6079:6379` — to avoid a port conflict, and use that port in Copilot4DevOps's own connection string.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "With Docker Desktop running, pull the image with `docker pull redis/redis-stack-server:latest`. Create a host folder for persistence, e.g. `mkdir C:\\redis\\redis-data`. Then run the container: `docker run -d --name redis-stack -p 6379:6379 -v \"C:/redis/redis-data:/data\" --restart always redis/redis-stack-server:latest redis-stack-server --requirepass \"redispass\" --dir /data` (change the password from the example). This runs Redis Stack on port 6379 with the host directory mounted for persistence. Confirm it's running with `docker ps`.\n\nNote: if Copilot4DevOps is being installed on a server that already runs Modern Requirements4DevOps (which has its own Redis on 6379), map Redis Stack to a different host port instead — e.g. `-p 6079:6379` — to avoid a port conflict, and use that port in Copilot4DevOps's own connection string."
   },
   {
     "id": "cp-onprem-mongodb-fresh-install",
     "title": "Copilot4DevOps on-premises — installing MongoDB 7.0.2 (fresh install)",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 4,
     "keywords": [
       "install mongodb 7.0.2 copilot4devops",
@@ -5001,12 +5002,12 @@
       "mongodb service network service user",
       "mongodb compass install"
     ],
-    "answer": "For a server with no existing MongoDB, download the MongoDB 7.0.2 MSI installer (mongodb-windows-x86_64-7.0.2-signed.msi) and run it choosing Complete installation. Install the MongoDB service running as the Network Service user, keeping the default Service Name and data/log directories. Optionally select Install MongoDB Compass for a GUI to browse the database, then finish the wizard.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "For a server with no existing MongoDB, download the MongoDB 7.0.2 MSI installer (mongodb-windows-x86_64-7.0.2-signed.msi) and run it choosing Complete installation. Install the MongoDB service running as the Network Service user, keeping the default Service Name and data/log directories. Optionally select Install MongoDB Compass for a GUI to browse the database, then finish the wizard."
   },
   {
     "id": "cp-onprem-mongodb-second-instance",
     "title": "Copilot4DevOps on-premises — running a second MongoDB instance alongside an existing one",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 5,
     "keywords": [
       "second mongodb instance same server",
@@ -5015,12 +5016,12 @@
       "mongod.exe --install --servicename custom port",
       "net start mongodbv7"
     ],
-    "answer": "If the server already runs Modern Requirements4DevOps with its own MongoDB (on the default port 27017), install Copilot4DevOps's required MongoDB 7.0.2 as a second, separate instance rather than replacing the existing one. In the MongoDB installer, choose Custom/Advanced installation and uncheck \"Install MongoD as a Service\" (don't let the installer register it automatically). Create separate data and log folders (e.g. C:\\Program Files\\MongoDB\\dbv7 and \\logv7). In an elevated Command Prompt, register it manually on a different port: `\"C:\\Program Files\\MongoDB\\Server\\7.0\\bin\\mongod.exe\" --dbpath=\"C:\\Program Files\\MongoDB\\dbv7\" --logpath=\"C:\\Program Files\\MongoDB\\logv7\\mongod.log\" --port 21018 --install --serviceName \"MongoDBv7\" --serviceDisplayName \"MongoDBv7\"`, then start it with `net start MongoDBv7`. Verify both services in services.msc: the original MongoDB on 27017 (used by ModernRequirements4DevOps) and MongoDBv7 on 21018 (used by Copilot4DevOps), both set to start automatically.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "If the server already runs Modern Requirements4DevOps with its own MongoDB (on the default port 27017), install Copilot4DevOps's required MongoDB 7.0.2 as a second, separate instance rather than replacing the existing one. In the MongoDB installer, choose Custom/Advanced installation and uncheck \"Install MongoD as a Service\" (don't let the installer register it automatically). Create separate data and log folders (e.g. C:\\Program Files\\MongoDB\\dbv7 and \\logv7). In an elevated Command Prompt, register it manually on a different port: `\"C:\\Program Files\\MongoDB\\Server\\7.0\\bin\\mongod.exe\" --dbpath=\"C:\\Program Files\\MongoDB\\dbv7\" --logpath=\"C:\\Program Files\\MongoDB\\logv7\\mongod.log\" --port 21018 --install --serviceName \"MongoDBv7\" --serviceDisplayName \"MongoDBv7\"`, then start it with `net start MongoDBv7`. Verify both services in services.msc: the original MongoDB on 27017 (used by ModernRequirements4DevOps) and MongoDBv7 on 21018 (used by Copilot4DevOps), both set to start automatically."
   },
   {
     "id": "cp-onprem-deploy-iis-site",
     "title": "Copilot4DevOps on-premises — deploying the files and creating the IIS site",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 13,
     "keywords": [
       "deploy copilot4devops iis",
@@ -5029,12 +5030,12 @@
       "net clr version integrated pipeline mode",
       "add website https binding copilot4devops"
     ],
-    "answer": "Download the latest Copilot4DevOps package from the link provided by the Modern Requirements Support team, and extract it to the IIS web server location (e.g. C:\\Inetpub\\Copilot4DevOps). In IIS Manager, create a new Application Pool for Copilot4DevOps (.NET CLR version and Integrated managed pipeline mode as required), then open its Advanced Settings and set Enable 32-Bit Applications to False. Add a new Website with that site name, application pool, and physical path, choosing HTTPS (or HTTP, depending on your organization's requirements) as the binding type, with the appropriate host name and SSL certificate.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "Download the latest Copilot4DevOps package from the link provided by the Modern Requirements Support team, and extract it to the IIS web server location (e.g. C:\\Inetpub\\Copilot4DevOps). In IIS Manager, create a new Application Pool for Copilot4DevOps (.NET CLR version and Integrated managed pipeline mode as required), then open its Advanced Settings and set Enable 32-Bit Applications to False. Add a new Website with that site name, application pool, and physical path, choosing HTTPS (or HTTP, depending on your organization's requirements) as the binding type, with the appropriate host name and SSL certificate."
   },
   {
     "id": "cp-onprem-appsettings-connections",
     "title": "Copilot4DevOps on-premises — configuring appsettings.json connection strings",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 11,
     "keywords": [
       "appsettings.json copilot4devops",
@@ -5044,12 +5045,12 @@
       "semantickernel filespersistence cache connectionstring",
       "target mongodb"
     ],
-    "answer": "In the deployed Copilot4DevOps folder's appsettings.json, point every connection setting at your MongoDB and Redis instances: Database → ConnectionString and DBName, FileStorage → Mongo ConnectionString, SemanticKernel's ChatHistory and FilesPersistence database connection strings, VectorStore's Redis connection string (format: `<host>:<port>,password=<password>,abortConnect=false`), Cache → ConnectionString, and the Logging section's Target/MongoDB connection string — all normally `mongodb://localhost:<port>` for MongoDB, or `<host>:<port>,password=...` for the VectorStore/Redis entry. When Copilot4DevOps shares a server with an existing Modern Requirements4DevOps install, these ports must point at Copilot4DevOps's own separate MongoDB/Redis instances (e.g. mongodb://localhost:21018 and localhost:6079), not the ones ModernRequirements4DevOps already uses (27017 and 6379) — using the same ports/database names for both products isn't supported and will cause conflicts.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "In the deployed Copilot4DevOps folder's appsettings.json, point every connection setting at your MongoDB and Redis instances: Database → ConnectionString and DBName, FileStorage → Mongo ConnectionString, SemanticKernel's ChatHistory and FilesPersistence database connection strings, VectorStore's Redis connection string (format: `<host>:<port>,password=<password>,abortConnect=false`), Cache → ConnectionString, and the Logging section's Target/MongoDB connection string — all normally `mongodb://localhost:<port>` for MongoDB, or `<host>:<port>,password=...` for the VectorStore/Redis entry. When Copilot4DevOps shares a server with an existing Modern Requirements4DevOps install, these ports must point at Copilot4DevOps's own separate MongoDB/Redis instances (e.g. mongodb://localhost:21018 and localhost:6079), not the ones ModernRequirements4DevOps already uses (27017 and 6379) — using the same ports/database names for both products isn't supported and will cause conflicts."
   },
   {
     "id": "cp-onprem-ssl-thumbprint-allowed-domains",
     "title": "Copilot4DevOps on-premises — SSL certificate thumbprint and Allowed Domains",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 14,
     "keywords": [
       "bypasssslthumbprints appsettings",
@@ -5058,12 +5059,12 @@
       "alloweddomains copilot4devops",
       "ssl thumbprint uppercase"
     ],
-    "answer": "Copilot4DevOps's appsettings.json needs the site's SSL certificate thumbprint in ByPassSSLThumbprints, and the site's domain name in AllowedDomains. To get the thumbprint: in IIS Manager, open the site's bindings, click Edit, then View on the SSL certificate, and copy the value from the \"Thumbprint\" field on the Details tab — or in PowerShell, run `Get-ChildItem -Path cert:\\LocalMachine\\My | Where-Object { $_.Subject -eq \"CN=<your-domain>\" }` (replace `<your-domain>` with your certificate's domain name) and copy the Thumbprint column. Paste the thumbprint into ByPassSSLThumbprints in uppercase, and add the site's domain to AllowedDomains — multiple entries for either setting are separated with a pipe (`|`) character.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "Copilot4DevOps's appsettings.json needs the site's SSL certificate thumbprint in ByPassSSLThumbprints, and the site's domain name in AllowedDomains. To get the thumbprint: in IIS Manager, open the site's bindings, click Edit, then View on the SSL certificate, and copy the value from the \"Thumbprint\" field on the Details tab — or in PowerShell, run `Get-ChildItem -Path cert:\\LocalMachine\\My | Where-Object { $_.Subject -eq \"CN=<your-domain>\" }` (replace `<your-domain>` with your certificate's domain name) and copy the Thumbprint column. Paste the thumbprint into ByPassSSLThumbprints in uppercase, and add the site's domain to AllowedDomains — multiple entries for either setting are separated with a pipe (`|`) character."
   },
   {
     "id": "cp-onprem-unlock-websocket-iis",
     "title": "Copilot4DevOps on-premises — unlocking WebSocket and restarting IIS",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 15,
     "keywords": [
       "unlock websocket configuration section iis",
@@ -5071,12 +5072,12 @@
       "net stop was net start w3svc",
       "restart iis services command prompt"
     ],
-    "answer": "Copilot4DevOps needs the WebSocket configuration section unlocked in IIS. In an elevated Command Prompt, run: `%windir%\\system32\\inetsrv\\appcmd unlock config /section:system.webServer/webSocket`. Then restart IIS's services: `net stop was /y` followed by `net start w3svc`. These two steps unlock WebSocket support and bring IIS back up with the change applied — do this after configuring appsettings.json and before testing the site.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "Copilot4DevOps needs the WebSocket configuration section unlocked in IIS. In an elevated Command Prompt, run: `%windir%\\system32\\inetsrv\\appcmd unlock config /section:system.webServer/webSocket`. Then restart IIS's services: `net stop was /y` followed by `net start w3svc`. These two steps unlock WebSocket support and bring IIS back up with the change applied — do this after configuring appsettings.json and before testing the site."
   },
   {
     "id": "cp-onprem-verify-running",
     "title": "Copilot4DevOps on-premises — verifying the deployment worked",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 16,
     "keywords": [
       "copilot4devops application is running message",
@@ -5084,12 +5085,12 @@
       "test copilot4devops in azure devops",
       "multi-lingual mode enabled build version"
     ],
-    "answer": "After deploying and configuring the site, open its URL in a browser (from IIS Manager's \"Browse Website\" action, or the URL you bound it to). A working deployment shows a plain-text confirmation like \"Copilot4DevOps vX.X (Build: v0.x.x.x) application is running.\" with a multilingual-mode status line — this page appearing means IIS, the app pool, and the appsettings.json connections are all correctly wired up. From there, log into your Azure DevOps account and exercise the actual Copilot4DevOps functionality (or check the About section for the version) to confirm it's fully working, not just that the site responds.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "After deploying and configuring the site, open its URL in a browser (from IIS Manager's \"Browse Website\" action, or the URL you bound it to). A working deployment shows a plain-text confirmation like \"Copilot4DevOps vX.X (Build: v0.x.x.x) application is running.\" with a multilingual-mode status line — this page appearing means IIS, the app pool, and the appsettings.json connections are all correctly wired up. From there, log into your Azure DevOps account and exercise the actual Copilot4DevOps functionality (or check the About section for the version) to confirm it's fully working, not just that the site responds."
   },
   {
     "id": "cp-onprem-upgrade-v6-to-v9",
     "title": "Copilot4DevOps on-premises — upgrading from v6 (or later) to v9",
+    "sourceDoc": "On-Premises Copilot4DevOps Upgrade Guide",
     "page": 3,
     "keywords": [
       "upgrade copilot4devops v6 to v9",
@@ -5102,12 +5103,12 @@
       "upgrading copilot4devops",
       "uninstall old net core runtime before upgrade"
     ],
-    "answer": "To upgrade an existing on-premises Copilot4DevOps from v6 or later to v9: confirm the current install is fully functional with MongoDB 7.x+ first, verify Web Socket is enabled in IIS, uninstall the WebDAV Common HTTP Feature if present (restart after), and make sure IIS URL Rewrite is installed. Uninstall the older Microsoft ASP.NET Core Runtime 8.0.x Hosting Bundle and install .NET Core 10.0.x in its place, and confirm the Visual C++ Redistributable 2022 package is present. Then in IIS Manager stop the Copilot4DevOps site and remove it, and rename the existing install folder (e.g. C:\\Inetpub\\Copilot4DevOps → C:\\Inetpub\\Copilot4DevOpsOld, or append the old version number) rather than deleting it.\n\nIf the server's current setup already uses a Docker-based Redis Stack Server, an external Ubuntu Server VM running Redis Stack Server, or WSL-based Ubuntu with Redis Stack Server, you can skip the WSL/Docker/Redis Stack setup steps entirely and go straight to redeploying the files (extract the new v9 package to the original path), recreating the IIS site, and updating appsettings.json's connection strings, SSL thumbprint, and allowed domains the same way as a fresh install. Only servers upgrading from a version earlier than v6 need to go through the full WSL/Docker/Redis Stack setup from scratch. Copilot4DevOps v9 requires Azure DevOps Server 2022 or later.",
-    "sourceDoc": "On-Premises Copilot4DevOps Upgrade Guide"
+    "answer": "To upgrade an existing on-premises Copilot4DevOps from v6 or later to v9: confirm the current install is fully functional with MongoDB 7.x+ first, verify Web Socket is enabled in IIS, uninstall the WebDAV Common HTTP Feature if present (restart after), and make sure IIS URL Rewrite is installed. Uninstall the older Microsoft ASP.NET Core Runtime 8.0.x Hosting Bundle and install .NET Core 10.0.x in its place, and confirm the Visual C++ Redistributable 2022 package is present. Then in IIS Manager stop the Copilot4DevOps site and remove it, and rename the existing install folder (e.g. C:\\Inetpub\\Copilot4DevOps → C:\\Inetpub\\Copilot4DevOpsOld, or append the old version number) rather than deleting it.\n\nIf the server's current setup already uses a Docker-based Redis Stack Server, an external Ubuntu Server VM running Redis Stack Server, or WSL-based Ubuntu with Redis Stack Server, you can skip the WSL/Docker/Redis Stack setup steps entirely and go straight to redeploying the files (extract the new v9 package to the original path), recreating the IIS site, and updating appsettings.json's connection strings, SSL thumbprint, and allowed domains the same way as a fresh install. Only servers upgrading from a version earlier than v6 need to go through the full WSL/Docker/Redis Stack setup from scratch. Copilot4DevOps v9 requires Azure DevOps Server 2022 or later."
   },
   {
     "id": "cp-onprem-integrate-with-mr4devops",
     "title": "Integrating Copilot4DevOps with an existing Modern Requirements4DevOps install",
+    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide",
     "page": 17,
     "keywords": [
       "copilot4devops.applicationurl setting",
@@ -5118,12 +5119,12 @@
       "connect copilot4devops to modern requirements4devops",
       "applicationurl"
     ],
-    "answer": "When Copilot4DevOps and Modern Requirements4DevOps run on the same server as separate IIS sites, MR4DevOps needs to be told where to find Copilot4DevOps. In IIS Manager, open the Copilot4DevOps site and copy its URL from the Browse Website panel. Then select the Modern Requirements4DevOps site, open Application Settings, and edit the Copilot4DevOps.ApplicationUrl property, setting its value to the URL you just copied. Restart the IIS web server for the change to take effect, then confirm the integration by using a Copilot4DevOps-powered feature from within Modern Requirements4DevOps.",
-    "sourceDoc": "Copilot4DevOps On-Premises Setup Guide"
+    "answer": "When Copilot4DevOps and Modern Requirements4DevOps run on the same server as separate IIS sites, MR4DevOps needs to be told where to find Copilot4DevOps. In IIS Manager, open the Copilot4DevOps site and copy its URL from the Browse Website panel. Then select the Modern Requirements4DevOps site, open Application Settings, and edit the Copilot4DevOps.ApplicationUrl property, setting its value to the URL you just copied. Restart the IIS web server for the change to take effect, then confirm the integration by using a Copilot4DevOps-powered feature from within Modern Requirements4DevOps."
   },
   {
     "id": "cp-onprem-handler-mappings-put-verb",
     "title": "Copilot4DevOps on-premises — allowing the PUT verb in IIS Handler Mappings and Request Filtering",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide",
     "page": 17,
     "keywords": [
       "extensionlessurlhandler-integrated-4.0 put verb",
@@ -5136,12 +5137,12 @@
       "put requests failing",
       "put method not allowed copilot4devops"
     ],
-    "answer": "Copilot4DevOps needs the PUT HTTP verb allowed in two separate IIS settings on its site, or certain requests will fail. First, in IIS Manager, open the Copilot4DevOps site's Handler Mappings, find ExtensionlessUrlHandler-Integrated-4.0, double-click it, click Request Restrictions, switch to the Verbs tab, and either select \"All verbs\" or select \"One of the following verbs\" and explicitly append `,PUT` to the list (e.g. `GET,HEAD,POST,DEBUG,PUT`). Second, open Request Filtering on the same site, go to the HTTP Verbs tab: if PUT is listed with Allowed = False, right-click it and choose Remove; if it isn't listed at all, click Allow Verb and add PUT.",
-    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+    "answer": "Copilot4DevOps needs the PUT HTTP verb allowed in two separate IIS settings on its site, or certain requests will fail. First, in IIS Manager, open the Copilot4DevOps site's Handler Mappings, find ExtensionlessUrlHandler-Integrated-4.0, double-click it, click Request Restrictions, switch to the Verbs tab, and either select \"All verbs\" or select \"One of the following verbs\" and explicitly append `,PUT` to the list (e.g. `GET,HEAD,POST,DEBUG,PUT`). Second, open Request Filtering on the same site, go to the HTTP Verbs tab: if PUT is listed with Allowed = False, right-click it and choose Remove; if it isn't listed at all, click Allow Verb and add PUT."
   },
   {
     "id": "cp-onprem-encryption-env-vars-apppool",
     "title": "Copilot4DevOps on-premises — setting the MR_COPILOT_ENCRYPTION environment variables on the app pool",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide",
     "page": 19,
     "keywords": [
       "mr_copilot_encryption_legacy_key",
@@ -5152,12 +5153,12 @@
       "appcmd recycle apppool copilot4devops",
       "set environment variables copilot4devops app pool"
     ],
-    "answer": "Copilot4DevOps's application pool needs four encryption-related environment variables set directly on it. In an elevated Command Prompt, run `cd C:\\Windows\\System32\\inetsrv`, then use `appcmd set config -section:system.applicationHost/applicationPools /+\"[name='Copilot4DevOps'].environmentVariables.[name='<VAR_NAME>',value='<value>']\" /commit:apphost` once each for MR_COPILOT_ENCRYPTION_LEGACY_KEY, MR_COPILOT_ENCRYPTION_LEGACY_IVHEX, MR_COPILOT_ENCRYPTION_UTILITY_AESKEY, and MR_COPILOT_ENCRYPTION_UTILITY_AESIV (use the exact values provided for your deployment, not placeholders), then run `appcmd recycle apppool /apppool.name:\"Copilot4DevOps\"` to apply them. Because these commands are long, paste them into Notepad first and check they haven't been split or line-wrapped incorrectly before copying each one into Command Prompt — a broken command here is a common cause of the app pool failing to pick up the keys.",
-    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+    "answer": "Copilot4DevOps's application pool needs four encryption-related environment variables set directly on it. In an elevated Command Prompt, run `cd C:\\Windows\\System32\\inetsrv`, then use `appcmd set config -section:system.applicationHost/applicationPools /+\"[name='Copilot4DevOps'].environmentVariables.[name='<VAR_NAME>',value='<value>']\" /commit:apphost` once each for MR_COPILOT_ENCRYPTION_LEGACY_KEY, MR_COPILOT_ENCRYPTION_LEGACY_IVHEX, MR_COPILOT_ENCRYPTION_UTILITY_AESKEY, and MR_COPILOT_ENCRYPTION_UTILITY_AESIV (use the exact values provided for your deployment, not placeholders), then run `appcmd recycle apppool /apppool.name:\"Copilot4DevOps\"` to apply them. Because these commands are long, paste them into Notepad first and check they haven't been split or line-wrapped incorrectly before copying each one into Command Prompt — a broken command here is a common cause of the app pool failing to pick up the keys."
   },
   {
     "id": "cp-onprem-docker-autostart-task-scheduler",
     "title": "Copilot4DevOps on-premises — starting Docker automatically after a server reboot",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide",
     "page": 26,
     "keywords": [
       "docker not running after server restart",
@@ -5171,12 +5172,12 @@
       "redis stack container down",
       "docker after reboot"
     ],
-    "answer": "Since Copilot4DevOps depends on the Redis Stack Server container, Docker Desktop needs to come back up automatically whenever the server reboots — it doesn't do this on its own by default. Create a Windows Task Scheduler task (taskschd.msc): on the General tab, run whether the user is logged on or not, with highest privileges; on the Triggers tab, trigger \"At startup\" with a ~30 second delay (to avoid conflicting with other services still starting); on the Actions tab, start a program pointing at Docker Desktop's executable (e.g. `\"C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe\"`); on the Conditions tab, uncheck all the idle/power/network conditions; and on the Settings tab, allow the task to run on demand, run it as soon as possible after a missed start, retry every 5 minutes up to 3 attempts on failure, and force-stop it if it doesn't end when requested. After saving, restart the server and confirm both the scheduled task ran (Task Scheduler's Last Run Result) and the Redis Stack container is up (`docker ps` in PowerShell).",
-    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+    "answer": "Since Copilot4DevOps depends on the Redis Stack Server container, Docker Desktop needs to come back up automatically whenever the server reboots — it doesn't do this on its own by default. Create a Windows Task Scheduler task (taskschd.msc): on the General tab, run whether the user is logged on or not, with highest privileges; on the Triggers tab, trigger \"At startup\" with a ~30 second delay (to avoid conflicting with other services still starting); on the Actions tab, start a program pointing at Docker Desktop's executable (e.g. `\"C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe\"`); on the Conditions tab, uncheck all the idle/power/network conditions; and on the Settings tab, allow the task to run on demand, run it as soon as possible after a missed start, retry every 5 minutes up to 3 attempts on failure, and force-stop it if it doesn't end when requested. After saving, restart the server and confirm both the scheduled task ran (Task Scheduler's Last Run Result) and the Redis Stack container is up (`docker ps` in PowerShell)."
   },
   {
     "id": "cp-onprem-deploy-extension-azure-devops-server",
     "title": "Copilot4DevOps on-premises — generating and installing the Copilot4DevOps extension in Azure DevOps Server",
+    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide",
     "page": 31,
     "keywords": [
       "copilot4devops extension maker vsix",
@@ -5191,7 +5192,6 @@
       "copilot4devops extension",
       "install extension azure devops server"
     ],
-    "answer": "After deploying the Copilot4DevOps web application itself, it still needs to be installed as an extension in Azure DevOps Server (on-premises only) before it shows up on Azure Boards. Run the Extension Maker executable (provided by the Modern Requirements team), enter the Copilot4DevOps site's URL when prompted, and generate the .vsix package (edevtech-mr.CoPilot4DevOps-x.x.x.vsix) — save it somewhere secure.\n\nThen, signed in to Azure DevOps Server as an account with permission to install extensions: open the Marketplace icon → Manage Extensions → Browse local extensions → Manage Extensions (button) → Upload Extension, and upload the .vsix file. Once it's installed, refresh Browse Local Extensions, select the CoPilot4DevOps tile, click \"Get it free\", choose the Team Project Collection to install it into, and click Install. Once done, the extension appears on the Azure Boards tiles for that collection, and opening it shows the Copilot4DevOps chat screen (Chat, Elicit, Analyze, Impact Assessment, etc.).",
-    "sourceDoc": "Copilot4DevOps V9 On-Premises Setup Guide"
+    "answer": "After deploying the Copilot4DevOps web application itself, it still needs to be installed as an extension in Azure DevOps Server (on-premises only) before it shows up on Azure Boards. Run the Extension Maker executable (provided by the Modern Requirements team), enter the Copilot4DevOps site's URL when prompted, and generate the .vsix package (edevtech-mr.CoPilot4DevOps-x.x.x.vsix) — save it somewhere secure.\n\nThen, signed in to Azure DevOps Server as an account with permission to install extensions: open the Marketplace icon → Manage Extensions → Browse local extensions → Manage Extensions (button) → Upload Extension, and upload the .vsix file. Once it's installed, refresh Browse Local Extensions, select the CoPilot4DevOps tile, click \"Get it free\", choose the Team Project Collection to install it into, and click Install. Once done, the extension appears on the Azure Boards tiles for that collection, and opening it shows the Copilot4DevOps chat screen (Chat, Elicit, Analyze, Impact Assessment, etc.)."
   }
 ]
