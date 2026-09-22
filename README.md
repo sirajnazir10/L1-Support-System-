@@ -197,26 +197,51 @@ Two ways to add more:
 Restart the server (or just refresh the page — the KB is fetched fresh
 on every load) after editing the file by hand.
 
-## What's in V1 (and isn't)
+## Optional: LLM-backed answers and document upload (v1.1+)
 
-This is **Version 1**: the full customer/agent workflow running for
-real on local keyword matching against the loaded documents — not yet a
-live call to an AI model, and not yet connected to Zendesk, your
-website, or live ticket history. It's built to prove out the exact
-shape of the real pipeline (classify → retrieve → draft → prioritize →
-route → escalate) so the UI, the review workflow, and the knowledge base
-are already real and usable today.
+The app works fully without this — everything below is additive and
+degrades cleanly if unconfigured. By default (no API key set), Nexis
+answers using only the local keyword-matching engine, exactly as
+before.
 
-**Likely V2+ candidates**, once this shape is approved:
-- Swap the keyword matcher for a real model call (semantic search + a
-  drafting model) for better recall on how customers actually phrase
-  things.
+**What it adds:**
+- **More naturally-drafted answers.** The local engine still does all
+  retrieval, entity detection, and honesty-gating (it never guesses,
+  and never hands the model anything to answer beyond the documentation
+  it already validated) — an LLM call is only used to phrase that
+  already-validated answer more naturally. If the call fails or isn't
+  configured, the reply falls straight back to the local engine's own
+  wording, so the app never depends on the LLM to function.
+- **Upload a document** (Agent Console → Knowledge Base → "Upload a
+  document"): upload a PDF, Word (.docx), .txt, or .md file, and an LLM
+  pass proposes distinct knowledge-base entries from it. Nothing is
+  saved automatically — you review, edit, and approve each proposed
+  entry before it's added, the same way manually-added entries work.
+
+**To turn this on**, set an environment variable before starting the
+server:
+```
+set ANTHROPIC_API_KEY=your-key-here      (Windows)
+export ANTHROPIC_API_KEY=your-key-here   (macOS/Linux)
+npm start
+```
+Get a key from [console.anthropic.com](https://console.anthropic.com).
+The key is only ever read from this environment variable — it's never
+written to a file, logged, or sent anywhere but Anthropic's API.
+Optionally set `NEXIS_MODEL` to pick a different model (defaults to
+`claude-sonnet-5`).
+
+## What's still local-only (and isn't)
+
+Not yet connected to Zendesk, your website, or live ticket history —
+tickets and content still flow in through the Customer Portal and the
+"Add documentation" / upload panels, not automatically.
+
+**Likely next candidates:**
 - Connect to Zendesk and the website so tickets and content flow in
-  automatically instead of manual "Add documentation" entries.
+  automatically.
+- Semantic (embedding-based) search instead of keyword matching, for
+  even better recall on unusual phrasing.
 - User accounts/login for agents, instead of a single shared console.
 - HTTPS and a proper database (instead of JSON files) once this moves
   off a single machine.
-
-Each future version can keep living in this same repo — bump the
-`version` in `package.json` and the `V1` label in the page header when
-that work starts.
