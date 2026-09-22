@@ -686,13 +686,79 @@
     "versionpackages": "version packages", "documentmanagement": "document management",
     "adminpanel": "admin panel", "emailmonitor": "email monitor", "customid": "custom id",
     "suspectlinks": "suspect links", "wordimport": "word import", "linkedartifacts": "linked artifacts",
-    "copilot4devops": "copilot4devops"
+    "copilot4devops": "copilot4devops", "agents4devops": "agents4devops",
+    "compliance4devops": "compliance4devops"
   };
+  // ---------------- typo tolerance ----------------
+  // A single mistyped word ("licnece" for "licence") makes it match no keyword and no entity,
+  // so the message looks topic-less and falls through to a weak, coincidental token match on
+  // unrelated documents instead of the real topic. Corrected here, before anything else runs,
+  // against this app's own vocabulary only (never a general dictionary) — and only when the
+  // first two letters already agree, so an unrelated real word is never reinterpreted.
+  function damerauLevenshtein(a, b){
+    var m = a.length, n = b.length, d = [], i, j;
+    for(i = 0; i <= m; i++){ d[i] = [i]; }
+    for(j = 0; j <= n; j++){ d[0][j] = j; }
+    for(i = 1; i <= m; i++){
+      for(j = 1; j <= n; j++){
+        var cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+        if(i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]){
+          d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + cost);
+        }
+      }
+    }
+    return d[m][n];
+  }
+  var typoVocabCache = null;
+  function typoVocab(){
+    if(typoVocabCache) return typoVocabCache;
+    var words = {};
+    function add(w){ w = String(w || '').toLowerCase(); if(w.length >= 5) words[w] = true; }
+    Object.keys(SYNONYMS).forEach(function(k){ add(k); SYNONYMS[k].forEach(add); });
+    Object.keys(PHRASE_SYNONYMS).forEach(function(p){ p.split(' ').forEach(add); PHRASE_SYNONYMS[p].forEach(add); });
+    Object.keys(ABBREVIATIONS).forEach(function(k){ ABBREVIATIONS[k].split(' ').forEach(add); });
+    Object.keys(GLUED_TERMS).forEach(function(k){ GLUED_TERMS[k].split(' ').forEach(add); });
+    ENTITIES.forEach(function(ent){ ent.match.forEach(function(m){ m.split(' ').forEach(add); }); });
+    ['licence', 'license', 'licensing', 'documentation', 'authentication', 'installation', 'installed', 'installer'].forEach(add);
+    typoVocabCache = Object.keys(words);
+    return typoVocabCache;
+  }
+  function correctTypo(word){
+    if(word.length < 5) return word;
+    var vocab = typoVocab();
+    if(vocab.indexOf(word) !== -1) return word;
+    var best = null, bestDist = Infinity;
+    for(var i = 0; i < vocab.length; i++){
+      var v = vocab[i];
+      if(v.charAt(0) !== word.charAt(0) || v.charAt(1) !== word.charAt(1)) continue;
+      if(Math.abs(v.length - word.length) > 2) continue;
+      // A plain trailing "s" is a plural, not a typo (e.g. "agents" must never fold into
+      // "agent") — singular/plural pairs are exactly one edit apart and would otherwise
+      // always look like a correction.
+      if(word === v + 's' || v === word + 's') continue;
+      // A single edit is enough for every real typo this needs to catch (transposition,
+      // one wrong/missing letter). Allowing two, even only for longer words, was enough
+      // slack to fold unrelated real words into each other (e.g. "reviews" -> "reviewer").
+      var dist = damerauLevenshtein(word, v);
+      if(dist <= 1 && dist < bestDist){ bestDist = dist; best = v; }
+    }
+    return best || word;
+  }
+  function correctTypos(text){ return text.replace(/[a-z]{5,}/g, correctTypo); }
+
   function normalizeQuery(text){
     var s = String(text || '');
+    // Protect "DevOps" from the camelCase splitter below — it's a fixed brand suffix (Azure
+    // DevOps, Copilot4DevOps, Modern Requirements4DevOps), not two separate words, but the
+    // splitter would otherwise read the internal lowercase-o-to-uppercase-O boundary as a
+    // PascalCase break and turn every correctly-capitalized product name into "...dev ops",
+    // silently breaking every keyword/glued-term match that depends on the joined form.
+    s = s.replace(/dev\s*ops/gi, 'zzzdevopszzz');
     // split camelCase / PascalCase boundaries ("SmartDocs" -> "Smart Docs") before lowercasing
     s = s.replace(/([a-z])([A-Z])/g, '$1 $2');
     s = s.toLowerCase();
+    s = s.replace(/zzzdevopszzz/g, 'devops');
     // punctuation to spaces, except the digits/letters inside product names like copilot4devops
     s = s.replace(/[^\w\s@.&/-]/g, ' ');
     // expand glued product terms
@@ -703,6 +769,12 @@
     Object.keys(ABBREVIATIONS).forEach(function(a){
       s = s.replace(new RegExp('\\b' + a + '\\b', 'g'), ABBREVIATIONS[a]);
     });
+    // Bare "mr" (any case — already lowercased above) means Modern Requirements4DevOps, but it's
+    // also the honorific ("Mr. Smith") and the start of a ticket ID ("MR-1023"), so it gets a
+    // narrower expansion than the generic ABBREVIATIONS loop: skip when followed by a period
+    // (title) or a hyphen+digits (ticket ID).
+    s = s.replace(/\bmr\b(?!\.)(?!-\d)/g, 'modern requirements4devops');
+    s = correctTypos(s);
     return s.replace(/\s+/g, ' ').trim();
   }
 
@@ -773,7 +845,7 @@
   // Applied as a tie-break so that when two sources say comparable things, the more current one
   // wins; it never overrides a clearly stronger textual match.
   var SOURCE_TIERS = [
-    { tier: 1, label: 'Current official documentation', test: function(d){ return /NextGen Online Help/i.test(d); } },
+    { tier: 1, label: 'Current official documentation', test: function(d){ return /NextGen Online Help|modernrequirements\.com/i.test(d); } },
     { tier: 2, label: 'Official release notes', test: function(d){ return /Release Notes/i.test(d); } },
     { tier: 3, label: 'Version-specific KB / technote', test: function(d){ return /Technote|Guide/i.test(d); } }
   ];
@@ -893,7 +965,14 @@
     { name: 'MR Services', product: 'MR4DevOps', match: ['mr services', 'mr agent', 'email monitor', 'custom id', 'suspect links', 'matcal'] },
     { name: 'Admin Panel', product: 'MR4DevOps', match: ['admin panel', 'admin configuration'] },
     { name: 'Licensing', product: 'MR4DevOps', match: ['licen', 'activation', 'seat'] },
-    { name: 'Copilot4DevOps', product: 'Copilot4DevOps', match: ['copilot4devops'] }
+    { name: 'Copilot4DevOps', product: 'Copilot4DevOps', match: ['copilot4devops'] },
+    { name: 'Agents4DevOps', product: 'Agents4DevOps', match: ['agents4devops'] },
+    { name: 'Compliance4DevOps', product: 'Compliance4DevOps', match: ['compliance4devops'] },
+    { name: 'AI Sync Bridge', product: 'AI Sync Bridge', match: ['ai sync bridge', 'sync bridge'] },
+    // The base product itself — "MR", "tell me about MR4DevOps" — as opposed to any of its
+    // individual features above. Kept last and filtered below so it never outranks or gets
+    // treated as a second topic alongside a more specific feature also named in the same message.
+    { name: 'Modern Requirements4DevOps', product: 'MR4DevOps', match: ['modern requirements4devops'] }
   ];
   function detectEntities(normalized){
     var found = [];
@@ -905,6 +984,12 @@
         }
       }
     });
+    // A generic "...in Modern Requirements4DevOps" mention alongside a named feature isn't a
+    // second topic — drop the umbrella-product match so it doesn't manufacture false ambiguity
+    // between (say) "Baseline" and the product Baseline is part of.
+    if(found.length > 1){
+      found = found.filter(function(e){ return e.name !== 'Modern Requirements4DevOps'; });
+    }
     return found;
   }
 
@@ -922,6 +1007,32 @@
     if(/should it|supposed to|expected|is it normal/.test(normalized)) return 'expected-vs-unexpected';
     if(/what is|what does|how does|how do|how can|explain|where is/.test(normalized)) return 'how-it-works';
     return 'general-info';
+  }
+
+  // ---------------- small talk ----------------
+  // Greetings, thanks, and "who are you" are not product questions — routing them through
+  // Section 6/7 (retrieve -> validate -> cite-or-refuse) just produces the cold "I don't know
+  // which product area this is about" reply for messages that were never asking about a product
+  // area in the first place. Caught here, before retrieval, so a plain "hi" gets a plain reply.
+  var GREETING_RE = /^(hi|hello|hey|hiya|yo|howdy|good\s?(morning|afternoon|evening))[\s,!.]*(there|nexis|team)?[\s,!.]*$/;
+  var THANKS_RE = /^(thanks|thank\s?you|thankyou|thx|ty|much appreciated|appreciate it|cheers)[\s,!.]*(so much|a lot|very much|nexis)?[\s,!.]*$/;
+  var BYE_RE = /^(bye|goodbye|see you( (later|soon|around|then))?|see ya|later|take care|that('?s| is) all|that('?s| is) it|all good( now)?)[\s,!.]*$/;
+  var HOWAREYOU_RE = /^how('?s| is| are)\s+(you|it going|things)\b/;
+  var WHOAMI_RE = /^(who|what)\s+are\s+you\b|^what\s+can\s+you\s+do\b|^what\s+is\s+nexis\b/;
+  var GREETING_REPLIES = [
+    "Hi! What can I help you with today — anything about Modern Requirements4DevOps or Copilot4DevOps?",
+    "Hello! Happy to help — what's going on?",
+    "Hey there! What would you like a hand with?"
+  ];
+  function smallTalkReply(rawText){
+    var t = String(rawText || '').trim().toLowerCase().replace(/[!?.]+$/, '');
+    if(!t) return null;
+    if(WHOAMI_RE.test(t)) return "I'm Nexis, the product assistant for Modern Requirements4DevOps and Copilot4DevOps. I answer from the " + KB.length + " indexed sections of documentation loaded here, and I'll tell you plainly if something isn't covered rather than guess. What can I help with?";
+    if(HOWAREYOU_RE.test(t)) return "Doing well, thanks for asking! What can I help you with today?";
+    if(THANKS_RE.test(t)) return "You're welcome! Let me know if anything else comes up.";
+    if(BYE_RE.test(t)) return "Take care — I'm here whenever you need me again.";
+    if(GREETING_RE.test(t)) return GREETING_REPLIES[Math.floor(Math.random() * GREETING_REPLIES.length)];
+    return null;
   }
 
   function detectVersion(normalized){
@@ -974,7 +1085,11 @@
     }
     if(!entities.length && matches.length >= 2){
       var a = matches[0], b = matches[1];
-      if(a.entry.sourceDoc !== b.entry.sourceDoc && Math.abs(a.score - b.score) < 0.4){
+      // Both candidates need a real keyword/phrase hit of their own, not just weak stemmed
+      // token overlap — otherwise two coincidentally-close near-zero scores (e.g. a message with
+      // no real topic in it at all) get presented as a genuine two-way choice between unrelated
+      // documents, which reads as nonsense rather than an honest "I don't know."
+      if(a.keywordScore > 0 && b.keywordScore > 0 && a.entry.sourceDoc !== b.entry.sourceDoc && Math.abs(a.score - b.score) < 0.4){
         return { ambiguous: true, what: 'the wording fits two different areas equally well', options: [friendlyTopicName(a.entry.sourceDoc), friendlyTopicName(b.entry.sourceDoc)] };
       }
     }
@@ -1056,13 +1171,25 @@
       return { pass: false, problems: problems };
     }
     var top = draft.usedMatches[0];
-    if(top.keywordScore === 0 && !draft.anchoredToContext){
-      problems.push('Top source has no direct topical overlap with the question wording.');
-    }
     // The answer must be about the feature the customer actually named (Section 7: never
     // answer an adjacent topic that happened to surface in retrieval). When several features
     // were named, the one committed to after clarification is the one that must match.
     var committed = reasoning.committedEntity || (reasoning.entities.length === 1 ? reasoning.entities[0] : null);
+    // A document whose own title/source says it's about the entity the customer named is
+    // strong-enough evidence on its own — a typo or unusual phrasing ("tell me abaout MR")
+    // can knock out every literal keyword-phrase match without the topic itself being any
+    // less certain, and this shouldn't force a false "not confident" reply in that case.
+    // ...but only for a genuine "what is / tell me about" style ask — a described problem
+    // ("my license is NOT WORKING") must still clear the real keyword bar, since a document
+    // merely being *about* the named topic (e.g. how to reach the activation page) doesn't
+    // mean it answers what's actually wrong. This is exactly the case the strict check exists
+    // to catch, so it stays strict whenever the message reads like a complaint, not an ask.
+    var isOverviewIntent = reasoning.intent === 'how-it-works' || reasoning.intent === 'general-info';
+    var describesAProblem = HIGH_PRIORITY_WORDS.concat(MED_PRIORITY_WORDS).some(function(w){ return reasoning.restated.indexOf(w) !== -1; });
+    var topIsAboutCommitted = committed && isOverviewIntent && !describesAProblem && isAboutEntity(top.entry, committed.match);
+    if(top.keywordScore === 0 && !draft.anchoredToContext && !topIsAboutCommitted){
+      problems.push('Top source has no direct topical overlap with the question wording.');
+    }
     if(committed){
       var haystack = (top.entry.sourceDoc + ' ' + top.entry.title + ' ' + top.entry.keywords.join(' ')).toLowerCase();
       if(haystack.indexOf(committed.match) === -1){
@@ -1153,6 +1280,38 @@
         });
       assumption = 'a question about ' + committedEntity.name;
       if(!usedMatches.length) validatedTopic = false;
+    } else if(!ambiguity.ambiguous && entities.length === 1){
+      // A single, clearly named feature or product isn't ambiguous at all — a common term the
+      // customer named outright. Scope straight to it and answer, the same way a forced commit
+      // does after two failed clarification rounds, instead of first requiring the raw free-text
+      // search to separately clear the generic keyword bar. No "I'm assuming..." hedge here —
+      // unlike a forced commit, the customer's own wording already said exactly which one they
+      // meant, so there's nothing to hedge about. Only takes effect if this actually finds
+      // something for that entity; otherwise falls through unchanged, no regression risk.
+      // Searches the whole KB, not just rawMatches — a query that's otherwise noisy (a typo, an
+      // odd phrasing) can score below findMatches' own threshold and never reach rawMatches at
+      // all, even though the entity itself was identified with certainty from the same text.
+      var entityQueryStems = expandQueryStems(normalized);
+      var scoped = KB
+        .filter(function(e){
+          var hay = (e.sourceDoc + ' ' + e.title + ' ' + e.keywords.join(' ')).toLowerCase();
+          return hay.indexOf(entities[0].match) !== -1;
+        })
+        .map(function(e){
+          var s = scoreEntry(e, normalized, entityQueryStems);
+          return { entry: e, score: s.total, keywordScore: s.keywordScore, tokenScore: s.tokenScore };
+        })
+        .sort(function(a, b){
+          var aAbout = isAboutEntity(a.entry, entities[0].match) ? 0 : 1;
+          var bAbout = isAboutEntity(b.entry, entities[0].match) ? 0 : 1;
+          if(aAbout !== bAbout) return aAbout - bAbout;
+          return rankMatches(a, b);
+        });
+      if(scoped.length){
+        committedEntity = entities[0];
+        usedMatches = scoped;
+        validatedTopic = true;
+      }
     }
 
     var topEntry = usedMatches.length ? usedMatches[0].entry : null;
@@ -1188,6 +1347,10 @@
 
     var named = committedEntity ? committedEntity.name
       : (entities.length === 1 ? entities[0].name : (topEntry ? entityNameForEntry(topEntry) : null));
+    // Narrower than `named`: only a feature the customer's own wording actually identified
+    // (never the accidental top scorer of an unvalidated search) — safe to state as fact in
+    // the "nothing usable retrieved" branch below, where topEntry is noise by definition.
+    var confidentlyNamed = committedEntity ? committedEntity.name : (entities.length === 1 ? entities[0].name : null);
 
     function unsettled(understanding, answer, nextStep, missingWhat, cause){
       reasoning.possibleCause = cause || null;
@@ -1204,8 +1367,8 @@
     if(ambiguity.ambiguous && rounds < 2){
       var opts = ambiguity.options.map(function(o, i){ return '(' + String.fromCharCode(97 + i) + ') ' + o; }).join(', ');
       return {
-        understanding: 'You have asked about something that could apply to more than one part of the product.',
-        answer: 'I can answer this properly, I just want to be sure I answer for the right one rather than guess.',
+        understanding: "That could apply to more than one part of the product.",
+        answer: "I'd rather confirm which one than guess and risk answering the wrong part.",
         nextStep: 'Which one do you mean: ' + opts + ', or something else?',
         investigate: true,
         missingWhat: 'which feature the question is about',
@@ -1222,17 +1385,23 @@
     if(!validatedTopic || !usedMatches.length){
       if(ctx.lastSourceDoc){
         return unsettled(
-          'You are asking a follow-up about ' + (ctx.lastTopicLabel || 'what we were just discussing') + ', but I cannot tell yet exactly which part.',
-          'I do not have documentation that covers "' + excerpt(text, 70) + '" specifically, so I would rather not guess at an answer.',
-          'Could you tell me in one line what you are trying to do with ' + (ctx.lastTopicLabel || 'it') + '?',
+          "Following up on " + (ctx.lastTopicLabel || 'what we were just discussing') + " — I'm just not sure yet exactly which part you mean.",
+          "I don't have documentation that covers \"" + excerpt(text, 70) + "\" specifically, and I'd rather ask than guess.",
+          'Could you tell me in one line what you’re trying to do with ' + (ctx.lastTopicLabel || 'it') + '?',
           'a clearer description of what you are trying to do',
           'POSSIBLE: the question may relate to a part of this feature that is not documented in the loaded material.'
         );
       }
       return unsettled(
-        attachments.count && !text ? 'You have sent an attachment without a description of the problem.' : 'I am not yet sure which product area your question is about.',
-        'I do not have enough verified information to answer this confidently, and I do not want to guess.',
-        'Which product and feature is this about — for example Modern Requirements4DevOps (Smart Docs, Baseline, Review, Trace Analysis) or Copilot4DevOps?',
+        attachments.count && !text
+          ? "Thanks for sending that over."
+          : confidentlyNamed
+            ? ("This looks like it's about " + confidentlyNamed + ".")
+            : "I can see you have a question, but I'm not yet sure which part of the product it's about.",
+        "I don't have a confident, verified answer for this in the documentation, and I'd rather ask than guess.",
+        confidentlyNamed
+          ? ('Could you tell me more about what’s happening with ' + confidentlyNamed + ' — the exact error or behaviour you’re seeing, and whether it’s Embedded or Standalone?')
+          : 'Which product and feature is this about — for example Modern Requirements4DevOps (Smart Docs, Baseline, Review, Trace Analysis) or Copilot4DevOps?',
         'the product and feature involved',
         null
       );
@@ -1246,11 +1415,11 @@
     if(!verdict.pass){
       reasoning.possibleCause = 'POSSIBLE: closest material found was "' + topEntry.title + '" (' + topEntry.sourceDoc + '), which did not survive validation.';
       return unsettled(
-        named ? ('You are asking about ' + named + '.') : ('You are asking about "' + excerpt(text, 70) + '".'),
-        'I could not confirm an answer to this from the current documentation. The closest material I found does not actually answer what you asked, so I am not going to present it as if it did.',
+        named ? ('You’re asking about ' + named + '.') : ('You’re asking about "' + excerpt(text, 70) + '".'),
+        "I couldn't confirm an answer to this from the current documentation. The closest material I found doesn't actually answer what you asked, so I won't present it as if it did.",
         intent === 'error'
-          ? 'Could you send the exact error message or a screenshot, and confirm whether you are on Azure DevOps cloud or an on-premises server?'
-          : 'Could you confirm the exact feature and what you are trying to do, and I will check it properly?',
+          ? "Could you send the exact error message or a screenshot, and let me know whether you're on Azure DevOps cloud or an on-premises server?"
+          : "Could you tell me a bit more about the exact feature and what you're trying to do? I'll check it properly.",
         'verified documentation covering this exact question',
         reasoning.possibleCause
       );
@@ -2111,10 +2280,20 @@
       return;
     }
 
-    var html = '';
-    if(payload.understanding) html += '<div class="rsec"><b>Understanding</b><br/>' + escapeHtml(payload.understanding) + '</div>';
-    if(payload.answer) html += '<div class="rsec"><b>Answer</b><br/>' + escapeHtml(payload.answer).replace(/\n/g, '<br/>') + '</div>';
-    if(payload.nextStep) html += '<div class="rsec"><b>Next step</b><br/>' + escapeHtml(payload.nextStep) + '</div>';
+    // Rendered as one flowing paragraph, not three separately-labeled blocks — a person
+    // doesn't preface an answer with a bolded "Understanding:" header. The underlying fields
+    // stay separate (composeNexisReply, the ticket transcript, and the agent console all still
+    // use them individually) — this only changes how the customer-facing bubble displays them.
+    var parts = [payload.understanding, payload.answer, payload.nextStep].filter(Boolean);
+    // Normally these read as consecutive sentences of one paragraph (space-joined). But when a
+    // part is itself a multi-line block (a bulleted list inside the answer), running the next
+    // sentence straight onto its last line reads as if it were part of the list — so that join
+    // gets its own blank line instead of a space.
+    var paragraph = parts.reduce(function(acc, p, i){
+      if(i === 0) return p;
+      return acc + (parts[i - 1].indexOf('\n') !== -1 ? '\n\n' : ' ') + p;
+    }, '');
+    var html = paragraph ? '<div class="rsec">' + escapeHtml(paragraph).replace(/\n/g, '<br/>') + '</div>' : '';
     bubble.innerHTML = html;
     wrap.appendChild(label); wrap.appendChild(bubble);
 
@@ -2152,6 +2331,23 @@
     composer.innerHTML = '';
     sendBtn.disabled = true;
     showTyping();
+
+    var hasAttachment = parts.some(function(p){return p.type==='image'||p.type==='file';});
+    var smalltalk = hasAttachment ? null : smallTalkReply(text);
+    if(smalltalk){
+      setTimeout(function(){
+        hideTyping();
+        addBotMessage(smalltalk);
+        if(liveTicket){
+          liveTicket.messages.push({ role:'user', parts: parts });
+          liveTicket.messages.push({ role:'bot', parts:[{type:'text', value: smalltalk}] });
+          persistTicketUpdate(liveTicket);
+        }
+        sendBtn.disabled = false;
+        composer.focus();
+      }, reduceMotion ? 150 : 500);
+      return;
+    }
 
     // Understand -> check latest knowledge -> analyze -> verify -> answer -> suggest further investigation.
     var minDelay = new Promise(function(resolve){ setTimeout(resolve, reduceMotion ? 150 : 900); });

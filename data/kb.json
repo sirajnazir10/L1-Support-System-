@@ -14,14 +14,14 @@
       "framework",
       "asp.net",
       ".net",
-      "requirement",
-      "requirements",
       "prerequisite",
       "prerequisites",
       "before install",
-      "admin rights"
+      "admin rights",
+      "nextgen",
+      "azure app service"
     ],
-    "answer": "Before installing Modern Requirements4DevOps, your machine needs:\n\n1. Operating System: Windows Server 2019 or 2022 (both 32-bit and 64-bit supported)\n2. Browser: Microsoft Edge, Internet Explorer 10+, Chrome, or Firefox 47.0.1+\n3. Screen resolution: 1280 x 960 or higher\n4. IIS: version 7 or higher\n5. Microsoft .NET Framework: 4.5 or higher\n6. ASP.NET: version matching your installed .NET Framework (e.g. .NET 4.7.2 → ASP.NET 4.7.2)\n7. Multilingual support: Language Pack for IE & Save as Word\n\nThe account installing the application needs administrator rights on the machine, and for regular team projects, admin rights on the TFS Collection (or added in the application domain in IIS).\n\nImportant: for HTTPS, the application must be bound with a trusted CA-signed SSL certificate — a self-signed certificate isn't supported.",
+    "answer": "Before installing Modern Requirements4DevOps, your machine needs:\n\n1. Operating System: Windows Server 2019 or 2022 (both 32-bit and 64-bit supported)\n2. Browser: Microsoft Edge, Internet Explorer 10+, Chrome, or Firefox 47.0.1+\n3. Screen resolution: 1280 x 960 or higher\n4. IIS: version 7 or higher\n5. Microsoft .NET Framework: 4.5 or higher\n6. ASP.NET: version matching your installed .NET Framework (e.g. .NET 4.7.2 → ASP.NET 4.7.2)\n7. Multilingual support: Language Pack for IE & Save as Word\n\nThe account installing the application needs administrator rights on the machine, and for regular team projects, admin rights on the TFS Collection (or added in the application domain in IIS).\n\nImportant: for HTTPS, the application must be bound with a trusted CA-signed SSL certificate — a self-signed certificate isn't supported.\n\nNote: this describes the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), on-premise Azure DevOps Server support now requires ADO Server 2022 or later, supported browsers are current versions of Chrome, Firefox, and Microsoft Edge (Internet Explorer is no longer supported), and hosting moved to a cloud-native Azure App Service model — the Windows Server/IIS/.NET Framework requirements above apply only to the legacy on-premise installation. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -36,9 +36,11 @@
       "docm",
       "dotm",
       "word version",
-      "which word"
+      "which word",
+      "nextgen",
+      "smart import"
     ],
-    "answer": "For Word Import, Modern Requirements4DevOps supports Microsoft Word 2010 or higher, with .docx, .dotx, .docm, and .dotm file extensions.",
+    "answer": "For Word Import, Modern Requirements4DevOps supports Microsoft Word 2010 or higher, with .docx, .dotx, .docm, and .dotm file extensions.\n\nNote: this describes the legacy on-premise (Classic) Word Import feature. In MR4DevOps NextGen (released June 2026), Word Import has been replaced by Smart Import — a guided wizard (Upload → Parse → Map & Classify → Link → Preview → Import) that accepts .docx and PDF files, with duplicate detection and field validation. See the \"Smart Import: turning Word/PDF documents into work items (NextGen)\" entry. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -53,9 +55,10 @@
       "single sign on",
       "sso",
       "azure devops 2019",
-      "azure devops 2022"
+      "azure devops 2022",
+      "nextgen"
     ],
-    "answer": "For the embedded build with Single Sign-On, Modern Requirements4DevOps requires Azure DevOps 2019 or 2022.",
+    "answer": "For the embedded build with Single Sign-On, Modern Requirements4DevOps requires Azure DevOps 2019 or 2022.\n\nNote: this describes the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), on-premise Azure DevOps Server support requires ADO Server 2022 or later — Azure DevOps 2019 is no longer supported. Azure DevOps Services (cloud) is supported on all versions, auto-updated by Microsoft. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -69,9 +72,11 @@
       "hard drive",
       "ssd",
       "storage space",
-      "100000"
+      "100000",
+      "nextgen",
+      "azure app service"
     ],
-    "answer": "Minimum hardware: at least 32 GB of RAM (or higher) if you're executing TFS work item queries greater than 100,000 items, and 256 GB of hard drive/SSD space.",
+    "answer": "Minimum hardware: at least 32 GB of RAM (or higher) if you're executing TFS work item queries greater than 100,000 items, and 256 GB of hard drive/SSD space.\n\nNote: this describes the legacy on-premise (Classic) version, where you provision and size your own server. In MR4DevOps NextGen (released June 2026), the platform runs on a managed, cloud-native Azure App Service with Azure App auto-scaling, so this kind of manual server capacity planning no longer applies. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -82,9 +87,11 @@
       "redis hardware",
       "redis memory",
       "redis disk",
-      "redis storage"
+      "redis storage",
+      "nextgen",
+      "cosmos db"
     ],
-    "answer": "Redis uses approximately 477.8495 KB (0.4666 MB) of memory per user. The maximum hard drive space required is 1.5 × your memory size — e.g. 8 GB of RAM means up to 12 GB of hard drive space for Redis. Make sure your machine has sufficient hardware before installing.",
+    "answer": "Redis uses approximately 477.8495 KB (0.4666 MB) of memory per user. The maximum hard drive space required is 1.5 × your memory size — e.g. 8 GB of RAM means up to 12 GB of hard drive space for Redis. Make sure your machine has sufficient hardware before installing.\n\nNote: this describes the legacy on-premise (Classic) version, which self-hosts Redis and MongoDB. In MR4DevOps NextGen (released June 2026), MongoDB was replaced by Azure Cosmos DB as the managed primary data store, and the platform runs on Azure App Service — there is no self-hosted Redis/MongoDB sizing to plan for. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -98,9 +105,11 @@
       "where to install",
       "install once",
       "exe file",
-      "recommendation install"
+      "recommendation install",
+      "nextgen",
+      "azure app service"
     ],
-    "answer": "Users get a single installation file: Modern Requirements4DevOps 202x.exe. Since it's web-based, it's best installed on a server, though any machine with IIS 7+ works. Installation is required only once — after that, all users with proper access rights can use it without installing anything locally.\n\nRecommendation: install MR on a separate server or VM from Azure DevOps for better scalability, performance, and to avoid resource conflicts with ADO.",
+    "answer": "Users get a single installation file: Modern Requirements4DevOps 202x.exe. Since it's web-based, it's best installed on a server, though any machine with IIS 7+ works. Installation is required only once — after that, all users with proper access rights can use it without installing anything locally.\n\nRecommendation: install MR on a separate server or VM from Azure DevOps for better scalability, performance, and to avoid resource conflicts with ADO.\n\nNote: this describes the legacy on-premise (Classic) installer model. In MR4DevOps NextGen (released June 2026), the product is delivered as a managed, cloud-native Azure App Service aligned natively to Azure DevOps rather than a locally installed .exe. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -116,9 +125,10 @@
       "setup wizard",
       "build type",
       "embedded or standalone",
-      "step by step"
+      "step by step",
+      "nextgen"
     ],
-    "answer": "1. Double-click the Modern Requirements4DevOps 202x Update 1.exe file to start.\n2. Check the license terms and conditions checkbox, then click Next.\n3. Select the build type: Embedded (recommended) or Standalone.\n4. Select the installation type: Single sign-on (TFS 2017 Update 3 / 2018 Update 1 and above only) or Standard.\n5. Click Next.\n6. Configure the MongoDB installation options and click Next/Install.\n7. Configure the Redis Installation options and click Install.\n8. Click Yes on the warning message box — the relevant files are copied and installed.\n9. Click Finish or Run to complete. For the standalone version, that's the last step.\n\nFor the embedded version, a TFS deployment instruction page opens after Finish, walking you through deploying the TFS Extension using the generated VSIX file.",
+    "answer": "1. Double-click the Modern Requirements4DevOps 202x Update 1.exe file to start.\n2. Check the license terms and conditions checkbox, then click Next.\n3. Select the build type: Embedded (recommended) or Standalone.\n4. Select the installation type: Single sign-on (TFS 2017 Update 3 / 2018 Update 1 and above only) or Standard.\n5. Click Next.\n6. Configure the MongoDB installation options and click Next/Install.\n7. Configure the Redis Installation options and click Install.\n8. Click Yes on the warning message box — the relevant files are copied and installed.\n9. Click Finish or Run to complete. For the standalone version, that's the last step.\n\nFor the embedded version, a TFS deployment instruction page opens after Finish, walking you through deploying the TFS Extension using the generated VSIX file.\n\nNote: this describes the legacy on-premise (Classic) installation wizard, including its local MongoDB and Redis setup steps. In MR4DevOps NextGen (released June 2026), the platform is hosted on a managed Azure App Service with Azure Cosmos DB as its data store, so these local database installation steps no longer apply. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -130,9 +140,11 @@
       "mongo db",
       "mongodb port",
       "mongodb replica set",
-      "mongodb password"
+      "mongodb password",
+      "nextgen",
+      "cosmos db"
     ],
-    "answer": "Auto Install/use existing MongoDB is recommended if MongoDB isn't already on the target machine. If it is, provide the machine name/IP where it's installed (same for a load-balancing server). The default MongoDB port is 27017 — use the same port you used during MongoDB's own install if different. Get the MongoDB user/password from your network department if set. The Replica Set field is for data replication/mirroring.",
+    "answer": "Auto Install/use existing MongoDB is recommended if MongoDB isn't already on the target machine. If it is, provide the machine name/IP where it's installed (same for a load-balancing server). The default MongoDB port is 27017 — use the same port you used during MongoDB's own install if different. Get the MongoDB user/password from your network department if set. The Replica Set field is for data replication/mirroring.\n\nNote: this describes the legacy on-premise (Classic) installer. In MR4DevOps NextGen (released June 2026), MongoDB has been replaced by Azure Cosmos DB as the managed primary data store — there's no MongoDB to install or configure. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -144,9 +156,10 @@
       "redis port",
       "redis password",
       "use ssl redis",
-      "redis config"
+      "redis config",
+      "nextgen"
     ],
-    "answer": "Auto Install/use existing Redis is recommended if Redis isn't already installed. If it is, provide the machine name/IP (same for load-balancing setups). The default Redis port is 6379. Get the Redis password from your network department if applicable. The password and Use SSL options aren't mandatory — it depends on your organization's procedures.",
+    "answer": "Auto Install/use existing Redis is recommended if Redis isn't already installed. If it is, provide the machine name/IP (same for load-balancing setups). The default Redis port is 6379. Get the Redis password from your network department if applicable. The password and Use SSL options aren't mandatory — it depends on your organization's procedures.\n\nNote: this describes the legacy on-premise (Classic) installer. In MR4DevOps NextGen (released June 2026), the platform runs on Azure App Service with Azure Cosmos DB as the managed data store, so there's no self-hosted Redis to configure. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -187,9 +200,12 @@
       "upload extension",
       "manage extensions",
       "browse local extensions",
-      "install extension"
+      "install extension",
+      "nextgen",
+      "mockup",
+      "convert to use case"
     ],
-    "answer": "1. Log into your TFS.\n2. Click the Marketplace icon, then select Manage extensions.\n3. Click Browse local extensions.\n4. Click Manage extensions, then Upload new extension.\n5. Click Browse, select the VSIX file generated at the end of installation, then click Upload.\n6. Select the desired team project collection and click Continue.\n7. Review the requested permissions (Code read/write/manage, Code status, Identity read, Work items read/write) and click Confirm.\n\nAfterward, the Modern Requirements4DevOps Embed options appear under the Work tab (Diagram, Simulation and Use Case, Review, Trace Analysis, Baseline, etc.).",
+    "answer": "1. Log into your TFS.\n2. Click the Marketplace icon, then select Manage extensions.\n3. Click Browse local extensions.\n4. Click Manage extensions, then Upload new extension.\n5. Click Browse, select the VSIX file generated at the end of installation, then click Upload.\n6. Select the desired team project collection and click Continue.\n7. Review the requested permissions (Code read/write/manage, Code status, Identity read, Work items read/write) and click Confirm.\n\nAfterward, the Modern Requirements4DevOps Embed options appear under the Work tab (Diagram, Simulation and Use Case, Review, Trace Analysis, Baseline, etc.).\n\nNote: the Simulation and Use Case modules named above are from the legacy on-premise (Classic) version. In MR4DevOps NextGen (released June 2026), Simulation was replaced by the Mockup module and Use Case by the Convert to Use Case function, both part of Copilot4DevOps. (Source: modernrequirements.com/resources/product-version-history-2026)",
     "sourceDoc": "Installation Guide"
   },
   {
@@ -3334,9 +3350,11 @@
       "ADO work items",
       "ruleset designer",
       "XML manual",
-      "introduction"
+      "introduction",
+      "nextgen",
+      "smart import"
     ],
-    "answer": "This document defines standard rules of Work Item Mapping Configuration supported in the Modern Requirements application, to help users define mapping in a ruleset file. By providing mapping configuration in a ruleset file, a user can import Microsoft Word document content into Smart Docs in the form of ADO work items. A ruleset file can be created either manually (as XML) or from the UI using the Ruleset Designer. Supported Microsoft Word versions for Word Import are Microsoft Word 2010 or higher, with the .docx, .dotx, .docm, and .dotm file extensions. The document is organized into: Key Points (for Ruleset Designer UI and for XML file/manual), Ruleset Designer UI, Work Item Mapping Configuration (supported by both XML manual and Ruleset Designer UI) for Headings, Tables, List Paragraph, and Add Paragraph, and an Appendix."
+    "answer": "This document defines standard rules of Work Item Mapping Configuration supported in the Modern Requirements application, to help users define mapping in a ruleset file. By providing mapping configuration in a ruleset file, a user can import Microsoft Word document content into Smart Docs in the form of ADO work items. A ruleset file can be created either manually (as XML) or from the UI using the Ruleset Designer. Supported Microsoft Word versions for Word Import are Microsoft Word 2010 or higher, with the .docx, .dotx, .docm, and .dotm file extensions. The document is organized into: Key Points (for Ruleset Designer UI and for XML file/manual), Ruleset Designer UI, Work Item Mapping Configuration (supported by both XML manual and Ruleset Designer UI) for Headings, Tables, List Paragraph, and Add Paragraph, and an Appendix.\n\nNote: this entire technote describes the legacy on-premise (Classic) Word Import feature and its ruleset-file-based mapping configuration. In MR4DevOps NextGen (released June 2026), Word Import has been replaced by Smart Import — a guided wizard (Upload → Parse → Map & Classify → Link → Preview → Import) supporting .docx and PDF, with duplicate detection and field validation, and no ruleset/XML file authoring required. See the \"Smart Import: turning Word/PDF documents into work items (NextGen)\" entry. (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "key-points-ruleset-designer-ui-supported-content",
@@ -3353,9 +3371,11 @@
       "table",
       "list paragraph",
       "add paragraph",
-      "supported content UI"
+      "supported content UI",
+      "nextgen",
+      "smart import"
     ],
-    "answer": "Before importing, users should review the Word document to determine what content should be managed as Work Items or fields in Smart Docs after import. Users can import a Word document using ruleset files created through the Ruleset Designer, accessible from the Word Import wizard window: Import Ruleset tab > Ruleset file (dropdown). The following Word document content is supported from the UI: Heading style (H1-H9), Table (row, cell), List Paragraph (Add List), and Add Paragraph."
+    "answer": "Before importing, users should review the Word document to determine what content should be managed as Work Items or fields in Smart Docs after import. Users can import a Word document using ruleset files created through the Ruleset Designer, accessible from the Word Import wizard window: Import Ruleset tab > Ruleset file (dropdown). The following Word document content is supported from the UI: Heading style (H1-H9), Table (row, cell), List Paragraph (Add List), and Add Paragraph.\n\nNote: this describes the legacy on-premise (Classic) Ruleset Designer. In MR4DevOps NextGen (released June 2026), this has been replaced by Smart Import's Map & Classify step, which doesn't require a ruleset file at all. See \"Smart Import: turning Word/PDF documents into work items (NextGen).\" (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "key-points-xml-manual-ruleset-file-locations",
@@ -3372,9 +3392,11 @@
       "My Ruleset",
       "inteGREAT4TFS",
       "import ruleset tab",
-      "custom configuration file"
+      "custom configuration file",
+      "nextgen",
+      "smart import"
     ],
-    "answer": "For the manual XML approach, users should first review the Word document to know what content should be managed as Work Items/fields. Users can import using default configuration ruleset files, accessible from Word Import wizard window > Import Ruleset tab > Ruleset file (dropdown). To define custom mapping, create a ruleset file with the '.wirule' extension and place it at one of these locations depending on deployment: dev.azure.com version - %public%\\Documents\\inteGREAT4TFS\\My Ruleset\\Smart Docs\\dev.azure.com\\{Account}; visualstudio.com version - %public%\\Documents\\inteGREAT4TFS\\My Ruleset\\Smart Docs\\{Account}.visualstudio.com; Embed version - %public%\\Documents\\inteGREAT4TFS\\My Ruleset\\Smart Docs\\{Server Name} or ...\\{Server Name}\\{Collection Name}. After placing the custom ruleset file at one of these locations, it becomes accessible from Word Import wizard window > Import Ruleset tab > Ruleset file (dropdown) > Smart Docs (node)."
+    "answer": "For the manual XML approach, users should first review the Word document to know what content should be managed as Work Items/fields. Users can import using default configuration ruleset files, accessible from Word Import wizard window > Import Ruleset tab > Ruleset file (dropdown). To define custom mapping, create a ruleset file with the '.wirule' extension and place it at one of these locations depending on deployment: dev.azure.com version - %public%\\Documents\\inteGREAT4TFS\\My Ruleset\\Smart Docs\\dev.azure.com\\{Account}; visualstudio.com version - %public%\\Documents\\inteGREAT4TFS\\My Ruleset\\Smart Docs\\{Account}.visualstudio.com; Embed version - %public%\\Documents\\inteGREAT4TFS\\My Ruleset\\Smart Docs\\{Server Name} or ...\\{Server Name}\\{Collection Name}. After placing the custom ruleset file at one of these locations, it becomes accessible from Word Import wizard window > Import Ruleset tab > Ruleset file (dropdown) > Smart Docs (node).\n\nNote: this describes the legacy on-premise (Classic) manual XML ruleset approach. In MR4DevOps NextGen (released June 2026), Word Import was replaced by Smart Import, which maps content through a guided wizard instead of hand-authored .wirule XML files. See \"Smart Import: turning Word/PDF documents into work items (NextGen).\" (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "xml-ruleset-tags-witype-property-propertytype",
@@ -3401,9 +3423,11 @@
     "keywords": [
       "ruleset designer UI",
       "ruleset designer powerpoint",
-      "UI accessibility"
+      "UI accessibility",
+      "nextgen",
+      "smart import"
     ],
-    "answer": "The document refers users to an embedded PowerPoint file, 'Word Import Configuration - Ruleset Designer.pptx', for more details regarding the user interface accessibility of the Ruleset Designer."
+    "answer": "The document refers users to an embedded PowerPoint file, 'Word Import Configuration - Ruleset Designer.pptx', for more details regarding the user interface accessibility of the Ruleset Designer.\n\nNote: the Ruleset Designer described here is part of the legacy on-premise (Classic) Word Import feature. In MR4DevOps NextGen (released June 2026), it has been superseded by Smart Import's wizard-based Map & Classify step. See \"Smart Import: turning Word/PDF documents into work items (NextGen).\" (Source: modernrequirements.com/resources/product-version-history-2026)"
   },
   {
     "id": "headings-map-each-heading-individually-to-different-work-item-type",
@@ -3430,7 +3454,6 @@
     "keywords": [
       "Headings tag",
       "same work item type",
-      "Requirement",
       "Add Table",
       "Add List",
       "sub-add dropdown",
@@ -3657,9 +3680,16 @@
       "nextgen overview",
       "requirements management devops",
       "web-based application",
-      "team projects"
+      "team projects",
+      "tell me about modern requirements4devops",
+      "about modern requirements4devops",
+      "what is modern requirements",
+      "modern requirements4devops overview",
+      "product overview",
+      "elevator pitch",
+      "what does modern requirements4devops do"
     ],
-    "answer": "Modern Requirements4DevOps NextGen is a web-based requirements management tool that bridges traditional requirements management practices with agile DevOps methodology, streamlining collaboration, communication, and traceability between development and operations stakeholders. It manages various components within Azure DevOps Team Projects, and lets users: create Smart Documents, create and manage application mock-ups, create and manage baselines, create and manage traceability among work items, and request/manage reviews of work items from team members. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Getting_Started.htm"
+    "answer": "Modern Requirements4DevOps NextGen is a web-based requirements management tool built for agile DevOps teams. It works directly inside your Azure DevOps Team Projects, keeping requirements management connected to how development and operations teams actually collaborate — so communication and traceability don't fall apart between the two.\n\nWith it, you can:\n- Create Smart Documents\n- Build and manage application mock-ups\n- Create and manage baselines\n- Trace relationships among work items\n- Request and manage reviews of work items from your team"
   },
   {
     "id": "nextgen-help-document-management-overview",
@@ -3678,7 +3708,7 @@
       "folders",
       "boards document management"
     ],
-    "answer": "The Document Management module lets users upload, organize, and manage documents and folders within a Team Project. Check-out/check-in functionality supports collaborative work with version control, and the system keeps a document version history so users can select and restore a previous version. MS-Word documents can be compared side-by-side across different versions. The interface also supports viewing, renaming, and removing documents and folders. To access it: go to the Boards section of your project and select 'Document Management'. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Document_Management.htm"
+    "answer": "The Document Management module lets users upload, organize, and manage documents and folders within a Team Project. Check-out/check-in functionality supports collaborative work with version control, and the system keeps a document version history so users can select and restore a previous version. MS-Word documents can be compared side-by-side across different versions. The interface also supports viewing, renaming, and removing documents and folders. To access it: go to the Boards section of your project and select 'Document Management'."
   },
   {
     "id": "nextgen-help-copilot4devops-functions",
@@ -3698,7 +3728,7 @@
       "copilot4devops toolbar icon",
       "context menu copilot"
     ],
-    "answer": "Copilot4DevOps offers 16 distinct functions — including Elicit, Analyze, Impact Assessment, Q&A Assistant, Dynamic Prompt, and Convert — accessible via a pop-up menu. It can be opened from: the Queries or Backlog tabs (select a work item, open its '...' context menu, choose Copilot4DevOps), from Smart Docs files (via the toolbar or a grid work item's context menu), or via a dedicated Copilot4DevOps icon in the toolbar. In Version Packages, users open/create a package, then select a work item from the grid to add descriptions or data via Copilot4DevOps. The Convert function can transform content into user stories, use cases, and Gherkin format. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Copilot4DevOps.htm"
+    "answer": "Copilot4DevOps offers 16 distinct functions — including Elicit, Analyze, Impact Assessment, Q&A Assistant, Dynamic Prompt, and Convert — accessible via a pop-up menu. It can be opened from: the Queries or Backlog tabs (select a work item, open its '...' context menu, choose Copilot4DevOps), from Smart Docs files (via the toolbar or a grid work item's context menu), or via a dedicated Copilot4DevOps icon in the toolbar. In Version Packages, users open/create a package, then select a work item from the grid to add descriptions or data via Copilot4DevOps. The Convert function can transform content into user stories, use cases, and Gherkin format."
   },
   {
     "id": "nextgen-help-copilot4devops-locked-items",
@@ -3713,7 +3743,7 @@
       "copilot4devops restrictions",
       "convert new work item exception"
     ],
-    "answer": "For locked work items, all the add/update options in each Copilot4DevOps function are shown disabled, with limited exceptions — such as creating a linked item, or using Convert to create a brand-new work item (rather than updating the locked one). See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Copilot4DevOps.htm"
+    "answer": "For locked work items, all the add/update options in each Copilot4DevOps function are shown disabled, with limited exceptions — such as creating a linked item, or using Convert to create a brand-new work item (rather than updating the locked one)."
   },
   {
     "id": "nextgen-help-smart-import-overview",
@@ -3732,7 +3762,7 @@
       "new import button",
       "docx pdf 50mb"
     ],
-    "answer": "Smart Import transforms a Microsoft Word (.docx) or PDF document into Azure DevOps work items, through a six-stage wizard: Upload, Parse, Map & classify, Link, Preview, and Import. Start by clicking 'New Import' on the Smart Import browse page. On the Upload page, add a document by dragging it into the upload area or using the browse button — accepted formats are .docx and .pdf, up to 50 MB each. After uploading, you can replace or delete the file. A saved ruleset template can be selected from 'Select Ruleset Template' to reuse a previous mapping configuration. Clicking 'Parse Document' (enabled only after a file is uploaded) extracts the document's structural outline and text content. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Smart_Import.htm"
+    "answer": "Smart Import transforms a Microsoft Word (.docx) or PDF document into Azure DevOps work items, through a six-stage wizard: Upload, Parse, Map & classify, Link, Preview, and Import. Start by clicking 'New Import' on the Smart Import browse page. On the Upload page, add a document by dragging it into the upload area or using the browse button — accepted formats are .docx and .pdf, up to 50 MB each. After uploading, you can replace or delete the file. A saved ruleset template can be selected from 'Select Ruleset Template' to reuse a previous mapping configuration. Clicking 'Parse Document' (enabled only after a file is uploaded) extracts the document's structural outline and text content."
   },
   {
     "id": "nextgen-help-version-packages-overview",
@@ -3746,7 +3776,7 @@
       "boards version packages",
       "new module nextgen"
     ],
-    "answer": "Version Packages is a module in Modern Requirements4DevOps NextGen that acts as a central place for creating and managing distinct version-package entities within a Team Project. Access it via Boards > Version packages, which opens a Browse Page for viewing and managing existing version packages. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Version_Packages.htm"
+    "answer": "Version Packages is a module in Modern Requirements4DevOps NextGen that acts as a central place for creating and managing distinct version-package entities within a Team Project. Access it via Boards > Version packages, which opens a Browse Page for viewing and managing existing version packages."
   },
   {
     "id": "nextgen-help-smart-docs-overview",
@@ -3762,7 +3792,7 @@
       "version management smart docs",
       "boards smart docs"
     ],
-    "answer": "Smart Docs is the module for creating virtual documents that distribute information to all stakeholders, helping prevent misconceptions. It supports formal documentation aligned with CMMI methodology, and Agile/Scrum teams can use it to maintain supplementary documentation such as stand-up/daily-scrum notes. The Version Management feature lets users manage multiple versions of a document. Access it via Boards > Smart Docs. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Smart_Docs.htm"
+    "answer": "Smart Docs is the module for creating virtual documents that distribute information to all stakeholders, helping prevent misconceptions. It supports formal documentation aligned with CMMI methodology, and Agile/Scrum teams can use it to maintain supplementary documentation such as stand-up/daily-scrum notes. The Version Management feature lets users manage multiple versions of a document. Access it via Boards > Smart Docs."
   },
   {
     "id": "nextgen-help-review-overview",
@@ -3780,7 +3810,7 @@
       "invoke review from smart docs",
       "create request dialogue box"
     ],
-    "answer": "The Review module manages reviews of work items within a Team Project — users can request reviews from teammates and complete reviews assigned to them. Access it via Boards > Review, or create a review request directly within the module. Review can also be invoked from other modules: from Baseline, invoking Review automatically adds the relevant work items into the Create Request dialog's corresponding section; from Smart Docs, invoking Review skips showing the 'Add Work Item' section entirely because the relevant work items are added automatically in the background, fully pre-populated. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Review_Management.htm"
+    "answer": "The Review module manages reviews of work items within a Team Project — users can request reviews from teammates and complete reviews assigned to them. Access it via Boards > Review, or create a review request directly within the module. Review can also be invoked from other modules: from Baseline, invoking Review automatically adds the relevant work items into the Create Request dialog's corresponding section; from Smart Docs, invoking Review skips showing the 'Add Work Item' section entirely because the relevant work items are added automatically in the background, fully pre-populated."
   },
   {
     "id": "nextgen-help-trace-analysis-overview",
@@ -3796,7 +3826,7 @@
       "edit work items in matrix",
       "create delete links trace analysis"
     ],
-    "answer": "Trace Analysis manages traceability between work items. It supports generating an Intersection Traceability Matrix and a Horizontal Traceability Matrix. Within the matrix, users can edit work items directly, view each work item's current state, see existing links between work items, and create or delete links. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Traceability.htm"
+    "answer": "Trace Analysis manages traceability between work items. It supports generating an Intersection Traceability Matrix and a Horizontal Traceability Matrix. Within the matrix, users can edit work items directly, view each work item's current state, see existing links between work items, and create or delete links."
   },
   {
     "id": "nextgen-help-baseline-overview",
@@ -3811,7 +3841,7 @@
       "difference report",
       "compare work item revisions"
     ],
-    "answer": "The Baseline module is the primary tool for maintaining baselines of Team Projects: users can create new baselines, compare baselines to identify differences, generate Difference Reports documenting those variations, and compare work item revisions. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Baseline.htm"
+    "answer": "The Baseline module is the primary tool for maintaining baselines of Team Projects: users can create new baselines, compare baselines to identify differences, generate Difference Reports documenting those variations, and compare work item revisions."
   },
   {
     "id": "nextgen-help-diagram-overview",
@@ -3828,7 +3858,7 @@
       "diagrams tile main page",
       "business analyst brainstorming"
     ],
-    "answer": "The Diagrams module lets users create, modify, and publish diagrams — including connected diagrams and sub-diagrams — within Azure DevOps. It's accessed by clicking the Diagrams tile on the NextGen main page, and serves as a design space for conceptual system models (as opposed to Mockups, which are physical/visual representations). Business Analysts use Diagrams to brainstorm and develop system models for stakeholder review, feedback, and discussing system improvements. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Diagram.htm"
+    "answer": "The Diagrams module lets users create, modify, and publish diagrams — including connected diagrams and sub-diagrams — within Azure DevOps. It's accessed by clicking the Diagrams tile on the NextGen main page, and serves as a design space for conceptual system models (as opposed to Mockups, which are physical/visual representations). Business Analysts use Diagrams to brainstorm and develop system models for stakeholder review, feedback, and discussing system improvements."
   },
   {
     "id": "nextgen-help-reporting-overview",
@@ -3843,7 +3873,7 @@
       "custom report from scratch",
       "reports from other modules"
     ],
-    "answer": "The Reporting section is dedicated to creating Advanced Reports, which are designed by the user from scratch rather than from predefined templates, giving full control over report content and presentation. Reports can also be initiated from other modules within the application, not just from Reporting itself. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Reporting.htm"
+    "answer": "The Reporting section is dedicated to creating Advanced Reports, which are designed by the user from scratch rather than from predefined templates, giving full control over report content and presentation. Reports can also be initiated from other modules within the application, not just from Reporting itself."
   },
   {
     "id": "nextgen-help-smart-report-workflow",
@@ -3859,7 +3889,7 @@
       "generate report button",
       "smart report toolbar option"
     ],
-    "answer": "Smart Report is accessible across all modules for personalizing report formatting before generation. Open a document and click the 'Smart Report' option in the toolbar to open the Smart Report window. Select a Report Part from a dropdown with IntelliSense search, choose a Style Sheet, then click 'Generate Report'. Reports default to HTML format but can also be saved as MS Word or PDF. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Generating_Smart_Report.htm"
+    "answer": "Smart Report is accessible across all modules for personalizing report formatting before generation. Open a document and click the 'Smart Report' option in the toolbar to open the Smart Report window. Select a Report Part from a dropdown with IntelliSense search, choose a Style Sheet, then click 'Generate Report'. Reports default to HTML format but can also be saved as MS Word or PDF."
   },
   {
     "id": "nextgen-help-smart-report-export-save",
@@ -3876,7 +3906,7 @@
       "bulk report email link",
       "background processing large reports"
     ],
-    "answer": "A generated Smart Report can be exported as MS Word, PDF, or HTML. For Word output, a custom template can be uploaded to personalize headers, footers, and the table of contents (uploaded templates can also be deleted from the template management interface). To get a PDF that preserves a Word template's formatting, use the 'Save as' menu and choose 'PDF as word template'. The 'Save to Library' option stores the generated report directly in the Document Management module, via a dialog where you set the report title, destination folder, and format. Large datasets trigger background processing (the app stays usable while the report generates), and an email with a link to the report is sent once a bulk report completes — the size threshold that triggers this is configurable in the system configuration file. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Generating_Smart_Report.htm"
+    "answer": "A generated Smart Report can be exported as MS Word, PDF, or HTML. For Word output, a custom template can be uploaded to personalize headers, footers, and the table of contents (uploaded templates can also be deleted from the template management interface). To get a PDF that preserves a Word template's formatting, use the 'Save as' menu and choose 'PDF as word template'. The 'Save to Library' option stores the generated report directly in the Document Management module, via a dialog where you set the report title, destination folder, and format. Large datasets trigger background processing (the app stays usable while the report generates), and an email with a link to the report is sent once a bulk report completes — the size threshold that triggers this is configurable in the system configuration file."
   },
   {
     "id": "nextgen-help-smart-view-overview",
@@ -3892,7 +3922,7 @@
       "smart edit review baseline smart docs version packages",
       "extension point context menu smart edit"
     ],
-    "answer": "Smart Edit (Smart View) enables side-by-side comparison of different versions/variants of a work item. It's integrated into several modules: the Review module (for version comparison during review), Baseline (for baseline-related comparisons), Smart Docs, and Version Packages (for package version analysis). It's also reachable via the extension point in the work item context menu, both in Backlogs and in Queries. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Smart_View.htm"
+    "answer": "Smart Edit (Smart View) enables side-by-side comparison of different versions/variants of a work item. It's integrated into several modules: the Review module (for version comparison during review), Baseline (for baseline-related comparisons), Smart Docs, and Version Packages (for package version analysis). It's also reachable via the extension point in the work item context menu, both in Backlogs and in Queries."
   },
   {
     "id": "nextgen-help-linked-artifacts-overview",
@@ -3908,7 +3938,7 @@
       "context menu linked artifacts",
       "work item form menu linked artifacts"
     ],
-    "answer": "Linked Artifacts is a read-only lookup — it does not create, change, or remove any link — that shows where a selected work item is used across modules: Baselines, Reviews, Smart Docs, and Version Packages. It's opened by right-clicking a work item in Queries or Backlog (or from a work item form menu) in Azure DevOps, and from context menus on work item rows in Smart Docs, Baseline detail grids, and Version Package Result tabs. The dialog header shows the work item's type, ID, and title. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Linked_Artifact.htm"
+    "answer": "Linked Artifacts is a read-only lookup — it does not create, change, or remove any link — that shows where a selected work item is used across modules: Baselines, Reviews, Smart Docs, and Version Packages. It's opened by right-clicking a work item in Queries or Backlog (or from a work item form menu) in Azure DevOps, and from context menus on work item rows in Smart Docs, Baseline detail grids, and Version Package Result tabs. The dialog header shows the work item's type, ID, and title."
   },
   {
     "id": "nextgen-help-linked-artifacts-dialog-ui",
@@ -3924,7 +3954,7 @@
       "version package locked packages only",
       "14 supported languages"
     ],
-    "answer": "The Linked Artifacts dialog organizes results into four collapsible sections — Baseline, Review, Smart Docs, and Version Package — toggled open/closed by clicking each group header. Selecting an artifact opens it in a new browser tab within its own module (artifacts from other projects also open in a separate tab). A Refresh button re-runs the lookup; Maximize/Restore buttons resize the dialog for large lists; a Close button dismisses it. In Version Package Result tabs specifically, Linked Artifacts only works on locked packages and saved versions — not on root rows or multi-row selections. All labels are available in 14 supported languages. See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Linked_Artifact.htm"
+    "answer": "The Linked Artifacts dialog organizes results into four collapsible sections — Baseline, Review, Smart Docs, and Version Package — toggled open/closed by clicking each group header. Selecting an artifact opens it in a new browser tab within its own module (artifacts from other projects also open in a separate tab). A Refresh button re-runs the lookup; Maximize/Restore buttons resize the dialog for large lists; a Close button dismisses it. In Version Package Result tabs specifically, Linked Artifacts only works on locked packages and saved versions — not on root rows or multi-row selections. All labels are available in 14 supported languages."
   },
   {
     "id": "nextgen-help-admin-panel-sections",
@@ -3942,6 +3972,757 @@
       "copilot4devops tab admin panel",
       "copilot4devops plus"
     ],
-    "answer": "In NextGen, the Admin Panel is accessed by launching the embedded application and selecting 'Modern Requirements4DevOps' under the Settings tab. It has six sections: Licensing (check license status, activate with a valid key), General (app-wide settings, including repository name configuration for GIT projects), Smart Docs (module-specific settings), Baseline (module-specific settings), Review (module-specific settings), and Copilot4DevOps (configure and manage integration with Copilot4DevOps Plus — this tab is new compared to older Admin Configuration Guide versions of the Admin Panel). See: https://www.modernrequirements.com/help/modern-requirements4devops-nextgen/Admin_Panel.htm"
+    "answer": "In NextGen, you'll find the Admin Panel by launching the embedded application and selecting 'Modern Requirements4DevOps' under the Settings tab. It has six sections:\n- Licensing — check license status, activate with a valid key\n- General — app-wide settings, including repository name configuration for GIT projects\n- Smart Docs — module-specific settings\n- Baseline — module-specific settings\n- Review — module-specific settings\n- Copilot4DevOps — configure and manage the integration with Copilot4DevOps Plus (this tab is new compared to older Admin Configuration Guide versions of the Admin Panel)"
+  },
+  {
+    "id": "site-agents4devops-overview",
+    "title": "What is Agents4DevOps",
+    "page": 1,
+    "keywords": [
+      "agents4devops",
+      "what is agents4devops",
+      "autonomous ai agents",
+      "ai agents for devops",
+      "agents 4 devops",
+      "devops execution agents",
+      "modern requirements agents4devops",
+      "autonomous execution"
+    ],
+    "answer": "Agents4DevOps is Modern Requirements' product for \"Autonomous AI agents for DevOps execution\" (per modernrequirements.com). It's the fifth product in the Modern Requirements suite, alongside Modern Requirements4DevOps (\"End-to-end requirements management in Azure DevOps\"), Copilot4DevOps (\"AI-powered assistance for DevOps workflows\"), Compliance4DevOps (\"Compliance management, built into Azure DevOps\"), and AI Sync Bridge (\"Real-time data sync across tools and systems\"). Within that suite, Agents4DevOps sits at the most automated end: Copilot4DevOps provides AI-assisted guidance that a user acts on, while Agents4DevOps is positioned to execute DevOps work autonomously. As of this writing, the public product page is a lightweight landing page (tagline plus \"Start Free Trial\" / \"Book a Demo\" calls to action) without a detailed published feature list.",
+    "sourceDoc": "modernrequirements.com — Agents4DevOps"
+  },
+  {
+    "id": "site-compliance4devops-overview",
+    "title": "What is Compliance4DevOps",
+    "page": 1,
+    "keywords": [
+      "compliance4devops",
+      "what is compliance4devops",
+      "compliance management azure devops",
+      "audit evidence azure devops",
+      "compliance record"
+    ],
+    "answer": "Compliance4DevOps is Modern Requirements' compliance management product, described on modernrequirements.com as \"Compliance management, built into Azure DevOps.\" It manages standards, clauses, assessments, and audit evidence within Azure DevOps — where the engineering work already happens — aiming to replace scattered spreadsheets and manual audit preparation with a system that tracks regulatory standards clause-by-clause and produces audit-ready evidence packages. It targets regulated industries: medical devices, pharmaceuticals, defense, aerospace, large infrastructure, utilities, manufacturing, automotive, and government. Per the product page, Compliance4DevOps went \"Live in September\" (2026), with its AI capabilities \"coming in October.\"",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+  },
+  {
+    "id": "site-compliance4devops-capabilities",
+    "title": "Key capabilities of Compliance4DevOps",
+    "page": 1,
+    "keywords": [
+      "compliance4devops features",
+      "compliance4devops capabilities",
+      "standard management",
+      "evidence mapping",
+      "audit package generation",
+      "compliance timeline",
+      "clause tracking",
+      "compliance verdict"
+    ],
+    "answer": "According to modernrequirements.com, Compliance4DevOps's core capabilities are:\n\n1. Standard Management — maintain a library of compliance frameworks or import custom ones; approve applicability and track versions.\n2. Evidence Mapping — connect controls to requirements and attach proof pulled from Azure DevOps and Modern Requirements work items.\n3. Assessment & Verdict — AI proposes a compliance verdict for each requirement, which the team then confirms.\n4. Audit Package Generation — produces \"a frozen, point-in-time audit package of requirements, evidence and decisions.\"\n5. Compliance Timeline — tracks internal audits, external audits, gap assessments, and certifications over time.\n6. Clause Tracking — a dashboard shows assessment progress across standards (the page's own example: \"88 of 152 assessed\").",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+  },
+  {
+    "id": "site-compliance4devops-standards",
+    "title": "Which compliance standards and regulations does Compliance4DevOps support",
+    "page": 1,
+    "keywords": [
+      "compliance4devops standards",
+      "iso 13485",
+      "iec 62304",
+      "fda 21 cfr part 11",
+      "eu mdr",
+      "cmmc",
+      "nist 800-171",
+      "nist 800-53",
+      "do-178c",
+      "iso 26262",
+      "iatf 16949",
+      "aspice",
+      "iso 27001",
+      "soc 2",
+      "hipaa",
+      "gdpr",
+      "nerc cip",
+      "iec 61508",
+      "iec 62443",
+      "which standards does compliance4devops support"
+    ],
+    "answer": "Per modernrequirements.com, Compliance4DevOps covers standards across several industries:\n\n- Medical devices & pharma: ISO 13485, IEC 62304, ISO 14971, FDA 21 CFR Part 11, EU MDR\n- Defense & aerospace: CMMC, NIST 800-171, NIST 800-53, AS9100, DO-178C\n- Automotive & manufacturing: ISO 26262, IATF 16949, ASPICE, ISO 9001\n- Information security: ISO 27001, SOC 2, HIPAA, GDPR\n- Energy & infrastructure: NERC CIP, IEC 61508, IEC 62443\n\nCompliance4DevOps maintains a library of these frameworks (or lets you import custom ones) and tracks progress against them clause by clause.",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+  },
+  {
+    "id": "site-compliance4devops-relationship-mr4devops",
+    "title": "How Compliance4DevOps relates to Modern Requirements4DevOps",
+    "page": 1,
+    "keywords": [
+      "compliance4devops vs mr4devops",
+      "compliance4devops and mr4devops",
+      "engineering record vs compliance record",
+      "how does compliance4devops work with modern requirements4devops",
+      "compliance4devops relationship"
+    ],
+    "answer": "Compliance4DevOps is designed to complement Modern Requirements4DevOps rather than replace it. Per modernrequirements.com: \"MR4DevOps produces the evidence. Compliance4DevOps maps it to your standards and builds the audit package. Together, the engineering record and the compliance record stay connected.\" In short, MR4DevOps handles requirements, traceability, and the engineering work itself, while Compliance4DevOps layers standards/clause tracking and audit-package generation on top, linking proof directly back to that engineering work.",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+  },
+  {
+    "id": "site-compliance4devops-availability",
+    "title": "When did Compliance4DevOps become available",
+    "page": 1,
+    "keywords": [
+      "compliance4devops release date",
+      "compliance4devops availability",
+      "compliance4devops launch date",
+      "is compliance4devops available"
+    ],
+    "answer": "Modern Requirements' Compliance4DevOps product page states it went \"Live in September\" (2026), with its AI-powered capabilities (such as AI-proposed compliance verdicts) described as \"coming in October.\"",
+    "sourceDoc": "modernrequirements.com — Compliance4DevOps"
+  },
+  {
+    "id": "site-ai-sync-bridge-overview",
+    "title": "What is AI Sync Bridge",
+    "page": 1,
+    "keywords": [
+      "ai sync bridge",
+      "what is ai sync bridge",
+      "azure devops jira sync",
+      "azure devops jira migration",
+      "ai-powered connector"
+    ],
+    "answer": "AI Sync Bridge is Modern Requirements' product for syncing and migrating work items between Azure DevOps and Jira, marketed as \"The AI-Powered Connector for Azure DevOps and Jira.\" It lets teams synchronize or migrate work items across platforms using AI-assisted field/type mapping, aiming to eliminate duplicated work items, prevent field synchronization issues, and reduce manual migration effort. Target users called out on the product page are DevOps leaders, QA teams, project managers, and implementation consultants.",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+  },
+  {
+    "id": "site-ai-sync-bridge-mapping",
+    "title": "How AI Sync Bridge's AI-assisted mapping works",
+    "page": 1,
+    "keywords": [
+      "ai sync bridge mapping",
+      "field mapping azure devops jira",
+      "work item type mapping",
+      "ai sync bridge how it works",
+      "parent child relationships sync",
+      "tested-by links sync"
+    ],
+    "answer": "Per modernrequirements.com, AI Sync Bridge's AI-assisted mapping automatically analyzes the source and target structures (e.g. an Azure DevOps project and a Jira project) and recommends field mappings. It suggests work item type correspondences (for example, Epic to Epic, Task to Task), and identifies and preserves parent-child relationships, references, and \"tested-by\" connections. It also copies attachments and maintains hierarchy during transfers.",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+  },
+  {
+    "id": "site-ai-sync-bridge-sync-paths",
+    "title": "What sync paths and modes does AI Sync Bridge support",
+    "page": 1,
+    "keywords": [
+      "ai sync bridge sync paths",
+      "azure devops to jira sync",
+      "jira to azure devops sync",
+      "bi-directional sync",
+      "one-way sync",
+      "cross-organization sync",
+      "sync template"
+    ],
+    "answer": "AI Sync Bridge supports three primary sync paths, per modernrequirements.com: Azure DevOps to Azure DevOps, Azure DevOps to Jira, and Jira to Jira. Syncs can be configured as one-way or bi-directional, and the product supports cross-organization and cross-instance workflows. Once a saved mapping template is applied, synchronization can be turned on with a single toggle. It's also used for organizational consolidation, team merging, and legacy project cleanup, with a real-time progress dashboard showing success/failure summaries by work item type and duration analytics.",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+  },
+  {
+    "id": "site-ai-sync-bridge-setup",
+    "title": "How do you set up a connection in AI Sync Bridge",
+    "page": 1,
+    "keywords": [
+      "ai sync bridge setup",
+      "ai sync bridge connection",
+      "ai sync bridge authentication",
+      "how to connect azure devops and jira",
+      "ai sync bridge server"
+    ],
+    "answer": "Per modernrequirements.com, connecting a system in AI Sync Bridge is a three-step process: (1) name the server, (2) provide authentication tokens, and (3) test and save the connection. All integrations are kept encrypted and isolated within private environments.",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+  },
+  {
+    "id": "site-ai-sync-bridge-monitoring",
+    "title": "How does AI Sync Bridge monitor syncs and troubleshoot errors",
+    "page": 1,
+    "keywords": [
+      "ai sync bridge monitoring",
+      "ai sync bridge dashboard",
+      "ai sync bridge error log",
+      "ai sync bridge troubleshooting",
+      "sync failures",
+      "analytics dashboard"
+    ],
+    "answer": "AI Sync Bridge includes an analytics dashboard that tracks successfully synced items, pinpoints failure points, displays operation duration metrics, and flags field mappings that need adjustment. It also keeps an error log with timestamped entries, categorization, work item ID references, and full context logs for debugging, per modernrequirements.com.",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+  },
+  {
+    "id": "site-ai-sync-bridge-roadmap",
+    "title": "AI Sync Bridge roadmap (Version 1 vs Version 2)",
+    "page": 1,
+    "keywords": [
+      "ai sync bridge roadmap",
+      "ai sync bridge version 2",
+      "ai sync bridge multi-tenant",
+      "hp alm integration",
+      "quality center integration",
+      "ai sync bridge future plans"
+    ],
+    "answer": "Per modernrequirements.com, AI Sync Bridge Version 1 focuses on enhanced sync intelligence and conditional rules. Version 2 is planned to add multi-tenant cloud deployment with self-service provisioning. Future integrations mentioned on the page include HP ALM / Quality Center.",
+    "sourceDoc": "modernrequirements.com — AI Sync Bridge"
+  },
+  {
+    "id": "site-copilot4devops-overview",
+    "title": "What is Copilot4DevOps (product overview)",
+    "page": 1,
+    "keywords": [
+      "copilot4devops",
+      "what is copilot4devops",
+      "ai assistant azure devops",
+      "copilot for azure devops",
+      "copilot4devops overview",
+      "number one ai assistant"
+    ],
+    "answer": "Copilot4DevOps is marketed on modernrequirements.com as the \"AI Assistant for Azure DevOps\" — described as \"the only AI integration built directly inside Azure DevOps,\" intended to \"turn months of manual requirements, gap analysis, and test case creation into minutes.\" The product page describes it as working directly inside Azure DevOps with \"no tool switching,\" and calls it the \"#1 AI Assistant for Azure DevOps,\" built for enterprise teams. It's part of the broader Modern Requirements suite alongside Modern Requirements4DevOps, Agents4DevOps, Compliance4DevOps, and AI Sync Bridge. Note: the NextGen Online Help documentation separately describes 16 distinct Copilot4DevOps functions available inside Modern Requirements4DevOps (see the KB entry on \"Copilot4DevOps functions and where to access them\"); the public product page markets a set of 12 AI-powered tools/categories (AI Chat, Elicit, Analyze, Generate, Transform, Convert, Mockup Tool, Diagramming, Impact Assessment, Q&A Assistant, SOP/Document generation, Dynamic Prompt).",
+    "sourceDoc": "modernrequirements.com — Copilot4DevOps"
+  },
+  {
+    "id": "site-copilot4devops-value-props",
+    "title": "Copilot4DevOps efficiency claims (speed, cost, manual work reduction)",
+    "page": 1,
+    "keywords": [
+      "copilot4devops roi",
+      "copilot4devops benefits",
+      "copilot4devops faster delivery",
+      "copilot4devops cost reduction",
+      "copilot4devops claims",
+      "80 percent faster",
+      "90 percent less manual work"
+    ],
+    "answer": "The Copilot4DevOps product page on modernrequirements.com advertises three headline efficiency claims: \"80% Faster Delivery\" (instant generation of requirements, test cases, and documentation), \"60% Cost Reduction\" (from consolidating tooling overhead and rework costs), and \"90% Less Manual Work\" (from automating repetitive tasks). These are marketing figures published on the product page, not independently verified benchmarks.",
+    "sourceDoc": "modernrequirements.com — Copilot4DevOps"
+  },
+  {
+    "id": "site-copilot4devops-byollm",
+    "title": "What is BYOLLM (Bring Your Own LLM) in Copilot4DevOps",
+    "page": 1,
+    "keywords": [
+      "byollm",
+      "bring your own llm",
+      "copilot4devops custom model",
+      "copilot4devops llm training",
+      "custom ai model azure devops"
+    ],
+    "answer": "BYOLLM (Bring Your Own LLM) is an add-on feature of Copilot4DevOps, per modernrequirements.com, that lets organizations upload documents, Azure DevOps wikis, and work items to train/customize the underlying AI model on their own data. It's called out as an additional-cost add-on rather than a feature included in base plans.",
+    "sourceDoc": "modernrequirements.com — Copilot4DevOps"
+  },
+  {
+    "id": "site-copilot4devops-pricing-tiers",
+    "title": "Copilot4DevOps pricing tiers (Lite, Plus, Ultimate)",
+    "page": 1,
+    "keywords": [
+      "copilot4devops pricing",
+      "copilot4devops lite",
+      "copilot4devops plus",
+      "copilot4devops ultimate",
+      "copilot4devops tokens",
+      "copilot4devops cost",
+      "how much does copilot4devops cost"
+    ],
+    "answer": "Per the Copilot4DevOps page on modernrequirements.com, Copilot4DevOps is offered in three tiers based on monthly AI token allowance: Lite (2M tokens, free), Plus (30M tokens, roughly $30–40/month), and Ultimate (100M tokens, roughly $40–50/month). These figures are as published on the product page and may change — confirm current pricing with Modern Requirements sales.",
+    "sourceDoc": "modernrequirements.com — Copilot4DevOps"
+  },
+  {
+    "id": "site-mr4devops-performance-claims",
+    "title": "Modern Requirements4DevOps NextGen performance claims vs the 2025 (Classic) version",
+    "page": 1,
+    "keywords": [
+      "mr4devops nextgen performance",
+      "how much faster is nextgen",
+      "nextgen vs 2025 performance",
+      "mr4devops speed improvement",
+      "auto scaling azure app service",
+      "60 percent faster"
+    ],
+    "answer": "Per modernrequirements.com's Modern Requirements4DevOps product page, NextGen is described as 60% faster for comparisons, file opens, reports, and traceability versus the MR 2025 (Classic) version, with 90%+ of known issues from the previous version resolved. The page also notes NextGen auto-scales on Azure App Service, removing the need for manual capacity planning.",
+    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps"
+  },
+  {
+    "id": "site-mr4devops-ai-edit",
+    "title": "What is AI Edit in Modern Requirements4DevOps",
+    "page": 1,
+    "keywords": [
+      "ai edit",
+      "mr4devops ai edit",
+      "one-click ai assistance",
+      "ai edit context menu",
+      "ai edit quality check"
+    ],
+    "answer": "AI Edit, per the Modern Requirements4DevOps product page on modernrequirements.com, is a one-click AI assistance feature accessible from the Azure DevOps context menu. It's aimed at focused, single-item editing and quality checks on individual work items (rather than bulk operations).",
+    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps"
+  },
+  {
+    "id": "site-mr4devops-compliance-standards",
+    "title": "Which compliance standards is Modern Requirements4DevOps built for",
+    "page": 1,
+    "keywords": [
+      "mr4devops compliance standards",
+      "fda 21 cfr part 11",
+      "iso 13485",
+      "iec 62304",
+      "do-178c",
+      "iso 26262",
+      "aspice",
+      "which standards does mr4devops support"
+    ],
+    "answer": "Modern Requirements4DevOps's product page on modernrequirements.com states it's \"purpose-built\" for regulated-industry standards including FDA 21 CFR Part 11, ISO 13485, IEC 62304, DO-178C, ISO 26262, and ASPICE. (For dedicated clause-by-clause compliance tracking and audit-package generation across a broader standards list, see Compliance4DevOps — a separate companion product.)",
+    "sourceDoc": "modernrequirements.com — Modern Requirements4DevOps"
+  },
+  {
+    "id": "site-pricing-plans-overview",
+    "title": "Modern Requirements pricing plans and what's included",
+    "page": 1,
+    "keywords": [
+      "pricing plans",
+      "frontier plan",
+      "frontier ai plan",
+      "engineering plan",
+      "engineering ai plan",
+      "what's included in each plan",
+      "modern requirements packages",
+      "licensing plans"
+    ],
+    "answer": "Modern Requirements' pricing page (modernrequirements.com/pricing/) lists four packages: Frontier (\"the mainline platform\"), Frontier AI (\"Frontier + AI capabilities,\" marked Popular), Engineering (\"for systems engineering\"), and Engineering AI (\"Engineering + AI capabilities,\" marked Popular). All plans include native AI features (Elicitation, Analysis, Convert, Transform) plus Smart Docs, Smart Report, Document Management, Word Import, Test Hub Reporting, Review Management, Trace Analysis, and Baseline. The AI-tier plans (Frontier AI and Engineering AI) add the full AI capability set: Chat, Diagram Generation, Mockup, Pseudocode & Test Scripts, Dynamic Prompt, SOP/Document Generator, Transform, and Q&A Assistant. The Engineering-tier plans (Engineering and Engineering AI) add Variant Management and Parameterized Requirements. The page does not publish specific per-user or subscription prices — it uses \"Request Pricing\" buttons throughout.",
+    "sourceDoc": "modernrequirements.com — Pricing"
+  },
+  {
+    "id": "site-pricing-support-tiers",
+    "title": "Modern Requirements support tiers by plan",
+    "page": 1,
+    "keywords": [
+      "support tiers",
+      "basic support",
+      "priority support",
+      "premium support",
+      "mr academy access",
+      "ai4devops academy",
+      "agents4devops early access",
+      "what support do i get"
+    ],
+    "answer": "Per modernrequirements.com/pricing/, support level differs by plan: Frontier includes Basic Support plus MR Academy access; Frontier AI includes Priority Support plus MR Academy and AI4DevOps Academy access; Engineering AI includes Premium Support plus early access to new features and to Agents4DevOps. This indicates Agents4DevOps is currently being rolled out as an early-access feature for Engineering AI customers rather than being generally available on all plans.",
+    "sourceDoc": "modernrequirements.com — Pricing"
+  },
+  {
+    "id": "site-help-center-overview",
+    "title": "Where to find self-study videos, tutorials, and learning resources for Modern Requirements4DevOps",
+    "page": 1,
+    "keywords": [
+      "help center",
+      "self-study videos",
+      "azure devops tutorials",
+      "product tutorials",
+      "bootcamp video series",
+      "learning resources",
+      "how to learn modern requirements"
+    ],
+    "answer": "Modern Requirements' Help Center / learning hub (modernrequirements.com/resources/help-center/) hosts a 4-week \"Bootcamp\" video series covering requirements-workflow fundamentals, plus text-based Product Tutorials on Smart Docs, Traceability, Smart Report, Review Management, Baseline, and Document Management (these overlap with the feature documentation already covered in the NextGen Online Help). It also links to blog articles (including industry-specific guides for standards like GAMP 5, 21 CFR Part 11, DO-178C, DO-254, and ASPICE), gated whitepapers (DO-254, DO-178C, Data Dictionaries, AS9100, ISO 13485) that require a download/form submission, and recorded webinars on compliance, AI, and healthcare topics.",
+    "sourceDoc": "modernrequirements.com — Help Center"
+  },
+  {
+    "id": "site-mr-academy-overview",
+    "title": "What is MR Academy and how do you enroll",
+    "page": 1,
+    "keywords": [
+      "mr academy",
+      "modern requirements academy",
+      "how to enroll mr academy",
+      "mr academy activation key",
+      "mr academy courses",
+      "free certification azure devops"
+    ],
+    "answer": "MR Academy is Modern Requirements' free Learning Management System offering self-paced courses and certifications in requirements management and Azure DevOps, at modernrequirements.com/mr-academy/. Enrollment is a three-step process that requires entering the activation key \"Learn\" (case-sensitive). Featured certification courses listed on the page are: AI Powered Requirements, Smart Reporting, Trace Analysis, Document Authoring, Use Case Management, and Impact Assessment — each with a \"Register to get certified\" link.",
+    "sourceDoc": "modernrequirements.com — MR Academy"
+  },
+  {
+    "id": "site-glossary-acceptance-criteria",
+    "title": "What are acceptance criteria (Glossary)",
+    "page": 1,
+    "keywords": [
+      "acceptance criteria",
+      "what are acceptance criteria",
+      "what does acceptance criteria mean",
+      "definition of acceptance criteria"
+    ],
+    "answer": "Per the Modern Requirements Glossary (modernrequirements.com/glossary/): Acceptance criteria are \"the specific, testable conditions a user story or requirement must meet to be considered complete.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-azure-devops-work-item",
+    "title": "What is an Azure DevOps work item (Glossary)",
+    "page": 1,
+    "keywords": [
+      "azure devops work item",
+      "what is a work item",
+      "what does work item mean",
+      "definition of work item"
+    ],
+    "answer": "Per the Modern Requirements Glossary: An Azure DevOps work item is \"a record used to track a single piece of work, such as a user story, bug, task, feature, or epic.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-change-impact-analysis",
+    "title": "What is change impact analysis (Glossary)",
+    "page": 1,
+    "keywords": [
+      "change impact analysis",
+      "what is change impact analysis",
+      "what does change impact analysis mean",
+      "impact assessment definition"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Change impact analysis is \"the process of working out what a proposed change to a requirement will affect before the change is made.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-ears-notation",
+    "title": "What is EARS notation (Glossary)",
+    "page": 1,
+    "keywords": [
+      "ears notation",
+      "what is ears notation",
+      "easy approach to requirements syntax",
+      "what does ears mean"
+    ],
+    "answer": "Per the Modern Requirements Glossary: EARS notation stands for \"Easy Approach to Requirements Syntax — a set of simple sentence templates for writing clear, testable requirements.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-epic",
+    "title": "What is an Epic in Azure DevOps (Glossary)",
+    "page": 1,
+    "keywords": [
+      "epic",
+      "what is an epic",
+      "what does epic mean in azure devops",
+      "definition of epic"
+    ],
+    "answer": "Per the Modern Requirements Glossary: An Epic is \"the highest level of work item in Azure DevOps, representing a large body of work that spans multiple features and often several months.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-feature-work-item",
+    "title": "What is a Feature work item in Azure DevOps (Glossary)",
+    "page": 1,
+    "keywords": [
+      "feature work item",
+      "what is a feature in azure devops",
+      "what does feature mean azure devops",
+      "definition of feature work item"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A Feature is \"a mid-level work item in Azure DevOps that represents a distinct capability a product delivers, sitting below an epic and above user stories.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-functional-requirements",
+    "title": "What are functional requirements (Glossary)",
+    "page": 1,
+    "keywords": [
+      "functional requirements",
+      "what are functional requirements",
+      "what does functional requirement mean",
+      "definition of functional requirement"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Functional requirements are \"descriptions of something a product must do — a specific behavior, feature, or response to a given input.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-non-functional-requirements",
+    "title": "What are non-functional requirements (Glossary)",
+    "page": 1,
+    "keywords": [
+      "non-functional requirements",
+      "what are non-functional requirements",
+      "what does non-functional requirement mean",
+      "nfr definition"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Non-functional requirements are \"requirements that define how well a system must perform rather than what it does, covering qualities like speed, security, reliability, scalability, and usability.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-product-backlog",
+    "title": "What is a product backlog (Glossary)",
+    "page": 1,
+    "keywords": [
+      "product backlog",
+      "what is a product backlog",
+      "what does product backlog mean",
+      "definition of product backlog"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A product backlog is \"an ordered list of everything a team might work on for a product, from features and user stories to fixes and improvements.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-analysis",
+    "title": "What is requirements analysis (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements analysis",
+      "what is requirements analysis",
+      "what does requirements analysis mean",
+      "definition of requirements analysis"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Requirements analysis is \"the work of examining gathered requirements to ensure they are clear, complete, consistent, and feasible, then prioritizing and refining them.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-baseline",
+    "title": "What is a requirements baseline (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements baseline",
+      "what is a requirements baseline",
+      "what does requirements baseline mean",
+      "definition of requirements baseline"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A requirements baseline is \"a reviewed and approved set of requirements, frozen at a point in time to serve as the agreed reference for the work ahead.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-elicitation",
+    "title": "What is requirements elicitation (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements elicitation",
+      "what is requirements elicitation",
+      "what does requirements elicitation mean",
+      "definition of requirements elicitation"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Requirements elicitation is \"the work of drawing out what stakeholders actually need, using techniques like interviews, workshops, observation, and prototyping.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-engineering",
+    "title": "What is requirements engineering (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements engineering",
+      "what is requirements engineering",
+      "what does requirements engineering mean",
+      "definition of requirements engineering"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Requirements engineering is \"the discipline of discovering, analyzing, documenting, validating, and managing the requirements for a system across its lifecycle.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-gathering",
+    "title": "What is requirements gathering (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements gathering",
+      "what is requirements gathering",
+      "what does requirements gathering mean",
+      "definition of requirements gathering"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Requirements gathering is \"the process of collecting the needs and expectations for a product from stakeholders, users, and other sources at the start of a project.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-management",
+    "title": "What is requirements management (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements management",
+      "what is requirements management",
+      "what does requirements management mean",
+      "definition of requirements management"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Requirements management is \"the process of documenting, organizing, and tracking a product's requirements across its lifecycle, so that stakeholder needs are captured, agreed on, and traceable.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-management-ado",
+    "title": "What is requirements management in Azure DevOps (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements management in azure devops",
+      "what is requirements management in azure devops",
+      "azure devops requirements management definition"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Requirements management in Azure DevOps is \"the practice of capturing, organizing, and tracing requirements directly inside Azure DevOps, using work items like epics, features, and user stories.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-management-plan",
+    "title": "What is a requirements management plan (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements management plan",
+      "what is a requirements management plan",
+      "what does requirements management plan mean",
+      "definition of requirements management plan"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A requirements management plan is \"a document that sets out how requirements will be handled on a project — how they are captured, tracked, changed, and traced, and who is responsible.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-review",
+    "title": "What is a requirements review (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements review",
+      "what is a requirements review",
+      "what does requirements review mean",
+      "definition of requirements review"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A requirements review is \"a structured check of requirements by stakeholders to confirm they are clear, complete, correct, and agreed before development starts.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-traceability",
+    "title": "What is requirements traceability (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements traceability",
+      "what is requirements traceability",
+      "what does requirements traceability mean",
+      "definition of requirements traceability"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Requirements traceability is \"the practice of linking each requirement to its source and to everything downstream that fulfills or verifies it, such as designs, code, and test cases.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-rtm",
+    "title": "What is a Requirements Traceability Matrix (RTM) (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements traceability matrix",
+      "rtm",
+      "what is an rtm",
+      "what does rtm mean",
+      "definition of traceability matrix"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A Requirements Traceability Matrix (RTM) is \"a table that maps each requirement to the items that satisfy and verify it, such as design elements, test cases, and results.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-requirements-versioning",
+    "title": "What is requirements versioning (Glossary)",
+    "page": 1,
+    "keywords": [
+      "requirements versioning",
+      "what is requirements versioning",
+      "what does requirements versioning mean",
+      "definition of requirements versioning"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Requirements versioning is \"the practice of tracking changes to requirements over time, keeping a record of what changed, when, and by whom.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-srs",
+    "title": "What is a Software Requirements Specification (SRS) (Glossary)",
+    "page": 1,
+    "keywords": [
+      "software requirements specification",
+      "srs",
+      "what is an srs",
+      "what does srs mean",
+      "definition of srs document"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A Software Requirements Specification (SRS) is \"a document that describes what a software system must do and the constraints it must work within.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-test-case-management-ado",
+    "title": "What is test case management in Azure DevOps (Glossary)",
+    "page": 1,
+    "keywords": [
+      "test case management in azure devops",
+      "what is test case management",
+      "azure test plans definition",
+      "definition of test case management"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Test case management in Azure DevOps is \"the practice of creating, organizing, and running test cases within Azure Test Plans, and linking them to requirements and user stories.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-traceability-ado",
+    "title": "What is traceability in Azure DevOps (Glossary)",
+    "page": 1,
+    "keywords": [
+      "traceability in azure devops",
+      "what is traceability",
+      "what does traceability mean azure devops",
+      "definition of traceability azure devops"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Traceability in Azure DevOps is \"linking work items to each other and to code, builds, and tests, so a team can follow a requirement through to the work that delivers and verifies it.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-use-case",
+    "title": "What is a use case (Glossary)",
+    "page": 1,
+    "keywords": [
+      "use case",
+      "what is a use case",
+      "what does use case mean",
+      "definition of use case"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A use case is \"a description of how a user or another system interacts with a system to achieve a specific goal, laid out as a sequence of steps.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-user-story",
+    "title": "What is a user story (Glossary)",
+    "page": 1,
+    "keywords": [
+      "user story",
+      "what is a user story",
+      "what does user story mean",
+      "definition of user story",
+      "as a user I want"
+    ],
+    "answer": "Per the Modern Requirements Glossary: A user story is \"a short, plain-language description of a feature told from the point of view of the person who wants it,\" typically in the form \"as a [user], I want [goal], so that [benefit].\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-verification-validation",
+    "title": "What is verification and validation (V&V) (Glossary)",
+    "page": 1,
+    "keywords": [
+      "verification and validation",
+      "v&v",
+      "what is verification and validation",
+      "what does v&v mean",
+      "definition of verification and validation"
+    ],
+    "answer": "Per the Modern Requirements Glossary: Verification and validation (V&V) are \"two complementary checks on a product — verification confirms the product meets specifications, while validation confirms it meets stakeholder needs.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "site-glossary-work-item-hierarchy",
+    "title": "What is the work item hierarchy (Epic, Feature, Story) (Glossary)",
+    "page": 1,
+    "keywords": [
+      "work item hierarchy",
+      "epic feature story hierarchy",
+      "what is the work item hierarchy",
+      "azure devops work item levels",
+      "definition of work item hierarchy"
+    ],
+    "answer": "Per the Modern Requirements Glossary: The work item hierarchy (Epic, Feature, Story) is \"the parent-child structure in Azure DevOps that organizes work from broad to specific, typically Epic at the top, then Feature, then User Story, then Task.\"",
+    "sourceDoc": "modernrequirements.com — Glossary"
+  },
+  {
+    "id": "article-activate-standalone-signin",
+    "title": "Reaching the License Activation Page on the Standalone version",
+    "page": 1,
+    "keywords": [
+      "standalone activation",
+      "standalone version activation",
+      "how to activate standalone",
+      "User/SignIn",
+      "sign in page standalone",
+      "activation page url",
+      "where is the activation page",
+      "hostname 8028 signin",
+      "standalone license activation access"
+    ],
+    "answer": "For the Standalone version (as opposed to the Embedded version inside Azure DevOps/TFS), reach the License Activation page by opening a browser and navigating to http://[hostname]:8028/User/SignIn (replace [hostname] with your server name), then click Sign In. If the system has not yet been activated, you'll be redirected to the License Activation Page, where you can choose User Based, Floating, or Offline Activation as usual.",
+    "sourceDoc": "modernrequirements.com — Activating Modern Requirements4DevOps"
   }
 ]
