@@ -55,6 +55,13 @@ db.exec(`
     uploadedAt TEXT NOT NULL DEFAULT (datetime('now')),
     status TEXT NOT NULL DEFAULT 'pending'
   );
+
+  -- Full-text search over the raw material that never becomes a curated KB entry:
+  -- whole uploaded documents (as-is, no LLM extraction needed) and past resolved
+  -- tickets. Used as a fallback net when the curated, honesty-gated KB search
+  -- (client-side) doesn't have a confident answer — never as the primary source.
+  CREATE VIRTUAL TABLE IF NOT EXISTS documents_fts USING fts5(doc_id UNINDEXED, fileName, body);
+  CREATE VIRTUAL TABLE IF NOT EXISTS tickets_fts USING fts5(ticket_id UNINDEXED, subject, draft);
 `);
 
 // ---------------- one-time import from the legacy JSON files ----------------
@@ -101,6 +108,18 @@ if (isFreshDb) {
   }
 }
 
+// FTS5 tables here are plain (not "external content"), so they're populated explicitly
+// rather than kept in sync via triggers — simplest correct option at this data volume.
+// Rebuilt from scratch on every boot (after any one-time import above) so they can
+// never drift from the source tables, then kept current incrementally as new
+// documents/tickets are added during the session (see createDocument/addTicket/deleteDocument).
+db.exec('DELETE FROM documents_fts; DELETE FROM tickets_fts;');
+db.exec(`INSERT INTO documents_fts (doc_id, fileName, body) SELECT id, fileName, extractedText FROM documents`);
+db.exec(`
+  INSERT INTO tickets_fts (ticket_id, subject, draft)
+  SELECT id, json_extract(data, '$.subject'), json_extract(data, '$.draft') FROM tickets
+`);
+
 function rowToKbEntry(row) {
   return { id: row.id, title: row.title, sourceDoc: row.sourceDoc, page: row.page, keywords: JSON.parse(row.keywords), answer: row.answer, documentId: row.documentId || undefined };
 }
@@ -136,6 +155,7 @@ function addTicket(ticket) {
   db.prepare('INSERT INTO tickets (id, createdAt, data) VALUES (@id, @createdAt, @data)').run({
     id: ticket.id, createdAt: ticket.createdAt || null, data: JSON.stringify(ticket)
   });
+  db.prepare('INSERT INTO tickets_fts (ticket_id, subject, draft) VALUES (?, ?, ?)').run(ticket.id, ticket.subject || '', ticket.draft || '');
   return ticket;
 }
 function updateTicket(id, patch) {
@@ -143,6 +163,7 @@ function updateTicket(id, patch) {
   if (!row) return null;
   const merged = Object.assign({}, JSON.parse(row.data), patch);
   db.prepare('UPDATE tickets SET data = ? WHERE id = ?').run(JSON.stringify(merged), id);
+  db.prepare('UPDATE tickets_fts SET subject = ?, draft = ? WHERE ticket_id = ?').run(merged.subject || '', merged.draft || '', id);
   return merged;
 }
 
@@ -159,6 +180,7 @@ function appendLog(text) {
 // ---------------- Documents (upload library) ----------------
 function createDocument(fileName, fileType, extractedText) {
   const info = db.prepare('INSERT INTO documents (fileName, fileType, extractedText) VALUES (?, ?, ?)').run(fileName, fileType, extractedText);
+  db.prepare('INSERT INTO documents_fts (doc_id, fileName, body) VALUES (?, ?, ?)').run(info.lastInsertRowid, fileName, extractedText);
   return getDocument(info.lastInsertRowid);
 }
 function getDocument(id) {
@@ -174,7 +196,42 @@ function listDocuments() {
 }
 function deleteDocument(id) {
   const info = db.prepare('DELETE FROM documents WHERE id = ?').run(id);
+  db.prepare('DELETE FROM documents_fts WHERE doc_id = ?').run(id);
   return info.changes > 0;
+}
+
+// ---------------- Fallback full-text search (documents + past tickets) ----------------
+// Only meant to be consulted when the curated, client-side KB search doesn't have a
+// confident match — surfaces raw, unverified material ("found a mention of this in...")
+// rather than ever standing in for a reviewed knowledge-base answer.
+const FTS_STOPWORDS = new Set(['the','is','a','an','and','or','to','of','for','in','on','with','how','what','why','when','where','do','does','did','i','my','me','can','you','your','please','it','this','that','are','was','were','be','been','have','has','had','not','from','about','get','got']);
+function ftsQueryFrom(text) {
+  const tokens = String(text || '').toLowerCase().match(/[a-z0-9]+/g) || [];
+  const significant = tokens.filter(t => t.length >= 3 && !FTS_STOPWORDS.has(t));
+  if (!significant.length) return null;
+  return significant.slice(0, 12).map(t => t + '*').join(' OR ');
+}
+
+function searchDocuments(text, limit) {
+  const q = ftsQueryFrom(text);
+  if (!q) return [];
+  try {
+    return db.prepare(`
+      SELECT doc_id AS documentId, fileName, snippet(documents_fts, 2, '[', ']', ' … ', 30) AS snippet, bm25(documents_fts) AS rank
+      FROM documents_fts WHERE documents_fts MATCH ? ORDER BY rank LIMIT ?
+    `).all(q, limit || 3);
+  } catch (err) { console.error('Document search failed:', err.message); return []; }
+}
+
+function searchTickets(text, limit) {
+  const q = ftsQueryFrom(text);
+  if (!q) return [];
+  try {
+    return db.prepare(`
+      SELECT ticket_id AS ticketId, subject, snippet(tickets_fts, 2, '[', ']', ' … ', 30) AS snippet, bm25(tickets_fts) AS rank
+      FROM tickets_fts WHERE tickets_fts MATCH ? ORDER BY rank LIMIT ?
+    `).all(q, limit || 3);
+  } catch (err) { console.error('Ticket search failed:', err.message); return []; }
 }
 
 module.exports = {
@@ -182,4 +239,5 @@ module.exports = {
   getTickets, addTicket, updateTicket, countTickets,
   getLog, appendLog,
   createDocument, getDocument, listDocuments, deleteDocument,
+  searchDocuments, searchTickets,
 };

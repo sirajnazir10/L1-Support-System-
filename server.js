@@ -214,6 +214,20 @@ app.post('/api/documents/:id/extract', async (req, res) => {
   }
 });
 
+// ---------------- Fallback search (raw documents + past tickets) ----------------
+// This is deliberately separate from GET /api/kb: the customer-facing engine in the
+// browser treats the curated KB as the only source it can present as a confirmed
+// answer. This endpoint gives it a second, honestly-labelled net to check — whole
+// uploaded documents and past resolved tickets — when the curated KB has nothing.
+app.get('/api/search', (req, res) => {
+  const q = req.query.q || '';
+  if (!q.trim()) return res.json({ documents: [], tickets: [] });
+  res.json({
+    documents: store.searchDocuments(q, 3),
+    tickets: store.searchTickets(q, 3)
+  });
+});
+
 // ---------------- Tickets ----------------
 app.get('/api/tickets', (req, res) => {
   res.json(store.getTickets());
