@@ -725,7 +725,11 @@
     return typoVocabCache;
   }
   function correctTypo(word){
-    if(word.length < 5) return word;
+    // 5-letter words are where this is riskiest: at that length, a single edit is enough to
+    // land on a completely unrelated real word ("stack" -> "stuck", both real, one substitution
+    // apart) rather than catching an actual typo. Requiring 6+ characters before attempting a
+    // correction avoids that class of collision entirely.
+    if(word.length < 6) return word;
     var vocab = typoVocab();
     if(vocab.indexOf(word) !== -1) return word;
     var best = null, bestDist = Infinity;
