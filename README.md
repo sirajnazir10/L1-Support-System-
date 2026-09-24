@@ -18,14 +18,19 @@ no Zendesk connection required — and serves a website at
   verified answer to the knowledge base on the spot — it's saved to disk
   immediately and used in the very next query.
 
-Everything (knowledge base, tickets, learning log) is stored as plain
-JSON files in the `data/` folder next to this app, so it survives
-restarts and is easy to back up, inspect, or edit by hand.
+Everything (knowledge base, tickets, learning log, and the document
+library) is stored in a SQLite database (`data/nexis.db`) in the `data/`
+folder next to this app, so it survives restarts and is a single file to
+back up. The knowledge base is also mirrored to `data/kb.json` after every
+change, purely so it stays easy to review, diff, or hand-edit — see
+[Growing the knowledge base](#growing-the-knowledge-base).
 
 ## Requirements
 
-- [Node.js](https://nodejs.org) 16 or newer (the LTS installer is fine).
-  Works on Windows, macOS, and Linux.
+- [Node.js](https://nodejs.org) 22 or newer (the LTS installer is fine).
+  Works on Windows, macOS, and Linux. (This moved up from Node 16 when the
+  app switched to a real SQLite database in v1.2 — `better-sqlite3` ships
+  prebuilt binaries for Node 22+ only.)
 
 ## Running it on Windows
 
@@ -159,9 +164,12 @@ lets you manage/restart the Node process independently of IIS.
   a certificate binding in IIS the normal way (IIS terminates TLS; the
   Node app itself keeps speaking plain HTTP internally) — ask if you'd
   like the exact steps once you're ready for that.
-- **Data location**: `data/kb.json`, `data/tickets.json`, and
-  `data/learning-log.json` live next to `server.js` wherever you deploy
-  it — back that folder up like you would any other application data.
+- **Data location**: `data/nexis.db` (the SQLite database — knowledge
+  base, tickets, learning log, and uploaded documents) lives next to
+  `server.js` wherever you deploy it — back that file up like you would
+  any other application data. `data/kb.json` is a read-friendly mirror of
+  the knowledge base table, regenerated automatically; it isn't read at
+  startup unless `data/nexis.db` doesn't exist yet (see below).
 - This is still the local keyword-matching demo described below, not a
   live model call or a Zendesk/website integration — IIS just changes
   *how it's reached* on your network, not what it does.
@@ -176,12 +184,17 @@ Document Properties Technote, Test Case Management Technote, 2025
 Release Notes, 2025 Patch Release Notes, and the MR4TFS Embedded
 overview.
 
-Two ways to add more:
+Three ways to add more:
 
 1. **From the Agent Console** — use the "Add documentation" panel to add
    a verified answer directly (great for capturing the resolution of a
    ticket that wasn't covered yet).
-2. **By editing `data/kb.json` directly** — each entry looks like:
+2. **Document library** (Agent Console → Knowledge Base → "Document
+   library") — upload PDF, Word (.docx), .txt, or .md files; they're
+   stored so you can come back and extract entries from any of them at
+   any time. See [Optional: LLM-backed answers and the document
+   library](#optional-llm-backed-answers-and-the-document-library-v11) below.
+3. **By editing `data/kb.json` directly** — each entry looks like:
 
 ```json
 {
@@ -193,11 +206,15 @@ Two ways to add more:
   "answer": "The full answer, written in plain language."
 }
 ```
+This only works as a *one-time import*: `data/kb.json` is read back in
+only when `data/nexis.db` doesn't exist yet (a brand-new install, or after
+deleting the database file to start fresh). Once the database exists, it
+is the source of truth and `data/kb.json` is just an export — edit the KB
+through the Agent Console (options 1 or 2) instead, or delete
+`data/nexis.db` and restart if you really want a hand-edited `kb.json` to
+be re-imported.
 
-Restart the server (or just refresh the page — the KB is fetched fresh
-on every load) after editing the file by hand.
-
-## Optional: LLM-backed answers and document upload (v1.1+)
+## Optional: LLM-backed answers and the document library (v1.1+)
 
 The app works fully without this — everything below is additive and
 degrades cleanly if unconfigured. By default (no API key set), Nexis
@@ -212,11 +229,15 @@ before.
   already-validated answer more naturally. If the call fails or isn't
   configured, the reply falls straight back to the local engine's own
   wording, so the app never depends on the LLM to function.
-- **Upload a document** (Agent Console → Knowledge Base → "Upload a
-  document"): upload a PDF, Word (.docx), .txt, or .md file, and an LLM
-  pass proposes distinct knowledge-base entries from it. Nothing is
-  saved automatically — you review, edit, and approve each proposed
-  entry before it's added, the same way manually-added entries work.
+- **Document library** (Agent Console → Knowledge Base → "Document
+  library"): upload one or more PDF, Word (.docx), .txt, or .md files at
+  once. Uploading and storing documents works even without an LLM key —
+  they're just kept in `data/nexis.db` for later. When you're ready, click
+  "Extract entries" on any stored document (this step needs the LLM) and
+  an AI pass proposes distinct knowledge-base entries from it. Nothing is
+  saved automatically — you review, edit, and approve each proposed entry
+  before it's added, the same way manually-added entries work, and saved
+  entries stay linked back to the document they came from.
 
 **To turn this on**, set an environment variable before starting the
 server:
@@ -240,8 +261,11 @@ tickets and content still flow in through the Customer Portal and the
 **Likely next candidates:**
 - Connect to Zendesk and the website so tickets and content flow in
   automatically.
+- Mining resolved tickets and client feedback to propose knowledge-base
+  updates automatically, the same reviewed-before-saving way document
+  uploads work now.
 - Semantic (embedding-based) search instead of keyword matching, for
   even better recall on unusual phrasing.
 - User accounts/login for agents, instead of a single shared console.
-- HTTPS and a proper database (instead of JSON files) once this moves
-  off a single machine.
+- HTTPS, and moving from SQLite to a client/server database (e.g.
+  Postgres) once this moves off a single machine.

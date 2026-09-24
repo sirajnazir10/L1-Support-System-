@@ -1,22 +1,20 @@
 // MR Nexis — local server
 // Serves the web app and a small JSON API for the knowledge base, tickets,
-// and the continuous-learning log. Everything persists to /data so the app
-// keeps its state across restarts.
+// the continuous-learning log, and the document upload library. Everything
+// persists to data/nexis.db (SQLite) so the app keeps its state across
+// restarts; data/kb.json is kept as a human-readable, git-diffable mirror of
+// the kb_entries table, regenerated after every KB write.
 
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const Anthropic = require('@anthropic-ai/sdk');
 const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
+const store = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DATA_DIR = path.join(__dirname, 'data');
-const KB_FILE = path.join(DATA_DIR, 'kb.json');
-const TICKETS_FILE = path.join(DATA_DIR, 'tickets.json');
-const LOG_FILE = path.join(DATA_DIR, 'learning-log.json');
 
 // ---------------- LLM (optional — app works without it, see /api/llm-status) ----------------
 // Reads the key from the environment only; never hardcode or log it. Everything that calls
@@ -26,48 +24,28 @@ const NEXIS_MODEL = process.env.NEXIS_MODEL || 'claude-sonnet-5';
 const anthropic = process.env.ANTHROPIC_API_KEY ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }) : null;
 function llmAvailable() { return !!anthropic; }
 
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } }); // 20MB
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } }); // 20MB/file
 
 app.use(express.json({ limit: '15mb' })); // generous limit so attached screenshots (base64) fit
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ---------------- small JSON-file helpers ----------------
-function readJson(file, fallback) {
-  try {
-    if (!fs.existsSync(file)) return fallback;
-    const raw = fs.readFileSync(file, 'utf8').trim();
-    return raw ? JSON.parse(raw) : fallback;
-  } catch (err) {
-    console.error('Failed to read', file, err.message);
-    return fallback;
-  }
+function escapeHtmlLite(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
-function writeJson(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
-}
-function ensureFile(file, fallback) {
-  if (!fs.existsSync(file)) writeJson(file, fallback);
-}
-
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-ensureFile(KB_FILE, []);
-ensureFile(TICKETS_FILE, []);
-ensureFile(LOG_FILE, []);
 
 // ---------------- Knowledge base ----------------
 // GET all entries
 app.get('/api/kb', (req, res) => {
-  res.json(readJson(KB_FILE, []));
+  res.json(store.getKb());
 });
 
-// Add a new entry — this is how the KB grows: an agent, or a future
-// integration (tickets/website/docs pipeline), posts a new sourced entry here.
+// Add a new entry — this is how the KB grows: an agent, or a document-upload
+// review pass, posts a new sourced entry here.
 app.post('/api/kb', (req, res) => {
-  const { title, sourceDoc, page, keywords, answer } = req.body || {};
+  const { title, sourceDoc, page, keywords, answer, documentId } = req.body || {};
   if (!title || !sourceDoc || !answer) {
     return res.status(400).json({ error: 'title, sourceDoc, and answer are required.' });
   }
-  const kb = readJson(KB_FILE, []);
   const slug = String(title).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40);
   const entry = {
     id: 'custom-' + slug + '-' + Date.now().toString(36),
@@ -75,11 +53,11 @@ app.post('/api/kb', (req, res) => {
     sourceDoc: String(sourceDoc),
     page: Number(page) || 0,
     keywords: Array.isArray(keywords) ? keywords : String(keywords || '').split(',').map(s => s.trim()).filter(Boolean),
-    answer: String(answer)
+    answer: String(answer),
+    documentId: documentId ? Number(documentId) : undefined
   };
-  kb.push(entry);
-  writeJson(KB_FILE, kb);
-  appendLog(`<b>Knowledge base updated</b> — new entry "${escapeHtmlLite(entry.title)}" added (source: ${escapeHtmlLite(entry.sourceDoc)}).`);
+  store.addKbEntry(entry);
+  store.appendLog(`<b>Knowledge base updated</b> — new entry "${escapeHtmlLite(entry.title)}" added (source: ${escapeHtmlLite(entry.sourceDoc)}).`);
   res.status(201).json(entry);
 });
 
@@ -130,65 +108,95 @@ app.post('/api/ask', async (req, res) => {
   }
 });
 
-// ---------------- Document upload -> KB entry extraction (optional, requires LLM) ----------------
-// Uploaded files are never written to disk or added to the KB automatically — text is
-// extracted, an LLM proposes candidate entries, and the caller reviews/edits/approves each one
-// (saved individually through the existing POST /api/kb) before anything persists.
-async function extractTextFromUpload(file) {
-  const ext = path.extname(file.originalname).toLowerCase();
+// ---------------- Document library (upload -> stored -> optionally extracted into KB entries) ----------------
+// Uploaded files are parsed to text and persisted in the documents table immediately (this works
+// even without an LLM key — it's just storage). Turning a stored document's text into proposed
+// KB entries is a separate step that does require the LLM; nothing is added to the KB
+// automatically — the caller reviews/edits/approves each proposed entry (saved individually
+// through the existing POST /api/kb, tagged with documentId) before anything persists there.
+async function extractTextFromFile(originalname, buffer) {
+  const ext = path.extname(originalname).toLowerCase();
   if (ext === '.pdf') {
-    const data = await pdfParse(file.buffer);
+    const data = await pdfParse(buffer);
     return data.text;
   }
   if (ext === '.docx' || ext === '.doc') {
-    const result = await mammoth.extractRawText({ buffer: file.buffer });
+    const result = await mammoth.extractRawText({ buffer });
     return result.value;
   }
   if (ext === '.txt' || ext === '.md') {
-    return file.buffer.toString('utf8');
+    return buffer.toString('utf8');
   }
   return null; // unsupported type — caller checks for this
 }
 
-app.post('/api/upload', upload.single('file'), async (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'No file uploaded (expected multipart field "file").' });
-  if (!llmAvailable()) {
-    return res.status(503).json({ error: 'Document upload requires the LLM to extract entries, and no API key is configured (set ANTHROPIC_API_KEY on the server).' });
+app.post('/api/documents', upload.array('files', 20), async (req, res) => {
+  if (!req.files || !req.files.length) return res.status(400).json({ error: 'No files uploaded (expected multipart field "files").' });
+  const results = [];
+  for (const file of req.files) {
+    const ext = path.extname(file.originalname).toLowerCase();
+    let text;
+    try {
+      text = await extractTextFromFile(file.originalname, file.buffer);
+    } catch (err) {
+      results.push({ fileName: file.originalname, error: 'Could not read this file: ' + err.message });
+      continue;
+    }
+    if (text === null) {
+      results.push({ fileName: file.originalname, error: 'Unsupported file type — upload a PDF, Word (.docx), .txt, or .md file.' });
+      continue;
+    }
+    text = text.trim();
+    if (!text) {
+      results.push({ fileName: file.originalname, error: 'No extractable text found in this file.' });
+      continue;
+    }
+    const doc = store.createDocument(file.originalname, ext, text);
+    store.appendLog(`<b>Document uploaded</b> — "${escapeHtmlLite(file.originalname)}" added to the document library.`);
+    results.push({ id: doc.id, fileName: doc.fileName, status: doc.status, textLength: text.length });
   }
-  let text;
-  try {
-    text = await extractTextFromUpload(req.file);
-  } catch (err) {
-    return res.status(422).json({ error: 'Could not read this file: ' + err.message });
-  }
-  if (text === null) {
-    return res.status(415).json({ error: 'Unsupported file type — upload a PDF, Word (.docx), .txt, or .md file.' });
-  }
-  text = text.trim();
-  if (!text) {
-    return res.status(422).json({ error: 'No extractable text found in this file.' });
-  }
+  res.status(201).json({ documents: results });
+});
 
-  const defaultSourceDoc = path.basename(req.file.originalname, path.extname(req.file.originalname));
-  const EXTRACTION_SYSTEM_PROMPT = `You split a support/product document into distinct, self-contained knowledge-base entries.
+app.get('/api/documents', (req, res) => {
+  res.json(store.listDocuments());
+});
+
+app.delete('/api/documents/:id', (req, res) => {
+  const ok = store.deleteDocument(Number(req.params.id));
+  if (!ok) return res.status(404).json({ error: 'Document not found.' });
+  res.json({ ok: true });
+});
+
+const EXTRACTION_SYSTEM_PROMPT_TEMPLATE = (defaultSourceDoc) => `You split a support/product document into distinct, self-contained knowledge-base entries.
 Each entry must be a single clear question-and-answer unit a customer might plausibly ask about — don't split one coherent idea into fragments, and don't merge unrelated topics into one entry.
 Only use facts actually present in the document — never add outside information.
 Respond with ONLY a JSON array, no other text, of objects matching exactly:
 {"title": "short descriptive title", "sourceDoc": "${defaultSourceDoc}", "page": 1, "keywords": ["3-8 short search phrases a customer would type"], "answer": "the full answer in plain language, grounded only in the document text"}
 If the document is too short or unclear to split meaningfully, return a single entry covering it as a whole. Cap it at 40 entries.`;
 
+app.post('/api/documents/:id/extract', async (req, res) => {
+  if (!llmAvailable()) {
+    return res.status(503).json({ error: 'Extracting KB entries requires the LLM, and no API key is configured (set ANTHROPIC_API_KEY on the server).' });
+  }
+  const doc = store.getDocument(Number(req.params.id));
+  if (!doc) return res.status(404).json({ error: 'Document not found.' });
+
+  const defaultSourceDoc = path.basename(doc.fileName, path.extname(doc.fileName));
+  const systemPrompt = EXTRACTION_SYSTEM_PROMPT_TEMPLATE(defaultSourceDoc);
   try {
     // Large documents are chunked so extraction stays within the model's context/output limits.
     const CHUNK_SIZE = 12000;
+    const text = doc.extractedText;
     const chunks = [];
     for (let i = 0; i < text.length; i += CHUNK_SIZE) chunks.push(text.slice(i, i + CHUNK_SIZE));
 
     const allEntries = [];
-    for (const chunk of chunks.slice(0, 10)) { // hard cap: 10 chunks (~120k chars) per upload
+    for (const chunk of chunks.slice(0, 10)) { // hard cap: 10 chunks (~120k chars) per document
       const message = await anthropic.messages.create({
         model: NEXIS_MODEL,
         max_tokens: 4000,
-        system: EXTRACTION_SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: [{ role: 'user', content: chunk }]
       });
       const raw = (message.content || []).map(b => b.type === 'text' ? b.text : '').join('').trim();
@@ -196,56 +204,56 @@ If the document is too short or unclear to split meaningfully, return a single e
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) allEntries.push(...parsed);
       } catch (e) {
-        console.error('Upload extraction: unparseable chunk response, skipping chunk.');
+        console.error('Document extraction: unparseable chunk response, skipping chunk.');
       }
     }
-    res.json({ fileName: req.file.originalname, defaultSourceDoc, entries: allEntries.slice(0, 60) });
+    res.json({ documentId: doc.id, fileName: doc.fileName, defaultSourceDoc, entries: allEntries.slice(0, 60) });
   } catch (err) {
-    console.error('LLM /api/upload extraction failed:', err.message);
+    console.error('LLM document extraction failed:', err.message);
     res.status(502).json({ error: 'The document was read, but extracting entries from it failed: ' + err.message });
   }
 });
 
+// ---------------- Fallback search (raw documents + past tickets) ----------------
+// This is deliberately separate from GET /api/kb: the customer-facing engine in the
+// browser treats the curated KB as the only source it can present as a confirmed
+// answer. This endpoint gives it a second, honestly-labelled net to check — whole
+// uploaded documents and past resolved tickets — when the curated KB has nothing.
+app.get('/api/search', (req, res) => {
+  const q = req.query.q || '';
+  if (!q.trim()) return res.json({ documents: [], tickets: [] });
+  res.json({
+    documents: store.searchDocuments(q, 3),
+    tickets: store.searchTickets(q, 3)
+  });
+});
+
 // ---------------- Tickets ----------------
 app.get('/api/tickets', (req, res) => {
-  res.json(readJson(TICKETS_FILE, []));
+  res.json(store.getTickets());
 });
 
 app.post('/api/tickets', (req, res) => {
-  const tickets = readJson(TICKETS_FILE, []);
-  const ticket = Object.assign({ id: 'MR-' + (1000 + tickets.length + 1), createdAt: new Date().toISOString() }, req.body);
-  tickets.push(ticket);
-  writeJson(TICKETS_FILE, tickets);
+  const ticket = Object.assign({ id: 'MR-' + (1000 + store.countTickets() + 1), createdAt: new Date().toISOString() }, req.body);
+  store.addTicket(ticket);
   res.status(201).json(ticket);
 });
 
 app.patch('/api/tickets/:id', (req, res) => {
-  const tickets = readJson(TICKETS_FILE, []);
-  const idx = tickets.findIndex(t => t.id === req.params.id);
-  if (idx === -1) return res.status(404).json({ error: 'Ticket not found.' });
-  tickets[idx] = Object.assign({}, tickets[idx], req.body);
-  writeJson(TICKETS_FILE, tickets);
-  res.json(tickets[idx]);
+  const updated = store.updateTicket(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: 'Ticket not found.' });
+  res.json(updated);
 });
 
 // ---------------- Learning log ----------------
-function escapeHtmlLite(s) {
-  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-function appendLog(text) {
-  const log = readJson(LOG_FILE, []);
-  log.unshift({ text, ts: new Date().toISOString() });
-  writeJson(LOG_FILE, log.slice(0, 500));
-}
-
 app.get('/api/log', (req, res) => {
-  res.json(readJson(LOG_FILE, []));
+  res.json(store.getLog());
 });
 
 app.post('/api/log', (req, res) => {
   const { text } = req.body || {};
   if (!text) return res.status(400).json({ error: 'text is required.' });
-  appendLog(String(text));
+  store.appendLog(String(text));
   res.status(201).json({ ok: true });
 });
 
@@ -253,7 +261,7 @@ app.listen(PORT, () => {
   console.log('');
   console.log('  MR Nexis is running.');
   console.log('  Open http://localhost:' + PORT + ' in your browser.');
-  console.log('  Knowledge base: ' + readJson(KB_FILE, []).length + ' entries loaded from data/kb.json');
+  console.log('  Knowledge base: ' + store.getKb().length + ' entries loaded from data/nexis.db');
   console.log('  Press Ctrl+C to stop.');
   console.log('');
 });

@@ -1,3 +1,5 @@
 node_modules/
 data/tickets.json
 data/learning-log.json
+data/nexis.db
+data/nexis.db-*

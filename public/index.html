@@ -2121,14 +2121,15 @@
       '</div></div>' +
     '</div>' +
     '<div class="card kb-mb collapsible" id="kbUploadCard">' +
-      '<button type="button" class="card-header-row"><h3>Upload a document</h3>' + ic('chevDown','chev') + '</button>' +
+      '<button type="button" class="card-header-row"><h3>Document library</h3>' + ic('chevDown','chev') + '</button>' +
       '<div class="coll-body">' +
-        '<p class="kb-stat">Upload a PDF, Word (.docx), .txt, or .md file — an AI pass proposes distinct knowledge-base entries from it for you to review, edit, and approve before anything is saved. Requires the server\'s LLM to be configured (ANTHROPIC_API_KEY).</p>' +
+        '<p class="kb-stat">Upload PDF, Word (.docx), .txt, or .md files — they\'re stored here so you can extract knowledge-base entries from any of them at any time. Extraction uses an AI pass to propose entries for you to review, edit, and approve before anything is saved to the knowledge base; it requires the server\'s LLM to be configured (ANTHROPIC_API_KEY), but uploading and storing documents works either way.</p>' +
         '<div class="form-grid">' +
-          '<label for="kbUploadFile">File</label><input id="kbUploadFile" type="file" accept=".pdf,.docx,.doc,.txt,.md"/>' +
-          '<button class="btn primary" id="kbUploadBtn" type="button" style="align-self:flex-start;">' + ic('plus') + 'Extract entries</button>' +
+          '<label for="kbUploadFile">Files</label><input id="kbUploadFile" type="file" accept=".pdf,.docx,.doc,.txt,.md" multiple/>' +
+          '<button class="btn primary" id="kbUploadBtn" type="button" style="align-self:flex-start;">' + ic('plus') + 'Upload</button>' +
           '<div class="form-msg" id="kbUploadMsg"></div>' +
         '</div>' +
+        '<div id="kbDocList" style="margin-top:12px;"></div>' +
         '<div id="kbUploadReview"></div>' +
       '</div>' +
     '</div>' +
@@ -2445,34 +2446,62 @@
         composer.focus();
       }
 
-      // LLM first, keyword fallback: the local engine above already did all retrieval,
-      // validation, and honesty-gating (never guesses) — the LLM call only asks for a more
-      // naturally-phrased draft of the SAME already-validated matches, and only replaces the
-      // wording if it actually grounds itself in one of those matches and says it's confident.
-      // Any missing key, network failure, or low-confidence response falls straight back to
-      // the exact reply this app has always produced.
-      if(nexisLlmAvailable && matches.length && text){
-        apiPost('/api/ask', { question: text, candidates: matches.slice(0, 8).map(function(m){ return m.entry; }) })
-          .then(function(llm){
-            var usedRealMatch = llm && Array.isArray(llm.usedIds) && llm.usedIds.some(function(id){
-              return matches.some(function(m){ return m.entry.id === id; });
-            });
-            if(llm && llm.available && llm.confident && usedRealMatch){
-              finish({
-                understanding: llm.understanding || reply.understanding,
-                answer: llm.answer || reply.answer,
-                nextStep: llm.nextStep || reply.nextStep,
-                citation: reply.citation, investigate: reply.investigate, missingWhat: reply.missingWhat
+      // Fallback net: the curated KB is the only thing the engine above will present as a
+      // confirmed answer — but when it comes up empty, check raw material that never went
+      // through curation (whole uploaded documents, past resolved tickets) before giving up.
+      // Anything found here is surfaced honestly as an unverified lead, not a settled answer,
+      // and never affects escalation/priority/confidence — those already came from `reply`.
+      var rawRefsPromise = (!matches.length && text)
+        ? apiGet('/api/search?q=' + encodeURIComponent(text)).catch(function(){ return null; })
+        : Promise.resolve(null);
+
+      rawRefsPromise.then(function(raw){
+        var replyWithRefs = attachRawReferenceNote(reply, raw);
+
+        // LLM first, keyword fallback: the local engine above already did all retrieval,
+        // validation, and honesty-gating (never guesses) — the LLM call only asks for a more
+        // naturally-phrased draft of the SAME already-validated matches, and only replaces the
+        // wording if it actually grounds itself in one of those matches and says it's confident.
+        // Any missing key, network failure, or low-confidence response falls straight back to
+        // the exact reply this app has always produced.
+        if(nexisLlmAvailable && matches.length && text){
+          apiPost('/api/ask', { question: text, candidates: matches.slice(0, 8).map(function(m){ return m.entry; }) })
+            .then(function(llm){
+              var usedRealMatch = llm && Array.isArray(llm.usedIds) && llm.usedIds.some(function(id){
+                return matches.some(function(m){ return m.entry.id === id; });
               });
-            } else {
-              finish(reply);
-            }
-          })
-          .catch(function(){ finish(reply); });
-      } else {
-        finish(reply);
-      }
+              if(llm && llm.available && llm.confident && usedRealMatch){
+                finish({
+                  understanding: llm.understanding || reply.understanding,
+                  answer: llm.answer || reply.answer,
+                  nextStep: llm.nextStep || reply.nextStep,
+                  citation: reply.citation, investigate: reply.investigate, missingWhat: reply.missingWhat
+                });
+              } else {
+                finish(replyWithRefs);
+              }
+            })
+            .catch(function(){ finish(replyWithRefs); });
+        } else {
+          finish(replyWithRefs);
+        }
+      });
     });
+  }
+
+  // Turns a /api/search hit (raw document or past-ticket text, never curated/reviewed) into
+  // one honest, clearly-hedged sentence appended to an otherwise-unconfident reply. Never
+  // used when the curated KB already found something — see the `!matches.length` gate above.
+  function attachRawReferenceNote(reply, raw){
+    if(!raw) return reply;
+    var refs = [];
+    (raw.documents || []).forEach(function(d){ refs.push({ label: 'the uploaded document "' + d.fileName + '"', snippet: d.snippet }); });
+    (raw.tickets || []).forEach(function(t){ refs.push({ label: 'a past ticket ("' + t.subject + '")', snippet: t.snippet }); });
+    if(!refs.length) return reply;
+    var top = refs[0];
+    var cleanSnippet = String(top.snippet || '').replace(/[\[\]]/g, '');
+    var note = "I couldn't confirm this from our verified, reviewed documentation, but I did find a possibly related mention in " + top.label + ': "' + cleanSnippet + '" — I\'m flagging this for an agent to check rather than presenting it as settled.';
+    return Object.assign({}, reply, { answer: (reply.answer || '') + '\n\n' + note });
   }
 
   sendBtn.addEventListener('click', trySend);
@@ -2563,37 +2592,89 @@
     });
   });
 
-  // ---- Upload a document -> AI-proposed entries -> reviewed -> saved individually via
-  // the same POST /api/kb used above. Nothing from an upload is ever saved automatically.
+  // ---- Document library: upload (stored immediately, works with or without the LLM) ->
+  // per-document "Extract entries" (AI-proposed, requires the LLM) -> reviewed -> saved
+  // individually via the same POST /api/kb used above, tagged with documentId. Nothing from
+  // a document is ever added to the KB automatically.
   document.getElementById('kbUploadBtn').addEventListener('click', function(){
     var fileInput = document.getElementById('kbUploadFile');
     var msg = document.getElementById('kbUploadMsg');
-    var review = document.getElementById('kbUploadReview');
-    var file = fileInput.files && fileInput.files[0];
-    if(!file){ msg.style.color = 'var(--danger)'; msg.textContent = 'Choose a file first.'; return; }
+    var files = fileInput.files;
+    if(!files || !files.length){ msg.style.color = 'var(--danger)'; msg.textContent = 'Choose one or more files first.'; return; }
     var btn = document.getElementById('kbUploadBtn');
     btn.disabled = true;
-    msg.style.color = ''; msg.textContent = 'Reading and analyzing the document…';
-    review.innerHTML = '';
+    msg.style.color = ''; msg.textContent = 'Uploading and reading ' + files.length + ' file' + (files.length > 1 ? 's' : '') + '…';
     var fd = new FormData();
-    fd.append('file', file);
-    fetch('/api/upload', { method: 'POST', body: fd })
+    Array.prototype.forEach.call(files, function(f){ fd.append('files', f); });
+    fetch('/api/documents', { method: 'POST', body: fd })
       .then(function(r){ return r.json().then(function(body){ return { ok: r.ok, body: body }; }); })
       .then(function(res){
         btn.disabled = false;
+        fileInput.value = '';
         if(!res.ok){ msg.style.color = 'var(--danger)'; msg.textContent = res.body.error || 'Upload failed.'; return; }
-        var entries = res.body.entries || [];
-        if(!entries.length){ msg.style.color = 'var(--danger)'; msg.textContent = 'No entries could be extracted from this document.'; return; }
-        msg.style.color = 'var(--success)';
-        msg.textContent = entries.length + ' proposed entries — review, edit, and save the ones you want.';
-        renderUploadReview(entries, res.body.defaultSourceDoc);
+        var docs = res.body.documents || [];
+        var failed = docs.filter(function(d){ return d.error; });
+        var okCount = docs.length - failed.length;
+        msg.style.color = failed.length ? 'var(--danger)' : 'var(--success)';
+        msg.textContent = okCount + ' file' + (okCount === 1 ? '' : 's') + ' added to the library' +
+          (failed.length ? ('; ' + failed.length + ' failed (' + failed.map(function(d){ return d.fileName + ': ' + d.error; }).join('; ') + ')') : '.');
+        loadDocuments();
       })
       .catch(function(){
         btn.disabled = false; msg.style.color = 'var(--danger)'; msg.textContent = 'Could not reach the server.';
       });
   });
 
-  function renderUploadReview(entries, defaultSourceDoc){
+  function loadDocuments(){
+    apiGet('/api/documents').then(function(docs){ renderDocList(docs || []); }).catch(function(){});
+  }
+
+  function renderDocList(docs){
+    var list = document.getElementById('kbDocList');
+    if(!docs.length){ list.innerHTML = '<p class="kb-stat">No documents uploaded yet.</p>'; return; }
+    list.innerHTML = docs.map(function(d){
+      var statusLabel = d.status === 'processed' ? (d.entryCount + ' entr' + (d.entryCount === 1 ? 'y' : 'ies') + ' saved') : 'not yet extracted';
+      return '<div class="card mini-card doc-row" data-doc-id="' + d.id + '" style="margin-top:8px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">' +
+        '<div style="flex:1; min-width:180px;"><strong>' + escapeHtml(d.fileName) + '</strong><br/>' +
+        '<span class="composer-hint">' + escapeHtml(statusLabel) + ' &middot; uploaded ' + escapeHtml(d.uploadedAt) + '</span></div>' +
+        '<button class="btn doc-extract-btn" type="button" data-doc-id="' + d.id + '"' + (nexisLlmAvailable ? '' : ' disabled title="Requires the server\'s LLM to be configured (ANTHROPIC_API_KEY)."') + '>' + ic('search') + 'Extract entries</button>' +
+        '<button class="btn danger-ghost doc-delete-btn" type="button" data-doc-id="' + d.id + '">' + ic('trash') + 'Remove</button>' +
+      '</div>';
+    }).join('');
+
+    Array.prototype.slice.call(document.querySelectorAll('.doc-extract-btn')).forEach(function(btn){
+      btn.addEventListener('click', function(){ extractFromDocument(Number(btn.getAttribute('data-doc-id')), btn); });
+    });
+    Array.prototype.slice.call(document.querySelectorAll('.doc-delete-btn')).forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = Number(btn.getAttribute('data-doc-id'));
+        btn.disabled = true;
+        fetch('/api/documents/' + id, { method: 'DELETE' }).then(function(){ loadDocuments(); }).catch(function(){ btn.disabled = false; });
+      });
+    });
+  }
+
+  function extractFromDocument(docId, btn){
+    var msg = document.getElementById('kbUploadMsg');
+    btn.disabled = true;
+    msg.style.color = ''; msg.textContent = 'Analyzing the document…';
+    fetch('/api/documents/' + docId + '/extract', { method: 'POST' })
+      .then(function(r){ return r.json().then(function(body){ return { ok: r.ok, body: body }; }); })
+      .then(function(res){
+        btn.disabled = false;
+        if(!res.ok){ msg.style.color = 'var(--danger)'; msg.textContent = res.body.error || 'Extraction failed.'; return; }
+        var entries = res.body.entries || [];
+        if(!entries.length){ msg.style.color = 'var(--danger)'; msg.textContent = 'No entries could be extracted from this document.'; return; }
+        msg.style.color = 'var(--success)';
+        msg.textContent = entries.length + ' proposed entries — review, edit, and save the ones you want.';
+        renderUploadReview(entries, res.body.defaultSourceDoc, docId);
+      })
+      .catch(function(){
+        btn.disabled = false; msg.style.color = 'var(--danger)'; msg.textContent = 'Could not reach the server.';
+      });
+  }
+
+  function renderUploadReview(entries, defaultSourceDoc, documentId){
     var review = document.getElementById('kbUploadReview');
     review.innerHTML = entries.map(function(e, i){
       return '<div class="card mini-card upload-review-row" data-idx="' + i + '" style="margin-top:10px;">' +
@@ -2613,7 +2694,8 @@
           sourceDoc: row.querySelector('.ur-source').value.trim() || 'Uploaded document',
           page: 1,
           keywords: row.querySelector('.ur-keywords').value.split(',').map(function(s){ return s.trim(); }).filter(Boolean),
-          answer: row.querySelector('.ur-answer').value.trim()
+          answer: row.querySelector('.ur-answer').value.trim(),
+          documentId: documentId
         };
       }).filter(function(e){ return e.title && e.answer; });
       if(!toSave.length){ toast('Nothing selected to save.', 'danger'); return; }
@@ -2623,13 +2705,13 @@
         saved.forEach(function(entry){ KB.push(entry); });
         docFreqCache = null;
         document.getElementById('kbUploadReview').innerHTML = '';
-        document.getElementById('kbUploadFile').value = '';
         var msg = document.getElementById('kbUploadMsg');
         msg.style.color = 'var(--success)';
         msg.textContent = 'Saved ' + saved.length + ' entries — the knowledge base now has ' + KB.length + ' entries.';
         updateKbStats();
         renderKbList();
-        toast('Saved ' + saved.length + ' entries from the uploaded document.', 'success');
+        loadDocuments();
+        toast('Saved ' + saved.length + ' entries from the document.', 'success');
         loadLog();
       }).catch(function(){
         saveBtn.disabled = false;
@@ -2673,7 +2755,7 @@
       renderKbList();
       loadLog();
       renderQueue();
-      apiGet('/api/llm-status').then(function(s){ nexisLlmAvailable = !!(s && s.available); }).catch(function(){ nexisLlmAvailable = false; });
+      apiGet('/api/llm-status').then(function(s){ nexisLlmAvailable = !!(s && s.available); }).catch(function(){ nexisLlmAvailable = false; }).then(function(){ loadDocuments(); });
     }).catch(function(){
       appLoading.classList.add('err-state');
     });
