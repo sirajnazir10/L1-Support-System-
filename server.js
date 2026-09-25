@@ -12,6 +12,14 @@ const Anthropic = require('@anthropic-ai/sdk');
 const pdfParse = require('pdf-parse');
 const mammoth = require('mammoth');
 const store = require('./db');
+const chat = require('./chat-store');
+const auth = require('./auth');
+const engine = require('./nexis-engine');
+const version = require('./version');
+
+// Fails the boot rather than serving a build that misreports its own number.
+// A version a customer quotes back has to be the one the team looks up.
+version.assertVersionsAgree();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,11 +35,353 @@ function llmAvailable() { return !!anthropic; }
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } }); // 20MB/file
 
 app.use(express.json({ limit: '15mb' })); // generous limit so attached screenshots (base64) fit
+app.use(auth.attachUser);
+
+// The chat workspace is the front door; the original ticket console stays
+// reachable at /tickets for the existing workflow.
+app.get('/', (req, res) => res.redirect(req.user ? '/chat.html' : '/login.html'));
+app.get('/tickets', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+chat.purgeExpiredSessions();
 
 function escapeHtmlLite(s) {
   return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
+
+// ============================================================
+//  Accounts & sessions
+// ============================================================
+const CUSTOMER_TYPES = ['new', 'existing'];
+
+app.post('/api/auth/register', (req, res) => {
+  const { username, password, displayName, email, customerType, organization } = req.body || {};
+  const usernameIssue = auth.usernameProblem(username);
+  if (usernameIssue) return res.status(400).json({ error: usernameIssue });
+  const emailIssue = auth.emailProblem(email);
+  if (emailIssue) return res.status(400).json({ error: emailIssue });
+  const passwordIssue = auth.passwordProblem(password);
+  if (passwordIssue) return res.status(400).json({ error: passwordIssue });
+  if (!CUSTOMER_TYPES.includes(customerType)) {
+    return res.status(400).json({ error: 'Tell us whether you are a new or existing customer.' });
+  }
+  // An existing customer's organisation is what ties their chats to a known
+  // environment, so it is required for them and meaningless for a new one.
+  if (customerType === 'existing' && !String(organization || '').trim()) {
+    return res.status(400).json({ error: 'Enter your company or organization name.' });
+  }
+  if (chat.getUserByUsername(String(username).trim())) {
+    return res.status(409).json({ error: 'That username is already taken.' });
+  }
+  if (chat.getUserByEmail(String(email).trim())) {
+    return res.status(409).json({ error: 'An account already exists for that email — sign in instead.' });
+  }
+  // First account to register administers the workspace (reviews proposed knowledge).
+  const role = chat.countUsers() === 0 ? 'admin' : 'agent';
+  const user = chat.createUser({
+    username: String(username).trim(),
+    displayName: displayName ? String(displayName).trim() : null,
+    email: String(email).trim(),
+    passwordHash: auth.hashPassword(password),
+    role,
+    customerType,
+    organization: organization ? String(organization).trim() : null
+  });
+  auth.issueSession(res, req, user.id);
+  chat.touchLogin(user.id);
+  res.status(201).json({ user: chat.publicUser(chat.getUserById(user.id)) });
+});
+
+app.post('/api/auth/login', (req, res) => {
+  const { username, email, identifier, password } = req.body || {};
+  const login = identifier || email || username;
+  const throttleKey = String(login || '').toLowerCase() + '|' + (req.ip || '');
+  const throttle = auth.loginThrottle(throttleKey);
+  if (throttle.blocked) {
+    return res.status(429).json({ error: `Too many failed attempts. Try again in ${Math.ceil(throttle.retryInSeconds / 60)} minute(s).` });
+  }
+  const user = login ? chat.getUserByLogin(login) : null;
+  // Same message either way — it shouldn't be possible to probe which accounts exist.
+  if (!user || !auth.verifyPassword(password, user.passwordHash)) {
+    auth.recordFailedLogin(throttleKey);
+    return res.status(401).json({ error: 'Incorrect email or password.' });
+  }
+  auth.clearLoginAttempts(throttleKey);
+  auth.issueSession(res, req, user.id);
+  chat.touchLogin(user.id);
+  res.json({ user: chat.publicUser(chat.getUserById(user.id)) });
+});
+
+app.post('/api/auth/logout', (req, res) => {
+  if (req.sessionTokenHash) chat.deleteSession(req.sessionTokenHash);
+  auth.clearSessionCookie(res);
+  res.json({ ok: true });
+});
+
+app.get('/api/auth/me', (req, res) => {
+  if (!req.user) return res.status(401).json({ error: 'Not signed in.' });
+  res.json({ user: chat.publicUser(req.user), llm: engine.llmAvailable() });
+});
+
+app.patch('/api/auth/profile', auth.requireAuth, (req, res) => {
+  const { displayName, email, customerType, organization } = req.body || {};
+  if (email !== undefined && String(email).trim() !== (req.user.email || '')) {
+    const emailIssue = auth.emailProblem(email);
+    if (emailIssue) return res.status(400).json({ error: emailIssue });
+    const owner = chat.getUserByEmail(String(email).trim());
+    if (owner && owner.id !== req.user.id) {
+      return res.status(409).json({ error: 'Another account already uses that email.' });
+    }
+  }
+  if (customerType !== undefined && !CUSTOMER_TYPES.includes(customerType)) {
+    return res.status(400).json({ error: 'customerType must be "new" or "existing".' });
+  }
+  res.json({ user: chat.publicUser(chat.updateUserProfile(req.user.id, { displayName, email, customerType, organization })) });
+});
+
+app.patch('/api/auth/preferences', auth.requireAuth, (req, res) => {
+  const current = chat.publicUser(req.user).preferences;
+  const merged = Object.assign({}, current, req.body || {});
+  res.json({ user: chat.publicUser(chat.updateUserPreferences(req.user.id, merged)) });
+});
+
+app.post('/api/auth/password', auth.requireAuth, (req, res) => {
+  const { currentPassword, newPassword } = req.body || {};
+  if (!auth.verifyPassword(currentPassword, req.user.passwordHash)) {
+    return res.status(401).json({ error: 'Current password is incorrect.' });
+  }
+  const issue = auth.passwordProblem(newPassword);
+  if (issue) return res.status(400).json({ error: issue });
+  chat.updatePassword(req.user.id, auth.hashPassword(newPassword));
+  // Changing a password ends every other session.
+  chat.deleteOtherSessions(req.user.id, req.sessionTokenHash);
+  res.json({ ok: true });
+});
+
+app.get('/api/auth/sessions', auth.requireAuth, (req, res) => {
+  res.json(chat.listSessions(req.user.id).map(s => ({
+    current: s.tokenHash === req.sessionTokenHash,
+    createdAt: s.createdAt, expiresAt: s.expiresAt, lastSeenAt: s.lastSeenAt, userAgent: s.userAgent
+  })));
+});
+
+app.delete('/api/auth/sessions', auth.requireAuth, (req, res) => {
+  chat.deleteOtherSessions(req.user.id, req.sessionTokenHash);
+  res.json({ ok: true });
+});
+
+// ============================================================
+//  Conversations
+// ============================================================
+app.get('/api/conversations', auth.requireAuth, (req, res) => {
+  res.json(chat.listConversations(req.user.id, {
+    search: req.query.q,
+    sort: req.query.sort,
+    includeArchived: req.query.archived === 'true'
+  }));
+});
+
+app.post('/api/conversations', auth.requireAuth, (req, res) => {
+  res.status(201).json(chat.createConversation(req.user.id, (req.body && req.body.title) || 'New chat'));
+});
+
+app.get('/api/conversations/:id', auth.requireAuth, auth.requireOwnedConversation, (req, res) => {
+  // Internal reasoning is only included when explicitly requested, so the
+  // customer-facing view can never accidentally render it.
+  const includeAnalysis = req.query.analysis === 'true';
+  res.json({
+    conversation: req.conversation,
+    messages: chat.getMessages(req.conversation.id).map(m => chat.shapeMessage(m, includeAnalysis)),
+    attachments: chat.listAttachments(req.conversation.id)
+  });
+});
+
+app.patch('/api/conversations/:id', auth.requireAuth, auth.requireOwnedConversation, (req, res) => {
+  const { title, pinned, archived, module } = req.body || {};
+  const patch = { keepTimestamp: true };
+  if (title !== undefined) { patch.title = String(title).slice(0, 120); patch.titleIsCustom = true; }
+  if (pinned !== undefined) patch.pinned = pinned;
+  if (archived !== undefined) patch.archived = archived;
+  if (module !== undefined) patch.module = module;
+  res.json(chat.updateConversation(req.user.id, req.conversation.id, patch));
+});
+
+app.delete('/api/conversations/:id', auth.requireAuth, auth.requireOwnedConversation, (req, res) => {
+  chat.deleteConversation(req.user.id, req.conversation.id);
+  res.json({ ok: true });
+});
+
+// Clear all history for the signed-in account. Deliberately requires an explicit
+// confirm flag so a stray DELETE can't wipe someone's workspace.
+app.delete('/api/conversations', auth.requireAuth, (req, res) => {
+  if (req.query.confirm !== 'true') return res.status(400).json({ error: 'Pass ?confirm=true to clear all conversations.' });
+  res.json({ ok: true, deleted: chat.deleteAllConversations(req.user.id) });
+});
+
+// ---------------- attachments ----------------
+app.post('/api/conversations/:id/attachments', auth.requireAuth, auth.requireOwnedConversation, upload.array('files', 10), async (req, res) => {
+  if (!req.files || !req.files.length) return res.status(400).json({ error: 'No files uploaded (expected multipart field "files").' });
+  const saved = [];
+  for (const file of req.files) {
+    const ext = path.extname(file.originalname).toLowerCase();
+    const isImage = /^image\//.test(file.mimetype || '');
+    let extractedText = null;
+    try {
+      if (!isImage) extractedText = await extractTextFromFile(file.originalname, file.buffer);
+    } catch (err) {
+      extractedText = null;
+    }
+    saved.push(chat.addAttachment({
+      conversationId: req.conversation.id,
+      userId: req.user.id,
+      fileName: file.originalname,
+      fileType: file.mimetype || ext,
+      byteSize: file.size,
+      extractedText: extractedText ? extractedText.trim().slice(0, 200000) : null,
+      // Images are kept inline so the conversation renders exactly as it was left.
+      previewData: isImage && file.size <= 4 * 1024 * 1024
+        ? `data:${file.mimetype};base64,${file.buffer.toString('base64')}`
+        : null
+    }));
+  }
+  res.status(201).json({ attachments: saved });
+});
+
+app.get('/api/attachments/:id', auth.requireAuth, (req, res) => {
+  const attachment = chat.getAttachment(req.user.id, Number(req.params.id));
+  if (!attachment) return res.status(404).json({ error: 'Attachment not found.' });
+  res.json({
+    id: attachment.id, fileName: attachment.fileName, fileType: attachment.fileType,
+    byteSize: attachment.byteSize, previewData: attachment.previewData,
+    extractedText: attachment.extractedText ? attachment.extractedText.slice(0, 20000) : null
+  });
+});
+
+// ---------------- the chat turn ----------------
+app.post('/api/conversations/:id/messages', auth.requireAuth, auth.requireOwnedConversation, async (req, res) => {
+  const { content, attachmentIds } = req.body || {};
+  if (!content || !String(content).trim()) return res.status(400).json({ error: 'content is required.' });
+  const text = String(content).trim();
+  const conversation = req.conversation;
+
+  try {
+    const history = chat.getMessages(conversation.id).map(m => chat.shapeMessage(m, false));
+
+    const userMessage = chat.addMessage(conversation.id, { role: 'user', content: text });
+    if (Array.isArray(attachmentIds) && attachmentIds.length) {
+      chat.linkAttachmentsToMessage(conversation.id, attachmentIds.map(Number), userMessage.id);
+    }
+
+    // Did the agent just teach Nexis something? Recorded against this
+    // conversation and checked against the documentation, but never promoted
+    // into the shared knowledge base without an explicit review.
+    let learnedEntry = null;
+    if (engine.looksLikeKnowledge(text)) {
+      const lastAssistant = [...history].reverse().find(m => m.role === 'assistant');
+      const validation = await engine.validateClaim(text, lastAssistant ? lastAssistant.content.slice(0, 600) : null);
+      learnedEntry = chat.addLearnedKnowledge({
+        userId: req.user.id,
+        conversationId: conversation.id,
+        claim: text,
+        topic: validation.topic,
+        keywords: validation.keywords,
+        sourceQuote: lastAssistant ? lastAssistant.content.slice(0, 600) : null,
+        status: validation.verdict === 'supported' ? 'verified' : 'proposed',
+        scope: 'conversation',
+        conflictsWith: validation.conflictsWith,
+        validationNote: validation.note
+      });
+    }
+
+    const learned = chat.knowledgeForConversation(conversation.id);
+    const attachments = chat.conversationAttachmentText(conversation.id, 4);
+    const reply = await engine.answer({
+      message: text, history, learned, attachments, learnedFromThisTurn: learnedEntry,
+      profile: { customerType: req.user.customerType, organization: req.user.organization }
+    });
+
+    const assistantMessage = chat.addMessage(conversation.id, {
+      role: 'assistant',
+      content: reply.answer,
+      analysis: Object.assign({}, reply.analysis, {
+        understanding: reply.understanding,
+        nextStep: reply.nextStep,
+        confident: reply.confident,
+        learnedFromThisTurn: learnedEntry ? { id: learnedEntry.id, status: learnedEntry.status, note: learnedEntry.validationNote } : null
+      }),
+      sources: reply.sources
+    });
+
+    // Title and module are derived from the opening exchange, once.
+    const patch = {};
+    if (!conversation.titleIsCustom && history.length === 0) {
+      patch.title = await engine.generateTitle(text);
+    }
+    if (!conversation.module && reply.analysis && reply.analysis.module) {
+      patch.module = reply.analysis.module;
+    }
+    const updated = Object.keys(patch).length
+      ? chat.updateConversation(req.user.id, conversation.id, patch)
+      : chat.getConversation(req.user.id, conversation.id);
+
+    res.status(201).json({
+      conversation: updated,
+      userMessage: chat.shapeMessage(userMessage, false),
+      assistantMessage: chat.shapeMessage(assistantMessage, true),
+      nextStep: reply.nextStep,
+      learned: learnedEntry
+        ? { id: learnedEntry.id, status: learnedEntry.status, note: learnedEntry.validationNote, conflictsWith: learnedEntry.conflictsWith }
+        : null
+    });
+  } catch (err) {
+    console.error('Chat turn failed:', err);
+    res.status(500).json({ error: 'Something went wrong answering that. The message was saved — try again.' });
+  }
+});
+
+// ============================================================
+//  Agent-supplied knowledge review
+// ============================================================
+app.get('/api/knowledge', auth.requireAuth, (req, res) => {
+  res.json(chat.listLearned({
+    status: req.query.status,
+    conversationId: req.query.conversationId,
+    limit: Number(req.query.limit) || 100
+  }));
+});
+
+// Promoting a claim to the shared knowledge base is an explicit, reviewed
+// action — this is the gate that stops one agent's assumption becoming
+// everyone's answer.
+app.post('/api/knowledge/:id/review', auth.requireAuth, (req, res) => {
+  const entry = chat.getLearnedById(Number(req.params.id));
+  if (!entry) return res.status(404).json({ error: 'Knowledge entry not found.' });
+  const { decision, title, sourceDoc } = req.body || {};
+  if (!['verify', 'reject', 'promote'].includes(decision)) {
+    return res.status(400).json({ error: 'decision must be "verify", "reject", or "promote".' });
+  }
+  if (decision === 'reject') {
+    return res.json(chat.reviewLearned(entry.id, { status: 'rejected', reviewedBy: req.user.id }));
+  }
+  if (decision === 'verify') {
+    return res.json(chat.reviewLearned(entry.id, { status: 'verified', scope: 'global', reviewedBy: req.user.id }));
+  }
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Only an admin can write into the shared knowledge base.' });
+  }
+  const kbEntry = {
+    id: 'learned-' + entry.id + '-' + Date.now().toString(36),
+    title: String(title || entry.topic || 'Agent-provided knowledge').slice(0, 120),
+    sourceDoc: String(sourceDoc || 'Agent-verified knowledge'),
+    page: 0,
+    keywords: entry.keywords,
+    answer: entry.claim
+  };
+  store.addKbEntry(kbEntry);
+  engine.invalidateKbCache();
+  store.appendLog(`<b>Knowledge base updated</b> — verified agent knowledge "${escapeHtmlLite(kbEntry.title)}" promoted by ${escapeHtmlLite(req.user.username)}.`);
+  res.json(chat.reviewLearned(entry.id, { status: 'verified', scope: 'global', reviewedBy: req.user.id, kbEntryId: kbEntry.id }));
+});
 
 // ---------------- Knowledge base ----------------
 // GET all entries
@@ -57,6 +407,7 @@ app.post('/api/kb', (req, res) => {
     documentId: documentId ? Number(documentId) : undefined
   };
   store.addKbEntry(entry);
+  engine.invalidateKbCache();
   store.appendLog(`<b>Knowledge base updated</b> — new entry "${escapeHtmlLite(entry.title)}" added (source: ${escapeHtmlLite(entry.sourceDoc)}).`);
   res.status(201).json(entry);
 });
@@ -67,6 +418,22 @@ app.post('/api/kb', (req, res) => {
 // those candidates here for a more naturally-drafted answer. This never freelances beyond the
 // given candidates and never fabricates a source; if the model doesn't have enough there, it
 // says so, the same honesty rule the local engine already follows.
+// Unauthenticated on purpose: the build number is what a customer reads back
+// when reporting a problem, and asking them to sign in first to find it defeats
+// the point. It exposes no data beyond the release record.
+app.get('/api/version', (req, res) => {
+  res.json({
+    version: version.version,
+    semantic: version.semantic,
+    build: version.buildNumber,
+    releaseDate: version.releaseDate,
+    node: process.version,
+    llm: llmAvailable() ? NEXIS_MODEL : null,
+    knowledgeBaseEntries: store.countKb(),
+    builds: version.builds
+  });
+});
+
 app.get('/api/llm-status', (req, res) => {
   res.json({ available: llmAvailable(), model: llmAvailable() ? NEXIS_MODEL : null });
 });
@@ -259,7 +626,7 @@ app.post('/api/log', (req, res) => {
 
 app.listen(PORT, () => {
   console.log('');
-  console.log('  MR Nexis is running.');
+  console.log('  MR Nexis ' + version.version + ' is running.');
   console.log('  Open http://localhost:' + PORT + ' in your browser.');
   console.log('  Knowledge base: ' + store.getKb().length + ' entries loaded from data/nexis.db');
   console.log('  Press Ctrl+C to stop.');

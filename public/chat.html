@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>MR Nexis · Support workspace</title>
+<link rel="stylesheet" href="chat.css"/>
+</head>
+<body>
+<div class="app">
+  <!-- ---------------- sidebar ---------------- -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div>
+          <div class="brand-name">MR Nexis</div>
+          <div class="brand-sub">
+            Support workspace
+            <button type="button" class="build-chip" id="buildChip" title="Build details">…</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" id="newChatBtn">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+        New chat
+      </button>
+      <div class="search-row">
+        <svg class="search-icon" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14" stroke-linecap="round"/></svg>
+        <input id="searchInput" type="search" placeholder="Search conversations" aria-label="Search conversations"/>
+      </div>
+    </div>
+
+    <div class="list-controls">
+      <select id="sortSelect" aria-label="Sort conversations">
+        <option value="recent">Most recent</option>
+        <option value="oldest">Oldest first</option>
+      </select>
+      <label style="font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:5px">
+        <input type="checkbox" id="showArchived" style="accent-color:var(--accent)"/> Archived
+      </label>
+    </div>
+
+    <div class="chat-list" id="chatList"></div>
+
+    <div class="sidebar-foot">
+      <button class="profile-btn" id="profileBtn">
+        <div class="avatar" id="avatar">?</div>
+        <div style="min-width:0;flex:1">
+          <div class="profile-name" id="profileName">…</div>
+          <div class="profile-role" id="profileRole"></div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ---------------- main ---------------- -->
+  <main class="main">
+    <header class="main-head">
+      <button class="icon-btn menu-toggle" id="sidebarToggle" aria-label="Toggle conversations">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+      </button>
+      <div class="conv-title" id="convTitle">New chat</div>
+      <span class="module-chip" id="convModule" hidden></span>
+      <div class="head-actions" id="headActions" hidden>
+        <button class="icon-btn" id="pinBtn" title="Pin conversation" aria-label="Pin conversation">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1.5h4l-.5 4 2.5 2.5H4L6.5 5.5z"/><path d="M8 8v6" stroke-linecap="round"/></svg>
+        </button>
+        <button class="icon-btn" id="renameBtn" title="Rename" aria-label="Rename conversation">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11.5 2.5l2 2L6 12l-3 1 1-3z"/></svg>
+        </button>
+        <button class="icon-btn" id="archiveBtn" title="Archive" aria-label="Archive conversation">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="3"/><path d="M3 6v7h10V6M6.5 9h3"/></svg>
+        </button>
+        <button class="icon-btn" id="deleteBtn" title="Delete" aria-label="Delete conversation">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.5 9h6l.5-9" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="composer-wrap">
+      <div class="composer" id="composer">
+        <div class="pending-attachments" id="pendingAttachments"></div>
+        <div class="composer-inner">
+          <textarea id="input" rows="1" placeholder="Describe the issue, or paste an error…" aria-label="Message"></textarea>
+          <div class="composer-tools">
+            <button class="icon-btn" id="attachBtn" title="Attach a document or log" aria-label="Attach file">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 7l-5.5 5.5a3 3 0 01-4.2-4.2L9 2.5a2 2 0 012.8 2.8L6 11.2a1 1 0 01-1.4-1.4L10 4.4" stroke-linecap="round"/></svg>
+            </button>
+            <button class="icon-btn" id="imageBtn" title="Attach a screenshot" aria-label="Attach image">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><circle cx="5.75" cy="6.25" r="1"/><path d="M2.5 11l3.5-3 2.5 2 2-1.5 3 2.5"/></svg>
+            </button>
+            <button class="icon-btn" id="voiceBtn" title="Dictate" aria-label="Dictate" hidden>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="1.5" width="4" height="8" rx="2"/><path d="M3.5 7.5a4.5 4.5 0 009 0M8 12v2.5" stroke-linecap="round"/></svg>
+            </button>
+            <button class="send-btn" id="sendBtn" disabled title="Send" aria-label="Send">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M8.5 3.5L13 8l-4.5 4.5"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="composer-hint">Nexis answers from Modern Requirements documentation and this conversation. Verify anything you send to a customer.</div>
+      <input type="file" id="fileInput" multiple hidden accept=".pdf,.docx,.doc,.txt,.md,.log,.csv,.json,.xml"/>
+      <input type="file" id="imageInput" multiple hidden accept="image/*"/>
+    </div>
+  </main>
+</div>
+
+<!-- ---------------- conversation context menu ---------------- -->
+<div class="menu" id="convMenu">
+  <button data-act="rename">Rename</button>
+  <button data-act="pin">Pin</button>
+  <button data-act="archive">Archive</button>
+  <div class="menu-sep"></div>
+  <button data-act="delete" class="danger">Delete</button>
+</div>
+
+<!-- ---------------- settings ---------------- -->
+<div class="overlay" id="settingsOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-head">
+      <h3 id="settingsTitle">Profile &amp; settings</h3>
+      <button class="icon-btn" id="settingsClose" aria-label="Close">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+      </button>
+    </div>
+    <div class="settings-tabs">
+      <button class="settings-tab active" data-tab="account">Account</button>
+      <button class="settings-tab" data-tab="chat">Chat</button>
+      <button class="settings-tab" data-tab="knowledge">Knowledge</button>
+      <button class="settings-tab" data-tab="security">Security</button>
+      <button class="settings-tab" data-tab="about">About</button>
+    </div>
+    <div class="modal-body">
+      <div class="settings-panel active" data-panel="account">
+        <div class="info-row"><span class="label">Registered email</span><span class="value" id="setEmailValue">—</span></div>
+        <div class="info-row"><span class="label">Username</span><span class="value" id="setUsername"></span></div>
+        <div class="info-row"><span class="label">Customer</span><span class="value" id="setCustomerType">—</span></div>
+        <div class="info-row"><span class="label">Role</span><span class="value" id="setRole"></span></div>
+        <div class="info-row"><span class="label">Account created</span><span class="value" id="setCreated"></span></div>
+        <div class="info-row"><span class="label">Conversations</span><span class="value" id="setConvCount">0</span></div>
+        <div class="info-row"><span class="label">Stored in</span><span class="value">data/nexis.db</span></div>
+        <div class="info-row"><span class="label">Answer engine</span><span class="value" id="setEngine">—</span></div>
+        <div style="margin-top:16px">
+          <div class="field">
+            <label for="setDisplayName">Display name</label>
+            <input id="setDisplayName"/>
+          </div>
+          <div class="field">
+            <label for="setEmail">Email</label>
+            <input id="setEmail" type="email"/>
+            <div class="hint">Your account and chat history are tied to this address.</div>
+          </div>
+          <div class="field">
+            <label for="setOrganization">Company or organization</label>
+            <input id="setOrganization"/>
+          </div>
+          <button class="btn btn-secondary" id="saveProfileBtn">Save profile</button>
+        </div>
+      </div>
+
+      <div class="settings-panel" data-panel="chat">
+        <div class="toggle-row">
+          <input type="checkbox" id="prefAnalysis"/>
+          <div>
+            <div class="t-title">Show Nexis's internal analysis</div>
+            <div class="t-desc">Adds a collapsed panel under each answer with retrieval and confidence detail. Never included when you copy an answer.</div>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <input type="checkbox" id="prefSend"/>
+          <div>
+            <div class="t-title">Enter sends the message</div>
+            <div class="t-desc">When off, Enter adds a new line and Ctrl+Enter sends.</div>
+          </div>
+        </div>
+        <div class="toggle-row">
+          <input type="checkbox" id="prefAutoTitle"/>
+          <div>
+            <div class="t-title">Name conversations automatically</div>
+            <div class="t-desc">Generates a title from your first message. Renaming a chat yourself always wins.</div>
+          </div>
+        </div>
+        <div class="danger-zone">
+          <h4>Clear conversation history</h4>
+          <p>Permanently deletes every conversation on this account, including attachments. This cannot be undone.</p>
+          <button class="btn btn-danger" id="clearHistoryBtn">Clear all conversations</button>
+        </div>
+      </div>
+
+      <div class="settings-panel" data-panel="knowledge">
+        <p style="margin-top:0;font-size:13px;color:var(--text-secondary)">
+          Corrections and product knowledge you give Nexis mid-conversation are recorded here. They apply to the
+          conversation they came from straight away, and only reach the shared knowledge base once verified.
+        </p>
+        <div class="toggle-row">
+          <input type="checkbox" id="prefLearn"/>
+          <div>
+            <div class="t-title">Capture corrections I make</div>
+            <div class="t-desc">When off, Nexis still answers normally but records nothing from your messages.</div>
+          </div>
+        </div>
+        <div id="knowledgeList" style="margin-top:14px"></div>
+      </div>
+
+      <div class="settings-panel" data-panel="security">
+        <div class="field">
+          <label for="curPassword">Current password</label>
+          <input id="curPassword" type="password" autocomplete="current-password"/>
+        </div>
+        <div class="field">
+          <label for="newPassword">New password</label>
+          <input id="newPassword" type="password" autocomplete="new-password"/>
+          <div class="hint">At least 8 characters, including a letter and a number. Changing it signs out your other sessions.</div>
+        </div>
+        <button class="btn btn-secondary" id="changePasswordBtn">Change password</button>
+
+        <h4 style="margin:20px 0 6px;font-size:13px">Active sessions</h4>
+        <div id="sessionList"></div>
+        <button class="btn btn-secondary" id="signOutOthersBtn" style="margin-top:10px">Sign out other sessions</button>
+      </div>
+
+      <div class="settings-panel" data-panel="about">
+        <div class="about-hero">
+          <div class="about-mark">N</div>
+          <div class="about-id">
+            <div class="about-name">MR Nexis</div>
+            <div class="about-version" id="aboutVersion">…</div>
+          </div>
+        </div>
+
+        <dl class="about-facts" id="aboutFacts"></dl>
+
+        <p class="about-note">
+          Quote the build number when reporting an issue — it identifies exactly which changes are included.
+          Build numbers are never reused.
+        </p>
+
+        <h4 class="about-h">Build history</h4>
+        <div class="about-history" id="aboutHistory"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-danger" id="logoutBtn">Sign out</button>
+      <button class="btn btn-secondary" id="settingsDone">Done</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-host" id="toastHost"></div>
+<script src="chat.js"></script>
+</body>
+</html>
