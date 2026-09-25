@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Sign in · MR Nexis</title>
+<link rel="stylesheet" href="chat.css"/>
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="brand-mark">N</div>
+      <div>
+        <div class="brand-name">MR Nexis</div>
+        <div class="brand-sub">Support workspace</div>
+      </div>
+    </div>
+
+    <h1 class="auth-title" id="formTitle">Sign in</h1>
+    <p class="auth-sub" id="formSub">Your conversations stay private to your account.</p>
+
+    <div class="alert alert-error" id="alert"></div>
+
+    <form id="authForm" autocomplete="on">
+      <!-- Registration opens by asking which kind of customer this is: it decides
+           what else we need, and it is context Nexis uses when answering. -->
+      <div id="customerTypeField" hidden>
+        <label style="display:block;font-weight:600;font-size:12px;margin-bottom:6px;color:var(--text-secondary)">
+          Are you a new or existing customer?
+        </label>
+        <div class="choice-grid">
+          <button type="button" class="choice" data-type="new">
+            <strong>New customer</strong>
+            <span>Evaluating or just getting started with Modern Requirements.</span>
+          </button>
+          <button type="button" class="choice" data-type="existing">
+            <strong>Existing customer</strong>
+            <span>Already using Modern Requirements4DevOps or Copilot4DevOps.</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="field" id="organizationField" hidden>
+        <label for="organization">Company or organization</label>
+        <input id="organization" name="organization" autocomplete="organization"/>
+        <div class="hint">Used to tie your conversations to your environment.</div>
+      </div>
+
+      <div class="field" id="emailField">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required autofocus/>
+        <div class="hint" id="emailHint" hidden>Your account and chat history stay tied to this address.</div>
+      </div>
+      <div class="field" id="usernameField" hidden>
+        <label for="username">Username</label>
+        <input id="username" name="username" autocomplete="username"/>
+      </div>
+      <div class="field" id="displayNameField" hidden>
+        <label for="displayName">Display name <span style="font-weight:400">(optional)</span></label>
+        <input id="displayName" name="displayName" autocomplete="name"/>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required/>
+        <div class="hint" id="passwordHint" hidden>At least 8 characters, including a letter and a number.</div>
+      </div>
+      <button class="btn btn-primary btn-block" id="submitBtn" type="submit">Sign in</button>
+    </form>
+
+    <div class="auth-switch">
+      <span id="switchText">Don't have an account?</span>
+      <button type="button" id="switchBtn">Create one</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var mode = 'login';
+  var customerType = null;
+  var form = document.getElementById('authForm');
+  var alertEl = document.getElementById('alert');
+  var submitBtn = document.getElementById('submitBtn');
+
+  function showAlert(msg) {
+    alertEl.textContent = msg;
+    alertEl.classList.add('show');
+  }
+  function clearAlert() { alertEl.classList.remove('show'); }
+
+  function setMode(next) {
+    mode = next;
+    var isRegister = mode === 'register';
+    document.getElementById('formTitle').textContent = isRegister ? 'Create your account' : 'Sign in';
+    document.getElementById('formSub').textContent = isRegister
+      ? 'Your workspace and chat history are private to this account.'
+      : 'Sign in with the email you registered.';
+    submitBtn.textContent = isRegister ? 'Create account' : 'Sign in';
+    document.getElementById('switchText').textContent = isRegister ? 'Already have an account?' : "Don't have an account?";
+    document.getElementById('switchBtn').textContent = isRegister ? 'Sign in' : 'Create one';
+    document.getElementById('customerTypeField').hidden = !isRegister;
+    document.getElementById('usernameField').hidden = !isRegister;
+    document.getElementById('displayNameField').hidden = !isRegister;
+    document.getElementById('passwordHint').hidden = !isRegister;
+    document.getElementById('emailHint').hidden = !isRegister;
+    document.getElementById('username').required = isRegister;
+    document.getElementById('organizationField').hidden = !(isRegister && customerType === 'existing');
+    document.getElementById('email').setAttribute('autocomplete', 'email');
+    document.getElementById('password').setAttribute('autocomplete', isRegister ? 'new-password' : 'current-password');
+    clearAlert();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.choice'), function (btn) {
+    btn.addEventListener('click', function () {
+      customerType = btn.getAttribute('data-type');
+      document.querySelectorAll('.choice').forEach(function (b) { b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      // Only an existing customer has an environment worth recording.
+      document.getElementById('organizationField').hidden = customerType !== 'existing';
+      clearAlert();
+    });
+  });
+
+  document.getElementById('switchBtn').addEventListener('click', function () {
+    setMode(mode === 'login' ? 'register' : 'login');
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    clearAlert();
+
+    if (mode === 'register' && !customerType) {
+      showAlert('Let us know whether you are a new or existing customer.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = mode === 'register' ? 'Creating…' : 'Signing in…';
+
+    var payload = {
+      identifier: document.getElementById('email').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('password').value
+    };
+    if (mode === 'register') {
+      payload.username = document.getElementById('username').value.trim();
+      payload.displayName = document.getElementById('displayName').value.trim();
+      payload.customerType = customerType;
+      payload.organization = document.getElementById('organization').value.trim();
+    }
+
+    fetch('/api/auth/' + (mode === 'register' ? 'register' : 'login'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+      .then(function (r) { return r.json().then(function (body) { return { ok: r.ok, body: body }; }); })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.body.error || 'Something went wrong. Try again.');
+        window.location.href = '/chat.html';
+      })
+      .catch(function (err) {
+        showAlert(err.message);
+        submitBtn.disabled = false;
+        setMode(mode);
+      });
+  });
+
+  // Already signed in? Go straight through.
+  fetch('/api/auth/me').then(function (r) { if (r.ok) window.location.href = '/chat.html'; });
+})();
+</script>
+</body>
+</html>

@@ -120,28 +120,109 @@ db.exec(`
   SELECT id, json_extract(data, '$.subject'), json_extract(data, '$.draft') FROM tickets
 `);
 
+// ---------------- product generation ----------------
+// Modern Requirements ships in two generations that must never be mixed in an
+// answer: MR 1.0 / MR 2025 (legacy) and MR 2.0 / NextGen (rebuilt UI, marketed
+// as "Frontier"). Every KB entry is tagged so retrieval can keep them apart:
+//
+//   'nextgen' — only true of MR 2.0 / NextGen
+//   'legacy'  — only true of MR 1.0 / MR 2025
+//   'both'    — genuinely version-independent (Copilot4DevOps, pricing,
+//               licensing, glossary, marketing pages)
+//
+// Derived from the source document rather than stored by hand: a source is
+// written against one generation, so mislabelling an entry means mislabelling
+// its whole source, which is far easier to spot and correct.
+const GENERATIONS = ['nextgen', 'legacy', 'both'];
+
+// The SOURCE decides the generation, never the title. A document is written
+// against one release of the product, so every entry drawn from it inherits
+// that release — including the ones whose titles happen to name a
+// version-independent product. "Copilot4DevOps trigger settings" described in
+// the 2025 Release Notes is still the MR 2025 way of doing it, and tagging it
+// 'both' on the strength of its title is precisely how a NextGen user ends up
+// reading legacy UI steps.
+function sourceGeneration(sourceDoc) {
+  const s = String(sourceDoc || '');
+  if (/nextgen|next gen|frontier|mr ?2\.0/i.test(s)) return 'nextgen';
+  if (/2025|release notes|technote|installation guide|admin configuration|customization|rights management|embedded|mr ?1\.0/i.test(s)) return 'legacy';
+  // Copilot4DevOps ships as its own product against either generation, and its
+  // own guides are written that way.
+  if (/copilot4devops|agents4devops|compliance4devops|ai sync bridge/i.test(s)) return 'both';
+  if (/modernrequirements\.com|glossary|pricing|mr academy|help center/i.test(s)) return 'both';
+  return null; // no signal in the source — fall through to the title
+}
+
+function classifyGeneration(sourceDoc, title) {
+  const fromSource = sourceGeneration(sourceDoc);
+  if (fromSource) return fromSource;
+  // Only reached for sources that carry no generation of their own (ad-hoc
+  // support threads, uploaded files). Here the title is the only evidence
+  // there is, and an explicit generation in it is worth honouring.
+  const t = String(title || '');
+  if (/nextgen|next gen|frontier|mr ?2\.0/i.test(t)) return 'nextgen';
+  if (/mr ?1\.0|mr ?2025|legacy/i.test(t)) return 'legacy';
+  return 'both';
+}
+
+// Added after the table already existed in the field, so it is applied as a
+// guarded migration rather than a schema change: existing databases gain the
+// column and get backfilled once, fresh ones just start with it.
+const kbColumns = db.prepare('PRAGMA table_info(kb_entries)').all().map((c) => c.name);
+// Features are not isolated facts: "Creating a baseline" belongs under the
+// Baseline module and sits alongside "Comparing baselines". Those relationships
+// come from the source documentation's own structure, so they are stored rather
+// than guessed at answer time.
+if (!kbColumns.includes('relatedIds')) {
+  db.exec(`ALTER TABLE kb_entries ADD COLUMN relatedIds TEXT NOT NULL DEFAULT '[]'`);
+}
+if (!kbColumns.includes('generation')) {
+  db.exec(`ALTER TABLE kb_entries ADD COLUMN generation TEXT NOT NULL DEFAULT 'both'`);
+  const backfill = db.transaction(() => {
+    const rows = db.prepare('SELECT id, sourceDoc, title FROM kb_entries').all();
+    const stmt = db.prepare('UPDATE kb_entries SET generation = ? WHERE id = ?');
+    rows.forEach((r) => stmt.run(classifyGeneration(r.sourceDoc, r.title), r.id));
+    return rows.length;
+  });
+  const n = backfill();
+  console.log('  Tagged ' + n + ' KB entries with a product generation (nextgen/legacy/both).');
+}
+
 function rowToKbEntry(row) {
-  return { id: row.id, title: row.title, sourceDoc: row.sourceDoc, page: row.page, keywords: JSON.parse(row.keywords), answer: row.answer, documentId: row.documentId || undefined };
+  return { id: row.id, title: row.title, sourceDoc: row.sourceDoc, page: row.page, keywords: JSON.parse(row.keywords), answer: row.answer, generation: row.generation || 'both', relatedIds: JSON.parse(row.relatedIds || '[]'), documentId: row.documentId || undefined };
 }
 
 // ---------------- Knowledge base ----------------
 function getKb() {
   return db.prepare('SELECT * FROM kb_entries ORDER BY rowid ASC').all().map(rowToKbEntry);
 }
+// A count without materialising the table. getKb().length reads every row and
+// JSON.parses two columns per row — fine when you wanted the entries, wasteful
+// when all you wanted was how many there are (see /api/version, which is
+// unauthenticated and so can be called freely).
+function countKb() {
+  return db.prepare('SELECT COUNT(*) AS n FROM kb_entries').get().n;
+}
 function exportKbJson() {
   fs.writeFileSync(KB_EXPORT_FILE, JSON.stringify(getKb(), null, 2), 'utf8');
 }
-const insertKbStmt = db.prepare(`INSERT INTO kb_entries (id, title, sourceDoc, page, keywords, answer, documentId) VALUES (@id, @title, @sourceDoc, @page, @keywords, @answer, @documentId)`);
+const insertKbStmt = db.prepare(`INSERT INTO kb_entries (id, title, sourceDoc, page, keywords, answer, generation, relatedIds, documentId) VALUES (@id, @title, @sourceDoc, @page, @keywords, @answer, @generation, @relatedIds, @documentId)`);
 function addKbEntry(entry) {
+  // An explicit generation wins; anything unrecognised falls back to deriving
+  // it from the source rather than being silently trusted.
+  const generation = GENERATIONS.includes(entry.generation)
+    ? entry.generation
+    : classifyGeneration(entry.sourceDoc, entry.title);
   insertKbStmt.run({
     id: entry.id, title: entry.title, sourceDoc: entry.sourceDoc, page: entry.page || 0,
-    keywords: JSON.stringify(entry.keywords || []), answer: entry.answer, documentId: entry.documentId || null
+    keywords: JSON.stringify(entry.keywords || []), answer: entry.answer,
+    generation, relatedIds: JSON.stringify(entry.relatedIds || []), documentId: entry.documentId || null
   });
   if (entry.documentId) {
     db.prepare(`UPDATE documents SET status = 'processed' WHERE id = ?`).run(entry.documentId);
   }
   exportKbJson();
-  return entry;
+  return Object.assign({}, entry, { generation });
 }
 
 // ---------------- Tickets ----------------
@@ -235,7 +316,8 @@ function searchTickets(text, limit) {
 }
 
 module.exports = {
-  getKb, addKbEntry, exportKbJson,
+  db, // shared handle — chat-store.js and auth.js build on the same connection
+  getKb, countKb, addKbEntry, exportKbJson, classifyGeneration,
   getTickets, addTicket, updateTicket, countTickets,
   getLog, appendLog,
   createDocument, getDocument, listDocuments, deleteDocument,

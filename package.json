@@ -1,6 +1,6 @@
 {
   "name": "mr-nexis",
-  "version": "1.2.0",
+  "version": "1.3.2",
   "description": "Document-grounded MR Nexis support app for Modern Requirements & Copilot4DevOps — runs locally on Windows, Mac, or Linux.",
   "private": true,
   "main": "server.js",
