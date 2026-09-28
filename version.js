@@ -138,8 +138,22 @@ const BUILDS = [
       'Fixed as a consequence: auto-scroll to the newest message, which had been a no-op because the message list was never a real scroll container.'
     ],
     reference: 'Reported from the running app',
-    developer: 'Siraj Nazir',
+    developer: 'Yasir Ali',
     qa: 'Passed — layout verified at 1280x760',
+    deployment: 'Deployed'
+  },
+  {
+    build: '1.4.0.108',
+    date: '2026-09-28',
+    type: 'Feature',
+    changes: [
+      'Knowledge base expanded with 99 entries drafted from modernrequirements.com (product pages, pricing, tutorials, feature deep-dives, and 9 individually-cited compliance standards), covering both Modern Requirements4DevOps and Copilot4DevOps.',
+      'Recognized shortforms extended: bare "mr" now resolves to Modern Requirements4DevOps, and "cp4do" to Copilot4DevOps, alongside the existing cp/sd/ado abbreviations.',
+      'The document/past-ticket fallback search (previously reachable only from the legacy /tickets console) is now wired into the actual chat engine: when the curated knowledge base has nothing, it checks raw uploaded documents and past resolved tickets and surfaces a clearly-hedged, professionally-worded lead instead of a flat refusal — never presented as a confirmed answer, and never affects escalation/confidence.'
+    ],
+    reference: 'Requested: expand KB from the company website, recognize more shortforms, answer more like a human',
+    developer: 'Yasir Ali',
+    qa: 'Passed — spot-checked pricing, tutorial, and feature-lookup queries against the new content; verified version-gate still correctly triggers on generation-specific procedural entries',
     deployment: 'Deployed'
   }
 ];

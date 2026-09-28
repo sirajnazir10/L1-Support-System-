@@ -19,9 +19,9 @@ const llmAvailable = () => !!anthropic;
 // ---------------- text normalization ----------------
 const STOPWORDS = new Set(['this', 'that', 'from', 'with', 'have', 'what', 'when', 'where', 'does', 'doesn', 'cannot', 'about', 'there', 'which', 'would', 'could', 'should', 'your', 'their', 'been', 'were', 'will', 'into', 'then', 'than', 'also', 'just', 'only', 'like', 'need', 'want', 'tell', 'show', 'give', 'please', 'thanks', 'hello', 'help']);
 const ABBREVIATIONS = {
-  cp: 'copilot4devops', c4do: 'copilot4devops', copilot: 'copilot4devops',
+  cp: 'copilot4devops', c4do: 'copilot4devops', cp4do: 'copilot4devops', copilot: 'copilot4devops',
   ado: 'azure devops', vsts: 'azure devops', tfs: 'azure devops server',
-  mr4do: 'modern requirements4devops', mr4devops: 'modern requirements4devops',
+  mr: 'modern requirements4devops', mr4do: 'modern requirements4devops', mr4devops: 'modern requirements4devops',
   tcm: 'test case management', sd: 'smart docs', va: 'trace analysis',
   pat: 'personal access token', sso: 'single sign on'
 };
@@ -458,7 +458,7 @@ const GENERATION_IN_CONTEXT = {
   nextgen: 'MR 2.0 (NextGen)', legacy: 'MR 1.0 / MR 2025 (Legacy)', both: 'applies to both generations'
 };
 
-function buildContextBlocks({ matches, learnedMatches, attachments, profile, generation }) {
+function buildContextBlocks({ matches, learnedMatches, attachments, profile, generation, rawQueryHint }) {
   const blocks = [];
   // Stated before the excerpts so the constraint is in view while they are read
   // rather than appended as an afterthought.
@@ -488,6 +488,20 @@ function buildContextBlocks({ matches, learnedMatches, attachments, profile, gen
       `[${a.fileName}]\n${String(a.extractedText).slice(0, 4000)}`
     ).join('\n\n---\n\n'));
   }
+  // Second net, only worth checking when nothing curated turned up: whole
+  // uploaded documents and past resolved tickets, raw and unreviewed. Labelled
+  // explicitly as unverified so it's surfaced as a lead, never as documentation.
+  if (!matches.length && !learnedMatches.length) {
+    const docs = kbStore.searchDocuments(rawQueryHint || '', 2) || [];
+    const tickets = kbStore.searchTickets(rawQueryHint || '', 2) || [];
+    if (docs.length || tickets.length) {
+      const lines = [
+        ...docs.map((d) => `[uploaded document: ${d.fileName}] ${String(d.snippet || '').replace(/[[\]]/g, '')}`),
+        ...tickets.map((t) => `[past ticket: ${t.subject}] ${String(t.snippet || '').replace(/[[\]]/g, '')}`)
+      ];
+      blocks.push('UNVERIFIED, RAW MATERIAL (not curated documentation — mention only as an unconfirmed lead, never state it as a fact):\n' + lines.join('\n'));
+    }
+  }
   return blocks.join('\n\n=====\n\n');
 }
 
@@ -501,6 +515,20 @@ function directnessOf(match, queryStems, moduleName) {
   if (!problemStems.length) return 1; // the module itself was the whole question
   const covered = problemStems.filter((t) => match.tokens && match.tokens.has(t)).length;
   return covered / problemStems.length;
+}
+
+// A second, honestly-labelled net for when curated documentation has nothing:
+// whole uploaded documents and past resolved tickets, searched as raw text
+// (never curated/reviewed). Only ever used to add one hedged sentence to an
+// otherwise-unconfident reply — never treated as a confirmed answer, and never
+// changes confidence/escalation, which are decided before this runs.
+function rawReferenceHint(queryText) {
+  const docs = kbStore.searchDocuments(queryText, 2) || [];
+  const tickets = kbStore.searchTickets(queryText, 2) || [];
+  if (!docs.length && !tickets.length) return '';
+  const label = docs.length ? `the uploaded document "${docs[0].fileName}"` : `a past ticket ("${tickets[0].subject}")`;
+  const snippet = String((docs[0] || tickets[0]).snippet || '').replace(/[[\]]/g, '');
+  return ` That said, I did find a possibly related mention in ${label}: "${snippet}" — I'll flag this for an agent to confirm rather than presenting it as settled.`;
 }
 
 // Deterministic reply used when no API key is configured. Same honesty rules,
@@ -519,9 +547,10 @@ function composeWithoutLlm({ matches, learnedMatches, resolved, originalMessage,
   const confidence = top ? Math.min(0.95, 0.42 + top.total * 0.07) : 0;
 
   if (!top && !learnedTop) {
+    const queryForFallback = originalMessage || resolved.query;
     return {
       understanding: 'Nothing in the current documentation matches this closely enough to answer from.',
-      answer: "I don't have anything in the documentation that covers this. Rather than guess: can you give me the exact product area, the version, and the error text or a screenshot if there is one? If it's something you already know the answer to, tell me and I'll record it for this conversation.",
+      answer: `I don't have a verified, documented answer for this yet.${rawReferenceHint(queryForFallback)} Could you give me the exact product area, the version, and the error text or a screenshot if there is one? If it's something you already know the answer to, tell me and I'll record it for this conversation.`,
       nextStep: 'Share the product/module, version, and any error text or screenshot.',
       usedIds: [], confident: false, confidence: 0
     };
@@ -602,11 +631,15 @@ function composeWithoutLlm({ matches, learnedMatches, resolved, originalMessage,
     const nearby = worthListing
       ? '\n\nThe closest things I do have are:\n' + matches.slice(0, 3).map((m) => `• ${m.entry.title} (${m.entry.sourceDoc})`).join('\n')
       : '';
+    // Only worth the extra round-trip to the database when the curated KB came
+    // up empty-handed (no near-misses to offer already) — otherwise the near-miss
+    // list above already gives the agent somewhere real to look.
+    const rawHint = worthListing ? '' : rawReferenceHint(originalMessage || resolved.query);
     return {
       understanding: module
         ? `About ${module}, but the specific problem isn't covered by the documentation.`
         : 'No documented material matches this closely enough to answer from.',
-      answer: `${opener}\n\n${resolved.isFollowUp
+      answer: `${opener}${rawHint}\n\n${resolved.isFollowUp
         ? askFor(profile)
         : 'What specifically is happening — and what did you expect instead?'}${nearby}`,
       nextStep: profile && profile.customerType === 'new'
@@ -817,7 +850,7 @@ async function answer({ message, history, learned, attachments, learnedFromThisT
     return { ...composed, sources: sourcesFrom(composed.usedIds, matches), analysis };
   }
 
-  const context = buildContextBlocks({ matches, learnedMatches, attachments: attachmentText, profile, generation: detected.generation });
+  const context = buildContextBlocks({ matches, learnedMatches, attachments: attachmentText, profile, generation: detected.generation, rawQueryHint: message || resolved.query });
   if (!context) {
     const composed = settleModule(composeWithoutLlm(composeArgs));
     analysis.confidence = composed.confidence;
